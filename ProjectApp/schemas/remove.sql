@@ -1,12 +1,12 @@
 --drop tables
-drop table courses_elements;
-drop table elements;
-drop table competencies;
-drop table courses;
-drop table terms;
-drop table domains;
+drop table courses_elements cascade constraints;
+drop table elements cascade constraints;
+drop table competencies cascade constraints;
+drop table courses cascade constraints;
+drop table terms cascade constraints;
+drop table domains cascade constraints;
 --Logging
-drop table audit_logs;
+drop table audit_logs cascade constraints;
 
 --Drop Views
 drop view view_courses;

@@ -4,24 +4,9 @@ drop table elements;
 drop table competencies;
 drop table courses;
 drop table terms;
-drop table elements;
-drop table competencies;
 drop table domains;
 --Logging
 drop table audit_logs;
-
---Users
-drop table course_users;
-
---Drop Triggers
---courses
-drop trigger after_courses_updated;
-drop trigger after_courses_inserted;
-drop trigger after_courses_deleted;
---competencies
-drop trigger after_competencies_updated;
-drop trigger after_competencies_inserted;
-drop trigger after_competencies_deleted;
 
 --Drop Views
 drop view view_courses;

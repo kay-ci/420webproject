@@ -23,3 +23,15 @@ class Competency:
 
     def __repr__(self):
         print(f"Competency({self.id}, {self.competency}, {self.competency_achievement}, {self.competency_type})")
+    def __str__(self):
+        print(f"Competency: {self.id}, {self.competency}, {self.competency_achievement}, {self.competency_type}")
+
+from flask_wtf import FlaskForm
+from wtforms import StringField, TextAreaField, SelectField
+from wtforms.validators import DataRequired
+    
+class CompetencyForm(FlaskForm):
+    id = StringField('competency id', validators=[DataRequired()])
+    competency = StringField('competency title', validators=[DataRequired()])
+    competency_achievement = TextAreaField('competency achivement', validators=[DataRequired()])
+    competency_type = SelectField('competency type', choices=[("mandatory"),("optional")], validators=[DataRequired()])

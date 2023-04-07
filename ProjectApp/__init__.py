@@ -11,6 +11,8 @@ def create_app(test_config=None):
     else:
         app.config.from_mapping(test_config)
 
+    init_app(app)
     return app
 
 def init_app(app):
+    pass

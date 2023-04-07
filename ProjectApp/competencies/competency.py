@@ -20,3 +20,6 @@ class Competency:
         self.competency = competency
         self.competency_achievement = competency_achievement
         self.competency_type = competency_type
+
+    def __repr__(self):
+        print(f"Competency({self.id}, {self.competency}, {self.competency_achievement}, {self.competency_type})")

@@ -55,7 +55,7 @@ class Database:
                 output.append(Competency(row[0], row[1], row[2], row[3]))
         return output
     
-    def get_competency(self, id):
+    def get_competency(self, id):#might return None
         output = None
         if not isinstance(id, str):
             raise TypeError("id must be a string")
@@ -64,22 +64,31 @@ class Database:
             results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies where competency_id = :id", id = id)
             for row in results:
                 output = Competency(row[0], row[1], row[2], row[3])
-            if output == None:
-                raise ValueError("given id doesn't match any competency")
             return output
     
     def delete_competency(self, id):
-        competency = self.get_competency(id)
+        competency = self.get_competency(id)#performs validation of type for id
         if competency == None:
             raise ValueError("can't delete competency that wasn't there to begin with")
         with self.__connection.cursor() as cursor:
-            cursor.execute("delete from competencies where competency_id = :id", id = id)#what about type validation?
+            cursor.execute("delete from competencies where competency_id = :id", id = id)
     
     def update_competency(self, competency_id, competency, competency_achievement, competency_term):
         pass
 
     def add_competency(self, competency):
-        pass
+        from .competencies.competency import Competency
+        if not isinstance(competency, Competency):
+            raise TypeError("expecting first argument to be an instance of Competency")
+        fromDb = self.get_competency(competency.id)
+        if fromDb != None:
+            raise ValueError("an existing competency is already using this id")
+        with self.__connection.cursor() as cursor:
+            cursor.execute("insert into competencies values(:id, :competency, :competency_achievement, :competency_type)",
+                            id = competency.id,
+                            competency = competency.competency,
+                            competency_achievement = competency.competency_achievement, 
+                            competency_type = competency.competency_type)
 
 
 if __name__ == '__main__':

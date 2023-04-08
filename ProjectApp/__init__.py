@@ -17,8 +17,8 @@ def create_app(test_config=None):
 def init_app(app):
     app.teardown_appcontext(cleanup)
 
-    #from competencies.competency_views import bp as competency_bp
-    #app.register_blueprint(competency_bp)
+    from .competencies.competency_views import bp as competency_bp
+    app.register_blueprint(competency_bp)
     #from courses.course_views import bp as course_bp
     #app.register_blueprint(course_bp)
     #from domains.domain_views import bp as domain_bp

@@ -22,9 +22,9 @@ class Competency:
         self.competency_type = competency_type
 
     def __repr__(self):
-        print(f"Competency({self.id}, {self.competency}, {self.competency_achievement}, {self.competency_type})")
+        return f"Competency({self.id}, {self.competency}, {self.competency_achievement}, {self.competency_type})"
     def __str__(self):
-        print(f"Competency: {self.id}, {self.competency}, {self.competency_achievement}, {self.competency_type}")
+        return f"Competency: {self.id}, {self.competency}, {self.competency_achievement}, {self.competency_type}"
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectField

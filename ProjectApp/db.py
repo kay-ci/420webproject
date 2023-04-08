@@ -45,6 +45,15 @@ class Database:
     def __connect(self):
         return oracledb.connect(user=os.environ['DBUSER'], password=os.environ['DBPWD'],
                                              host="198.168.52.211", port=1521, service_name="pdbora19c.dawsoncollege.qc.ca")
+    
+    def get_competencies(self):
+        from .competencies.competency import Competency
+        output = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies")
+            for row in results:
+                output.append(Competency(row[0], row[1], row[2], row[3]))
+        return output
 
 
 if __name__ == '__main__':

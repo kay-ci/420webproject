@@ -1,0 +1,10 @@
+body {
+    background-color: rgb(224, 176, 241);
+    color: rgb(54, 29, 78);
+}
+
+#course_form {
+    display: flex;
+    flex-wrap: wrap;
+}
+

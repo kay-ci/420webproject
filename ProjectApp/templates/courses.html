@@ -9,20 +9,24 @@ Courses List
 {% endblock %}
 
 {% block content%}
-    <form method="post">
+    <form method="post" id="course_form">
         {{ form.csrf_token }}
-        {{ form.course_id.label }} {{ form.course_id() }}
-        {{ form.course_title.label }} {{ form.course_title() }}
-        {{ form.thoery_hours.label }} {{ form.thoery_hours() }}
-        {{ form.lab_hours.label }} {{ form.lab_hours() }}
-        {{ form.work_hours.label }} {{ form.work_hours() }}
-        {{ form.description.label }} {{ form.description() }}
-        {{ form.domain_id.label }} {{ form.domain_id() }}
-        {{ form.term_id.label }} {{ form.term_id() }}
+        <div id="formdiv1">
+            {{ form.course_id.label }} {{ form.course_id() }}
+            {{ form.course_title.label }} {{ form.course_title() }}
+            {{ form.thoery_hours.label }} {{ form.thoery_hours() }}
+            {{ form.lab_hours.label }} {{ form.lab_hours() }}
+        </div>
+        <div id="formdiv2">
+            {{ form.work_hours.label }} {{ form.work_hours() }}
+            {{ form.description.label }} {{ form.description() }}
+            {{ form.domain_id.label }} {{ form.domain_id() }}
+            {{ form.term_id.label }} {{ form.term_id() }}
+        </div>
     </form>
     <ul>
         {% for course in courses%}
-            <li>{{course}}</a></li>
+            <li>{{course.course_id}}: {{ course.course_title }}</li>
         {% endfor%}
     </ul>    
 {% endblock%}

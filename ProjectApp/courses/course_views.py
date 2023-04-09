@@ -1,7 +1,9 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
+from ProjectApp.dbmanager import get_db
 from .course import Course, CourseForm
 
-bp = Blueprint('course', __name__, url_prefix='/courses/')
+
+bp = Blueprint('courses', __name__, url_prefix='/courses/')
 
 @bp.route("/", methods=['GET', 'POST'])
 def list_courses():
@@ -15,7 +17,8 @@ def list_courses():
             else:
                 flash('Course already exists')
         elif request.method == 'GET':
-            return render_template('courses.html', form = form, addresses = get_db().get_courses())
-        return render_template('course.html', form = form, addresses = get_db().get_courses)
+            return render_template('courses.html', form = form, courses = get_db().get_courses())
+        return render_template('courses.html', form = form, courses = get_db().get_courses())
     except Exception as e:
+        print(e)
         return render_template('404.html')

@@ -10,9 +10,6 @@ def create_app(test_config=None):
         app.config.from_pyfile('config.py', silent=True)
     else:
         app.config.from_mapping(test_config)
-        
-    from .courses.courses_api import bp as address_api_bp
-    app.register_blueprint(address_api_bp)
 
     init_app(app)
     return app
@@ -22,8 +19,8 @@ def init_app(app):
 
     #from competencies.competency_views import bp as competency_bp
     #app.register_blueprint(competency_bp)
-    #from courses.course_views import bp as course_bp
-    #app.register_blueprint(course_bp)
+    from .courses.course_views import bp as course_bp
+    app.register_blueprint(course_bp)
     #from domains.domain_views import bp as domain_bp
     #app.register_blueprint(domain_bp)
     #from elements.element_views import bp as element_bp

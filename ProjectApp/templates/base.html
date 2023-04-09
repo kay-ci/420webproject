@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {%block title%}
+            {%endblock%}
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+        {% block script %}
+        {% endblock %}
+    </head>
+    <body>
+        <h1>
+            {% block header %}
+            {% endblock %}
+        </h1>
+        {% block content%}
+
+        {% endblock%}
+        <section id="flash_messages">
+            <h1>flash messages:</h1>
+            {% for message in get_flashed_messages() %}
+                <div class="flash"> {{message}} </div>
+            {% endfor %}
+        </section>
+    </body>
+</html>

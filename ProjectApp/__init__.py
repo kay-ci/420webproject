@@ -10,7 +10,11 @@ def create_app(test_config=None):
         app.config.from_pyfile('config.py', silent=True)
     else:
         app.config.from_mapping(test_config)
+        
+    from .courses.courses_api import bp as address_api_bp
+    app.register_blueprint(address_api_bp)
 
     return app
 
 def init_app(app):
+    a = 0

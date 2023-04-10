@@ -14,7 +14,7 @@ body {
 }
 
 #course_form label {
-    color: rgb(15, 7, 128);
+    color: rgb(25, 151, 151);
     font-weight: 600;
 }
 
@@ -30,23 +30,27 @@ h1 {
 a:link {
     text-decoration: none;
     font-size: 1.2em;
+    font-weight: 600;
     color: rgb(25, 151, 151);
 }
 
 a:visited {
     text-decoration: none;
     font-size: 1.2em;
+    font-weight: 600;
     color: rgb(25, 151, 151);
 }
 
 a:hover {
     text-decoration: none;
     font-size: 1.2em;
+    font-weight: 600;
     color: aliceblue;
 }
 
 a:active {
     text-decoration: none;
     font-size: 1.2em;
+    font-weight: 600;
     color: aliceblue;
 }

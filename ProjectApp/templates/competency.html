@@ -7,4 +7,13 @@
     <p>Name: {{competency.competency}}</p>
     <p>Achievement: {{competency.competency_achievement}}</p>
     <p>Type: {{competency.competency_type}}</p>
+    
+    <form method="post">
+        {{form.csrf_token}}
+        {{form.id.label}} {{form.id()}}
+        {{form.competency.label}} {{form.competency()}}
+        {{form.competency_achievement.label}} {{form.competency_achievement()}}
+        {{form.competency_type.label}} {{form.competency_type()}}
+        <input type="submit"/>
+    </form>
 {% endblock %}

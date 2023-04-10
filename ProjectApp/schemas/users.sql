@@ -1,5 +1,5 @@
 
-create table members(
+create table users (
     id number GENERATED ALWAYS as IDENTITY primary key,
     email varchar2(100) NOT NULL,
     password varchar2(102) NOT NULL,

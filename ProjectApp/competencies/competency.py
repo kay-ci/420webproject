@@ -28,10 +28,10 @@ class Competency:
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length
     
 class CompetencyForm(FlaskForm):
-    id = StringField('competency id', validators=[DataRequired()])
-    competency = StringField('competency title', validators=[DataRequired()])
-    competency_achievement = TextAreaField('competency achievement', validators=[DataRequired()])
+    id = StringField('competency id', validators=[DataRequired(), Length(max = 4)])
+    competency = StringField('competency title', validators=[DataRequired(), Length(max = 250)])
+    competency_achievement = TextAreaField('competency achievement', validators=[DataRequired(), Length(max = 500)])
     competency_type = SelectField('competency type', choices=[("mandatory"),("optional")], validators=[DataRequired()])

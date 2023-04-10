@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block header %}{{competency.competency}}{% endblock %}
+
+{% block content %}
+    <p>Id: {{competency.id}}</p>
+    <p>Name: {{competency.competency}}</p>
+    <p>Achievement: {{competency.competency_achievement}}</p>
+    <p>Type: {{competency.competency_type}}</p>
+{% endblock %}

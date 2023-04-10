@@ -73,8 +73,20 @@ class Database:
         with self.__connection.cursor() as cursor:
             cursor.execute("delete from competencies where competency_id = :id", id = id)
     
-    def update_competency(self, competency_id, competency, competency_achievement, competency_term):
-        pass
+    def update_competency(self, old_competency_id, competency_id, competency, competency_achievement, competency_type):
+        from .competencies.competency import Competency
+        fromDb = self.get_competency(old_competency_id)
+        if fromDb == None:
+            raise ValueError("couldn't find a competency with that id to update")
+        newCompetency = Competency(competency_id, competency, competency_achievement, competency_type)#for the validation
+        with self.__connection.cursor() as cursor:
+            cursor.execute("update competencies set competency_id = :id, competency = :competency, competency_achievement = :achievement, competency_type = :type where competency_id = :old_id",
+                           old_id = old_competency_id,
+                           id = competency_id,
+                           competency = competency,
+                           achievement = competency_achievement,
+                           type = competency_type)
+
 
     def add_competency(self, competency):
         from .competencies.competency import Competency

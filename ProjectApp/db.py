@@ -1,3 +1,4 @@
+from domains.domain import Domain
 import oracledb
 import os
 class Database:
@@ -45,7 +46,20 @@ class Database:
     def __connect(self):
         return oracledb.connect(user=os.environ['DBUSER'], password=os.environ['DBPWD'],
                                              host="198.168.52.211", port=1521, service_name="pdbora19c.dawsoncollege.qc.ca")
-
+    
+    def get_domain(self, domain_id):
+        with self.__conn.cursor() as cursor:
+            results = cursor.execute('select domain, domain_description where domain_id=:id', domain_id=id)
+            for row in results:
+                domain = Domain(domain_id,row[0],row[1])
+                return domain; 
+            
+    def insert_domain(self, domain):
+        if not isinstance(domain, Domain):
+            raise TypeError()
+        with self.__conn.cursor() as cursor:
+            cursor.execute('insert into domains (domain_id, domain, domain_description) values (:domain_id, :domain, :domain_description)',
+                           domain_id = domain.domain_id, domain = domain.domain, domain_description = domain.domain_description)
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

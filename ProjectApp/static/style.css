@@ -14,14 +14,39 @@ body {
 }
 
 #course_form label {
-    color:rgb(15, 7, 128);
+    color: rgb(15, 7, 128);
     font-weight: 600;
 }
 
 ul {
     font-family: 'Courier New', Courier, monospace;
 }
+
 h1 {
     font-family: "Lucida Console";
     
+}
+
+a:link {
+    text-decoration: none;
+    font-size: 1.2em;
+    color: rgb(25, 151, 151);
+}
+
+a:visited {
+    text-decoration: none;
+    font-size: 1.2em;
+    color: rgb(25, 151, 151);
+}
+
+a:hover {
+    text-decoration: none;
+    font-size: 1.2em;
+    color: aliceblue;
+}
+
+a:active {
+    text-decoration: none;
+    font-size: 1.2em;
+    color: aliceblue;
 }

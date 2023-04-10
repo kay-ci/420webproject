@@ -11,7 +11,7 @@ Courses List
 {% block content%}
     <ul>
         {% for course in courses%}
-            <li>{{course.course_id}}: {{ course.course_title }}</li>
+            <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}: {{ course.course_title }}</a></li>
         {% endfor%}
     </ul>
     <h1>Add Course</h1>

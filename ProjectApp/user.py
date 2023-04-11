@@ -27,6 +27,7 @@ class User(UserMixin):
 from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, StringField, BooleanField
 from wtforms.validators import DataRequired
+
 class SignupForm(FlaskForm):
     email = EmailField("email", validators=[DataRequired()])
     password = PasswordField("password", validators=[DataRequired()])

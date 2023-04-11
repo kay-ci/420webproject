@@ -1,8 +1,8 @@
-from domains.domain import Domain
+from .domains.domain import Domain
+from ProjectApp.user import User
 import oracledb
 import os
 
-from user import User
 class Database:
     def __init__(self, autocommit=True):
         self.__connection = self.__connect()

@@ -1,4 +1,4 @@
-class term:
+class Term:
     def __init__(self, id, name):
         if not isinstance(id, int):
             raise TypeError("expecting an id of type int")

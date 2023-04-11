@@ -15,3 +15,13 @@ def list_courses_elements():
             flash(e)
     if request.method == "GET":
         return render_template("courses_elements.html", courses_elements = get_db().get_courses_elements(), form = form)
+    
+#display all elements for a given course
+@bp.route("course/<element_id>/")
+def get_course_element_id(element_id):
+    pass
+    
+#display a course for a given element_id
+@bp.route("elements/<course_id>/")
+def get_course_course_id(course_id):
+    pass

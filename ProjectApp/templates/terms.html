@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block header %}Terms{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for term in terms %}
+        <li><a href="{{url_for('term.show_term', id = term.id)}}">{{term.id}}: {{term.name}}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

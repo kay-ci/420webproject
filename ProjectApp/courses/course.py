@@ -39,7 +39,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
     
-class AddressForm(FlaskForm):
+class CourseForm(FlaskForm):
     course_id = StringField('course_id', validators=[DataRequired()])
     course_title = StringField('course_title', validators=[DataRequired()])
     thoery_hours = IntegerField('thoery_hours', validators=[DataRequired()])

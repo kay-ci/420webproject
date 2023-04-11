@@ -1,0 +1,19 @@
+{%extends 'base.html' %}
+{% block title %}
+Courses Elements
+{% endblock title%}
+{% block header %}
+Courses Elements
+{% endblock header %}
+
+{% block content %}
+    <section id = "courses_element_block">
+        <ul>
+            {% for courses_element in courses_elements%}
+                {{ courses_element | safe}}
+                <li><a href="{{url_for('courses_elements.get_course', course_id = courses_element.course_id)}}"> Go to Course </a> </li>
+                <li><a href="{{url_for('courses_elements.get_element', element_id = courses_element.element_id)}}"> Go to Element </a> </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock content %}

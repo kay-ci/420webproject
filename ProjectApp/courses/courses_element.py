@@ -4,8 +4,11 @@ class CourseElement:
             raise Exception ("course id is not a str")
         if not isinstance (element_id, str):
             raise Exception ("Element id is not str")
-        if not isinstance (hours, int) or not isinstance(hours, float):
+        if not isinstance(hours, float):
             raise Exception ("hours is not int or float")
+        self.course_id = course_id
+        self.element_id = element_id
+        self.hours = hours
     def __repr__(self):
         return f'CourseElement({self.course_id}, {self.element_id}, {self.hours})'
     def __str__(self):

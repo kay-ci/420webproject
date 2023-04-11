@@ -108,8 +108,23 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute("select course_id, elem_id, elem_hours from course_element")
             for row in results:
-                courses_elements.append(CourseElement(row[0], row[1], row[2]))
+                courses_elements.append(CourseElement(row[0], row[1], float(row[2])))
         return courses_elements
+    
+    def add_courses_element(self, course_element):
+        with self.__get_cursor() as cursor:
+            cursor.execute("insert into course_element values(:course_id, :elem_id, :elem_hours)",
+                           course_id = course_element.course_id,
+                           elem_id = course_element.element_id,
+                           elem_hourse = course_element.hours)
+    
+    #only update hours
+    def update_courses_element(self, course_element):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update course_element set elem_hours = :new_hour where course_id=:id and elem_id = :elem_id",
+                           new_hour = course_element.hours,
+                           id = course_element.course_id,
+                           elem_id = course_element.element_id)
 
 
 if __name__ == '__main__':

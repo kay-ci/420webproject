@@ -16,4 +16,13 @@ Courses Elements
             {% endfor %}
         </ul>
     </section>
+
+    <section id = "Courses_element_form">
+        <form method = "post">
+            {{form.csrf_token}}
+            {{form.course_id.label}}{{form.course_id()}}
+            {{form.element_id.label}}{{form.element_id()}}
+            {{form.hours.label}}{{form.hours()}}
+        </form>
+    </section>
 {% endblock content %}

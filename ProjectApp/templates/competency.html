@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 
-{% block header %}Competencies{% endblock %}
+{% block header %}{{competency.competency}}{% endblock %}
 
 {% block content %}
-    <ul>
-        {% for competency in competencies %}
-        <li><a href="{{url_for('competency.delete_competency', id = competency.id)}}">Delete this Competency</a> <a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
-        {% endfor %}
-    </ul>
-
+    <p>Id: {{competency.id}}</p>
+    <p>Name: {{competency.competency}}</p>
+    <p>Achievement: {{competency.competency_achievement}}</p>
+    <p>Type: {{competency.competency_type}}</p>
+    
     <form method="post">
         {{form.csrf_token}}
         {{form.id.label}} {{form.id()}}
@@ -17,5 +16,4 @@
         {{form.competency_type.label}} {{form.competency_type()}}
         <input type="submit"/>
     </form>
-
 {% endblock %}

@@ -45,6 +45,62 @@ class Database:
     def __connect(self):
         return oracledb.connect(user=os.environ['DBUSER'], password=os.environ['DBPWD'],
                                              host="198.168.52.211", port=1521, service_name="pdbora19c.dawsoncollege.qc.ca")
+    
+    def get_competencies(self):
+        from .competencies.competency import Competency
+        output = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies")
+            for row in results:
+                output.append(Competency(row[0], row[1], row[2], row[3]))
+        return output
+    
+    def get_competency(self, id):#might return None
+        output = None
+        if not isinstance(id, str):
+            raise TypeError("id must be a string")
+        from .competencies.competency import Competency
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies where competency_id = :id", id = id)
+            for row in results:
+                output = Competency(row[0], row[1], row[2], row[3])
+            return output
+    
+    def delete_competency(self, id):
+        competency = self.get_competency(id)#performs validation of type for id
+        if competency == None:
+            raise ValueError("can't delete competency that wasn't there to begin with")
+        with self.__connection.cursor() as cursor:
+            cursor.execute("delete from competencies where competency_id = :id", id = id)
+    
+    def update_competency(self, old_competency_id, competency_id, competency, competency_achievement, competency_type):
+        from .competencies.competency import Competency
+        fromDb = self.get_competency(old_competency_id)
+        if fromDb == None:
+            raise ValueError("couldn't find a competency with that id to update")
+        newCompetency = Competency(competency_id, competency, competency_achievement, competency_type)#for the validation
+        with self.__connection.cursor() as cursor:
+            cursor.execute("update competencies set competency_id = :id, competency = :competency, competency_achievement = :achievement, competency_type = :type where competency_id = :old_id",
+                           old_id = old_competency_id,
+                           id = competency_id,
+                           competency = competency,
+                           achievement = competency_achievement,
+                           type = competency_type)
+
+
+    def add_competency(self, competency):
+        from .competencies.competency import Competency
+        if not isinstance(competency, Competency):
+            raise TypeError("expecting first argument to be an instance of Competency")
+        fromDb = self.get_competency(competency.id)
+        if fromDb != None:
+            raise ValueError("an existing competency is already using this id")
+        with self.__connection.cursor() as cursor:
+            cursor.execute("insert into competencies values(:id, :competency, :competency_achievement, :competency_type)",
+                            id = competency.id,
+                            competency = competency.competency,
+                            competency_achievement = competency.competency_achievement, 
+                            competency_type = competency.competency_type)
 
 
 if __name__ == '__main__':

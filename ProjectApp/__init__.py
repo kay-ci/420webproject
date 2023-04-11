@@ -25,8 +25,8 @@ def init_app(app):
     #app.register_blueprint(domain_bp)
     #from elements.element_views import bp as element_bp
     #app.register_blueprint(element_bp)
-    #from terms.term_views import bp as term_bp
-    #app.register_blueprint(term_bp)
+    from terms.term_views import bp as term_bp
+    app.register_blueprint(term_bp)
 
     @app.errorhandler(404)
     def page_not_found(error):

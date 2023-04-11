@@ -16,8 +16,8 @@ def create_app(test_config=None):
 
     from .competencies.competency_views import bp as competency_bp
     app.register_blueprint(competency_bp)
-    #from courses.course_views import bp as course_bp
-    #app.register_blueprint(course_bp)
+    from courses.course_views import bp as course_bp
+    app.register_blueprint(course_bp)
     
     from .domains.domain_views import bp as domain_bp
     app.register_blueprint(domain_bp)

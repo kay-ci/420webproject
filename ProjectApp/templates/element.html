@@ -11,7 +11,7 @@
         <p>Competency ID: {{element.competency_id}}</p>
     </section>
 
-    <section id = "element_update">
+    <section clas = "element_form">
         <form method="post">
             {{form.csrf_token}}
             {{form.element_id.label}} {{form.element_id()}}

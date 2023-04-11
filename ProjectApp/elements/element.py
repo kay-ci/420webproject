@@ -37,6 +37,6 @@ class ElementForm(FlaskForm):
     element_id = StringField('Element id', validators=[DataRequired()])
     element_order = StringField('Element_order', validators=[DataRequired()])
     element = StringField('Element', validators=[DataRequired()])
-    element_criteria = StringField('Element', validators=[DataRequired])
+    element_criteria = StringField('Element', validators=[DataRequired()])
     competency_id = StringField('Competency_id',validators=[DataRequired()])
         

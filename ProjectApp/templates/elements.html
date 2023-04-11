@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Elements Page{% endblock title %}
+{% block header %}Elements{% endblock %}
+
+{% block content %}
+    <section id = "elements info">
+        <ul>
+            {% for competency in competencies %}
+            <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">Delete this Competency</a> <a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section clas = "element_form">
+        <form method="post">
+            {{form.csrf_token}}
+            {{form.element_id.label}} {{form.element_id()}}
+            {{form.element_order.label}} {{form.element_order()}}
+            {{form.element.label}} {{form.element()}}
+            {{form.element_criteria.label}} {{form.element_criteria()}}
+            {{form.competency_id.label}} {{form.competency_id()}}
+            <input type="submit"/>
+        </form>
+    </section
+
+{% endblock %}

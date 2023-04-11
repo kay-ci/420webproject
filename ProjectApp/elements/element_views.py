@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from .element import Element, ElementForm
 from ..dbmanager import get_db
-bp = Blueprint("element", __name__, url_prefix='elements')
+bp = Blueprint("element", __name__, url_prefix='/elements')
 
 @bp.route("/", methods = ["GET", "POST"])
 def show_elements():

@@ -152,6 +152,26 @@ class Database:
                             competency = competency.competency,
                             competency_achievement = competency.competency_achievement, 
                             competency_type = competency.competency_type)
+    
+    def get_terms(self):
+        from .terms.term import Term
+        output = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select term_id, term_name from terms")
+            for row in results:
+                output.append(Term(row[0], row[1]))
+        return output
+    
+    def get_term(self, id):#might return None
+        output = None
+        if not isinstance(id, int):
+            raise TypeError("id must be an int")
+        from .terms.term import Term
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select term_id, term_name from terms where term_id = :id", id = id)
+            for row in results:
+                output = Term(row[0], row[1])
+            return output
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

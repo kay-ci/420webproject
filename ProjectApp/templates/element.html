@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block header %}Element{% endblock %}
+{% block header %}Element Information{% endblock %}
 
 {% block content %}
     <section id= "element_info">
@@ -14,7 +14,6 @@
     <section clas = "element_form">
         <form method="post">
             {{form.csrf_token}}
-            {{form.element_id.label}} {{form.element_id()}}
             {{form.element_order.label}} {{form.element_order()}}
             {{form.element.label}} {{form.element()}}
             {{form.element_criteria.label}} {{form.element_criteria()}}

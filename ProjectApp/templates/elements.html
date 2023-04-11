@@ -5,8 +5,8 @@
 {% block content %}
     <section id = "elements info">
         <ul>
-            {% for competency in competencies %}
-            <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">Delete this Competency</a> <a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
+            {% for element in elements %}
+            <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element.element | safe}}</a> </li>
             {% endfor %}
         </ul>
     </section>

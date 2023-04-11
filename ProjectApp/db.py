@@ -1,5 +1,6 @@
 import oracledb
 import os
+from .elements.element import Element
 class Database:
     def __init__(self, autocommit=True):
         self.__connection = self.__connect()
@@ -127,15 +128,50 @@ class Database:
                            elem_id = course_element.element_id)
 
     def get_elements(self):
-        pass
+        elements = []
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements")
+            for row in results:
+                elements.append(Element(int(row[0]), int(row[1]), row[2], row[3], row[4]))
+        return elements
+    
     def get_element(self, element_id):
-        pass
+        if not isinstance (element_id, int):
+            raise TypeError("element_id must be int")
+        element = None
+        with self.__get_cursor() as cursor:
+            result = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where element_id = :id", id = element_id)
+            for row in result:
+                element = Element(int(row[0]), int(row[1]), row[2], row[3], row[4])
+            return element
     def add_element(self, element):
-        pass
-    def update_element(self, element):
-        pass
+        if not isinstance(element, Element):
+            raise TypeError("Expected Type Element")
+        #check integrity todo
+        with self.__get_cursor() as cursor:
+            cursor.execute("insert into elements (element_id, element_order, element, element_criteria, competency_id) values (:id, :order, :element, :criteria, :comp_id)",
+                           id = element.element_id,
+                           order = element.element_order,
+                           element = element.element,
+                           criteria = element.element_criteria,
+                           comp_id = element.competency_id)
+    def update_element(self, element_id, element_order, element, element_criteria, competency_id ):
+        check = self.get_element(int(element_id))
+        if check == None:
+            raise Exception("Could not update! element does not exist")
+        with self.__get_cursor() as cursor:
+            cursor.execute("update elements set element_order = :order, element = :element, element_criteria = :criteria, competency_id = :comp_id where element_id = :old_id",
+                           order = element_order,
+                           element = element,
+                           criteria = element_criteria,
+                           comp_id = competency_id,
+                           old_id = element_id)
     def delete_element(self, element_id):
-        pass
+        element = self.get_element(int(element_id))
+        if element == None:
+            raise ValueError("Element does not exist could not delete!")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from elements where element_id = :id", id = element_id )
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

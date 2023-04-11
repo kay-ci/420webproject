@@ -101,6 +101,15 @@ class Database:
                             competency = competency.competency,
                             competency_achievement = competency.competency_achievement, 
                             competency_type = competency.competency_type)
+            
+    def get_courses_elements(self):
+        from .courses.courses_element import CourseElement
+        courses_elements = []
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, elem_id, elem_hours from course_element")
+            for row in results:
+                courses_elements.append(CourseElement(row[0], row[1], row[2]))
+        return courses_elements
 
 
 if __name__ == '__main__':

@@ -20,7 +20,7 @@ class CourseElement:
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField
 from wtforms.validators import DataRequired
-class CourseElementForm:
+class CourseElementForm(FlaskForm):
     course_id = StringField('Course ID', [DataRequired()])
     element_id = StringField('Element ID', [DataRequired()])
     hours = FloatField('Hours', [DataRequired()])

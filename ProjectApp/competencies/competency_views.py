@@ -23,12 +23,17 @@ def delete_competency(id):
         flash("couldn't find competency with this id to delete")
     return redirect(url_for("competency.show_competencies"))
 
-@bp.route("/<id>/")
+@bp.route("/<id>/", methods = ["GET", "POST"])
 def show_competency(id):
+    form = CompetencyForm()
     if not isinstance(id, str):
         flash("could not find a competency with this id")
     competency = get_db().get_competency(id)
     if competency == None:
         flash("could not find a competency with this id")
-        return redirect(url_for('show_competencies')), 404
-    return render_template("competency.html", competency = competency)
+        return redirect(url_for('competency.show_competencies')), 404
+    if request.method == "POST" and form.validate_on_submit():
+        get_db().update_competency(id, form.id.data, form.competency.data, form.competency_achievement.data, form.competency_type.data)
+        competency = get_db().get_competency(form.id.data)
+        return redirect(url_for("competency.show_competency", id = form.id.data))
+    return render_template("competency.html", competency = competency, form = form)

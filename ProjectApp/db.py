@@ -126,6 +126,16 @@ class Database:
                            id = course_element.course_id,
                            elem_id = course_element.element_id)
 
+    def get_elements(self):
+        pass
+    def get_element(self, element_id):
+        pass
+    def add_element(self, element):
+        pass
+    def update_element(self, element):
+        pass
+    def delete_element(self, element_id):
+        pass
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

@@ -25,8 +25,8 @@ def init_app(app):
     app.register_blueprint(courses_elements_bp)
     #from domains.domain_views import bp as domain_bp
     #app.register_blueprint(domain_bp)
-    #from elements.element_views import bp as element_bp
-    #app.register_blueprint(element_bp)
+    from elements.element_views import bp as element_bp
+    app.register_blueprint(element_bp)
     #from terms.term_views import bp as term_bp
     #app.register_blueprint(term_bp)
 

@@ -1,7 +1,56 @@
-fieldset {
-    width: 100px;
-}
 body {
+    background-color: rgb(226, 195, 255);
+    color: rgb(15, 7, 128);
+}
+
+#course_form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+#course_form input {
+    width: 20%;
+}
+
+#course_form label {
+    color: rgb(25, 151, 151);
+    font-weight: 600;
+}
+
+ul {
     font-family: 'Courier New', Courier, monospace;
-    background-color: #babce1;
+}
+
+h1 {
+    font-family: "Lucida Console";
+    
+}
+
+a:link {
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: rgb(25, 151, 151);
+}
+
+a:visited {
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: rgb(25, 151, 151);
+}
+
+a:hover {
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: aliceblue;
+}
+
+a:active {
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: aliceblue;
 }

@@ -3,6 +3,8 @@ from ProjectApp.user import User
 import oracledb
 import os
 from .elements.element import Element
+from .courses.course import Course
+
 class Database:
     def __init__(self, autocommit=True):
         self.__connection = self.__connect()
@@ -47,7 +49,28 @@ class Database:
 
     def __connect(self):
         return oracledb.connect(user=os.environ['DBUSER'], password=os.environ['DBPWD'],
-                                host="198.168.52.211", port=1521, service_name="pdbora19c.dawsoncollege.qc.ca")
+                                             host="198.168.52.211", port=1521, service_name="pdbora19c.dawsoncollege.qc.ca")
+        
+    def get_courses(self):
+        with self.__connection.cursor() as cursor:
+            cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses")
+            results = cursor.fetchall()
+            addresses = []
+            for row in results:
+                address = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
+                addresses.append(address)
+            return addresses
+        
+    def get_course(self, id):
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses where course_id=:given_id", given_id=id)
+            for row in results:
+                course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
+            return course
+
+    
+    def add_course(course):
+        pass
     
     def get_domain(self, domain_id):
         with self.__connection.cursor() as cursor:
@@ -137,7 +160,6 @@ class Database:
                            competency = competency,
                            achievement = competency_achievement,
                            type = competency_type)
-
 
     def add_competency(self, competency):
         from .competencies.competency import Competency

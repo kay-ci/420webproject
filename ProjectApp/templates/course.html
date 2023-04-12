@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{%block title%}
+Course Information
+{%endblock%}
+
+{% block header %}
+Courses Information
+{% endblock %}
+
+{% block content %}
+<ul class="info_course">
+    <li>Course ID: {{ course.course_id }}</li>
+    <li>Course Title: {{ course.course_title }}</li>
+    <li>Thoery Hours: {{ course.thoery_hours }}</li>
+    <li>Lab Hours: {{ course.lab_hours }}</li>
+    <li>Work Hours: {{ course.work_hours }}</li>
+    <li>Description: {{ course.description }}</li>
+    <li>Term: </li>
+    <li>Domain: </li>
+</ul>
+
+<h1>Elements</h1>
+{% endblock %}

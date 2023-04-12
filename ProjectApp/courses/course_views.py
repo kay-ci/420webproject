@@ -27,7 +27,7 @@ def list_courses():
 def find_course(the_id):
     try:
         result = get_db().get_course(the_id)
-        return render_template('courses_elements.html', course = result)
+        return render_template('course.html', course = result)
     except Exception as e:
         flash('Something went wrong, could not find the Course')
         return redirect(url_for('courses.list_courses'))

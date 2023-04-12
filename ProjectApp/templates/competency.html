@@ -5,8 +5,19 @@
 {% block content %}
     <p>Id: {{competency.id}}</p>
     <p>Name: {{competency.competency}}</p>
-    <p>Achievement: {{competency.competency_achievement}}</p>
+    <p>Achievements</p>
+    <ul>
+        {% for achievement in achievements %}
+        <li>{{achievement}}</li>
+        {% endfor %}
+    </ul>
     <p>Type: {{competency.competency_type}}</p>
+    <p>Elements: </p>
+    <ul>
+        {% for element in elements %}
+        <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element}}</a></li>
+        {% endfor %}
+    </ul>
     
     <form method="post">
         {{form.csrf_token}}

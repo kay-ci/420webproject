@@ -16,15 +16,15 @@ body {
 #course_form label {
     color: rgb(25, 151, 151);
     font-weight: 600;
+    font-size: 1.2em;
 }
 
 ul {
     font-family: 'Courier New', Courier, monospace;
 }
 
-h1 {
+h1, h2 {
     font-family: "Lucida Console";
-    
 }
 
 a:link {

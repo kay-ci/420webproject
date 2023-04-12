@@ -54,3 +54,21 @@ a:active {
     font-weight: 600;
     color: aliceblue;
 }
+
+#alert404 {
+    background-color: black;
+    color:aquamarine;
+    font-size:300px;
+    text-align:center;
+    font-family: 'Lucida Sans';
+}
+
+#txt404 {
+    font-size:30px;
+    text-align:center;
+    color: black;
+}
+
+#body404 {
+    background-color: aliceblue;
+}

@@ -36,4 +36,6 @@ def show_competency(id):
         get_db().update_competency(id, form.id.data, form.competency.data, form.competency_achievement.data, form.competency_type.data)
         competency = get_db().get_competency(form.id.data)
         return redirect(url_for("competency.show_competency", id = form.id.data))
-    return render_template("competency.html", competency = competency, form = form)
+    achievements = competency.competency_achievement.split("*")
+    achievements.pop(0)
+    return render_template("competency.html", competency = competency, form = form, achievements = achievements, elements = get_db().get_competency_elements(id))

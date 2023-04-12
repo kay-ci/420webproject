@@ -174,6 +174,17 @@ class Database:
                             competency = competency.competency,
                             competency_achievement = competency.competency_achievement, 
                             competency_type = competency.competency_type)
+            
+    def get_competency_elements(self, id):
+        output = []
+        if not isinstance(id, str):
+            raise TypeError("id must be a string")
+        from .elements.element import Element
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from view_competencies_elements where competency_id = :id", id = id)
+            for row in results:
+                output.append(Element(row[0], row[1], row[2], row[3], row[4]))
+        return output
                 
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement

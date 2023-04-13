@@ -13,9 +13,13 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
 
     init_app(app)
+    
+    from .home.home_views import bp as home_bp
+    app.register_blueprint(home_bp)
 
     from .competencies.competency_views import bp as competency_bp
     app.register_blueprint(competency_bp)
+    
     from .courses.course_views import bp as course_bp
     app.register_blueprint(course_bp)
     
@@ -30,6 +34,9 @@ def create_app(test_config=None):
     
     from .terms.term_views import bp as term_bp
     app.register_blueprint(term_bp)
+    
+    from .auth_views import bp as auth_bp
+    app.register_blueprint(auth_bp)
 
     @app.errorhandler(404)
     def page_not_found(error):

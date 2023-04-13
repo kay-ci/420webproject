@@ -46,10 +46,12 @@ label {
 ul {
     font-family: 'Courier New', Courier, monospace;
     margin-left: 20px;
+    list-style-type: none;
 }
 
 li {
     margin-left: 40px;
+    font-size: large;
 }
 
 h1, h2 {

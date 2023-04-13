@@ -3,22 +3,26 @@
 {% block header %}{{competency.competency}}{% endblock %}
 
 {% block content %}
-    <p>Id: {{competency.id}}</p>
-    <p>Name: {{competency.competency}}</p>
-    <p>Achievements</p>
     <ul>
-        {% for achievement in achievements %}
-        <li>{{achievement}}</li>
-        {% endfor %}
+        <li><b>Id:</b> {{competency.id}}</li>
+        <li><b>Name:</b> {{competency.competency}}</li>
+        <li><b>Achievements:</b></li>
+        <li>
+            <ul>
+                {% for achievement in achievements %}
+                <li>{{achievement}}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li><b>Type:</b> {{competency.competency_type}}</li>
     </ul>
-    <p>Type: {{competency.competency_type}}</p>
-    <p>Elements: </p>
+    <h2>Elements: </h2>
     <ul>
         {% for element in elements %}
         <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element}}</a></li>
         {% endfor %}
     </ul>
-    
+    <h1>??? Competency</h1>
     <form method="post">
         {{form.csrf_token}}
         {{form.id.label}} {{form.id()}}

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 * {
     padding:0px;
     margin:0px;
@@ -14,12 +13,6 @@ nav {
 }
 
 body {
-=======
-body, html {
-    border: 0;
-    padding: 0;
-    margin: 0;
->>>>>>> 950116b103abde4dc144094c3445f7c68ff593f4
     background-color: rgb(226, 195, 255);
     color: rgb(15, 7, 128);
  }
@@ -47,6 +40,7 @@ label {
     width: 30%;
     margin: auto;
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 ul {
@@ -111,4 +105,10 @@ a:active {
 
 #description {
     height:100px;
+}
+
+#account_yet {
+    margin-left: 20px;
+    margin-top: 10px;
+    display: inline-block;
 }

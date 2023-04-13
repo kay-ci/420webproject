@@ -23,11 +23,14 @@ def create_app(test_config=None):
     from .courses.course_views import bp as course_bp
     app.register_blueprint(course_bp)
     
+    from .courses.courses_elements_views import bp as courses_elements_bp
+    app.register_blueprint(courses_elements_bp)
+ 
     from .domains.domain_views import bp as domain_bp
     app.register_blueprint(domain_bp)
     
-    #from elements.element_views import bp as element_bp
-    #app.register_blueprint(element_bp)
+    from .elements.element_views import bp as element_bp
+    app.register_blueprint(element_bp)
     
     from .terms.term_views import bp as term_bp
     app.register_blueprint(term_bp)

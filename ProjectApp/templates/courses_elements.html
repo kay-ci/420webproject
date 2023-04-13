@@ -1,22 +1,27 @@
-{% extends 'base.html' %}
-
-{%block title%}
-Course Information
-{%endblock%}
-
+{%extends 'base.html' %}
+{% block title %}
+Courses Elements
+{% endblock title%}
 {% block header %}
-Courses Information
-{% endblock %}
+Courses Elements
+{% endblock header %}
 
 {% block content %}
-<ul class="info_course">
-    <li>Course ID: {{ course.course_id }}</li>
-    <li>Course Title: {{ course.course_title }}</li>
-    <li>Thoery Hours: {{ course.thoery_hours }}</li>
-    <li>Lab Hours: {{ course.lab_hours }}</li>
-    <li>Work Hours: {{ course.work_hours }}</li>
-    <li>Description: {{ course.description }}</li>
-</ul>
+    <section id = "courses_element_block">
+        <ul>
+            {% for courses_element in courses_elements%}
+                <li>{{ courses_element | safe}}</li>
+            {% endfor %}
+        </ul>
+    </section>
 
-<h1>Elements</h1>
-{% endblock %}
+    <section id = "Courses_element_form">
+        <form method = "post">
+            {{form.csrf_token}}
+            {{form.course_id.label}}{{form.course_id()}}
+            {{form.element_id.label}}{{form.element_id()}}
+            {{form.hours.label}}{{form.hours()}}
+            <input type = "submit"
+        </form>
+    </section>
+{% endblock content %}

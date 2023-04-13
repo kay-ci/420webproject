@@ -2,13 +2,13 @@
     {% block title %}Home{% endblock %}
 {% block content%}
         <div id="nav_bar">
-            <a class="active" href="">Home</a>
-            <a href="">Competencies</a>
-            <a href="">Domains</a>
-            <a href="">Course Elements</a>
-            <a href="">Terms</a>
-            <a href="">Elements</a>
-            <a href="">Elements</a>
+            <a class="active" href={{url_for('home.index')}}>Home</a>
+            <a href={{url_for('competency.show_competencies')}}>Competencies</a>
+            <a href={{url_for('domain_views.get_domains')}}>Domains</a>
+            <a href={{url_for('home.index')}}>Course Elements</a>
+            <a href={{url_for('home.index')}}>Terms</a>
+            <a href={{url_for('home.index')}}>Elements</a>
+            <a href={{url_for('home.index')}}>Elements</a>
             <p id="web_name">Dawson College Database Manager</p>
         </div> 
         <section>

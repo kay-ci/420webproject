@@ -8,7 +8,7 @@ from ProjectApp.user import LoginForm
 bp = Blueprint('home', __name__, url_prefix="/")
 
 
-@bp.route('/login/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET', 'POST'])
 def login_index():
     form = LoginForm()
     if request.method == 'POST':

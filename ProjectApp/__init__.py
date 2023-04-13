@@ -34,6 +34,9 @@ def create_app(test_config=None):
     
     from .terms.term_views import bp as term_bp
     app.register_blueprint(term_bp)
+    
+    from .auth_views import bp as auth_bp
+    app.register_blueprint(auth_bp)
 
     @app.errorhandler(404)
     def page_not_found(error):

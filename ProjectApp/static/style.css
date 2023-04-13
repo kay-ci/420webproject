@@ -88,4 +88,7 @@ fieldset {
     margin-bottom: 9px;
     margin-top: 13px;
 }
+#account_yet {
+    display: inline-block;
+}
 

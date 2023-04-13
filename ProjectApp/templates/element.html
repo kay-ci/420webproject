@@ -1,20 +1,19 @@
 {% extends "base.html" %}
-{% block title %}Elements Page{% endblock title %}
-{% block header %}Elements{% endblock %}
+
+{% block header %}Element Information{% endblock %}
 
 {% block content %}
-    <section id = "elements info">
-        <ul>
-            {% for element in elements %}
-            <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element.element | safe}}</a> </li>
-            {% endfor %}
-        </ul>
+    <section id= "element_info">
+        <p>Element ID: {{element.element_id}}</p>
+        <p>Element order: {{element.element_order}}</p>
+        <p>Element: {{element.element}}</p>
+        <p>Element criteria: {{element.element_criteria}}</p>
+        <p>Competency ID: {{element.competency_id}}</p>
     </section>
 
     <section clas = "element_form">
         <form method="post">
             {{form.csrf_token}}
-            {{form.element_id.label}} {{form.element_id()}}
             {{form.element_order.label}} {{form.element_order()}}
             {{form.element.label}} {{form.element()}}
             {{form.element_criteria.label}} {{form.element_criteria()}}
@@ -22,5 +21,4 @@
             <input type="submit"/>
         </form>
     </section
-
 {% endblock %}

@@ -8,14 +8,14 @@
         <li><a href="{{url_for('competency.delete_competency', id = competency.id)}}">Delete this Competency</a> <a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
         {% endfor %}
     </ul>
-
+    <h1>Add Competency</h1>
     <form method="post">
         {{form.csrf_token}}
         {{form.id.label}} {{form.id()}}
         {{form.competency.label}} {{form.competency()}}
         {{form.competency_achievement.label}} {{form.competency_achievement()}}
         {{form.competency_type.label}} {{form.competency_type()}}
-        <input type="submit"/>
+        <input class="submit" type="submit"/>
     </form>
 
 {% endblock %}

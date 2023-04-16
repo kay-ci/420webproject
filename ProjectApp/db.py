@@ -185,7 +185,6 @@ class Database:
             for row in results:
                 output.append(Element(row[0], row[1], row[2], row[3], row[4]))
         return output
-                
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement
         courses_elements = []

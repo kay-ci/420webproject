@@ -1,19 +1,29 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
-from .competency import Competency, CompetencyForm
+from .competency import Competency, CompetencyForm, CompleteCompetencyForm
+from ..elements.element import ElementForm, Element
 from ..dbmanager import get_db
 
 bp = Blueprint("competency", __name__, url_prefix="/competencies")
 
-@bp.route("/", methods = ["GET", "POST"])
+@bp.route("/")
 def show_competencies():
-    form = CompetencyForm()
+    return render_template("competencies.html", competencies = get_db().get_competencies())
+
+@bp.route("/add/", methods = ["GET", "POST"])#login required
+def add_competency():
+    form = CompleteCompetencyForm()
     if request.method == "POST" and form.validate_on_submit():
-        newCompetency = Competency(form.id.data, form.competency.data, form.competency_achievement.data, form.competency_type.data)
-        try:
-            get_db().add_competency(newCompetency)#will throw on duplicate
-        except ValueError as e:
-            flash(e)
-    return render_template("competencies.html", competencies = get_db().get_competencies(), form = form)
+        competency = Competency(form.competency_id.data, form.competency.data, form.competency_achievement.data, form.competency_type.data)
+        element = Element(None, form.element_order.data, form.element.data, form.element_criteria.data, form.competency_id.data)
+        if get_db().get_competency(form.competency_id.data) != None:
+            flash("this competency id is already being used")
+            return render_template("add_competency.html", form = form)
+        get_db().add_competency(competency)
+        get_db().add_element(element)
+        return redirect(url_for('competency.show_competency', id = competency.id))
+    return render_template("add_competency.html", form = form)
+        
+            
 
 @bp.route("/delete/<id>/")
 def delete_competency(id):

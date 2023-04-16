@@ -190,7 +190,7 @@ class Database:
         from .courses.courses_element import CourseElement
         courses_elements = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute("select course_id, elem_id, elem_hours from course_element")
+            results = cursor.execute("select course_id, element_id, element_hours from courses_elements")
             for row in results:
                 courses_elements.append(CourseElement(row[0], row[1], float(row[2])))
         return courses_elements
@@ -232,12 +232,11 @@ class Database:
             raise TypeError("Expected Type Element")
         #check integrity todo
         with self.__get_cursor() as cursor:
-            cursor.execute("insert into elements (element_id, element_order, element, element_criteria, competency_id) values (:id, :order, :element, :criteria, :comp_id)",
-                           id = element.element_id,
-                           order = element.element_order,
+            cursor.execute("insert into elements(element_order, element, element_criteria, competency_id) values(:element_order, :element, :element_criteria, :competency_id)",
+                           element_order = element.element_order,
                            element = element.element,
-                           criteria = element.element_criteria,
-                           comp_id = element.competency_id)
+                           element_criteria = element.element_criteria,
+                           competency_id = element.competency_id)
     def update_element(self, element_id, element_order, element, element_criteria, competency_id ):
         check = self.get_element(int(element_id))
         if check == None:

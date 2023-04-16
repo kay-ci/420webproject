@@ -30,12 +30,12 @@ from wtforms import EmailField, PasswordField, StringField, BooleanField
 from wtforms.validators import DataRequired
 
 class SignupForm(FlaskForm):
-    email = EmailField("email", validators=[DataRequired()])
-    password = PasswordField("password", validators=[DataRequired()])
-    name = StringField("name", validators=[DataRequired()])
-    avatar = FileField("avatar")
+    email = EmailField("Email", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    name = StringField("Name", validators=[DataRequired()])
+    avatar = FileField("Choose your own avatar!")
 
 class LoginForm(FlaskForm):
-    email = EmailField("email", validators=[DataRequired()])
-    password = PasswordField("password", validators=[DataRequired()])
-    remember_me = BooleanField("remember_me", validators=[DataRequired()])
+    email = EmailField("Email", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    remember_me = BooleanField("Remember me", validators=[DataRequired()])

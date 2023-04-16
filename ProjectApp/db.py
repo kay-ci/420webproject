@@ -74,7 +74,7 @@ class Database:
     
     def get_domain(self, domain_id):
         with self.__connection.cursor() as cursor:
-            results = cursor.execute('select domain, domain_description where domain_id=:id', domain_id=domain_id)
+            results = cursor.execute('select domain, domain_description from domains where domain_id=:id', id=domain_id)
             for row in results:
                 domain = Domain(domain_id,row[0],row[1])
                 return domain; 

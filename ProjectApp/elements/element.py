@@ -31,11 +31,11 @@ class Element:
         ##return Element
         
 from flask_wtf import FlaskForm 
-from wtforms import StringField
+from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
 class ElementForm(FlaskForm):
-    element_order = StringField('Element_order', validators=[DataRequired()])
+    element_order = IntegerField('Element order', validators=[DataRequired()])
     element = StringField('Element', validators=[DataRequired()])
     element_criteria = StringField('Element criteria', validators=[DataRequired()])
-    competency_id = StringField('Competency_id',validators=[DataRequired()])
+    competency_id = StringField('Competency id',validators=[DataRequired()])
         

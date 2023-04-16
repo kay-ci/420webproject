@@ -1,7 +1,6 @@
 class Element:
     def __init__(self, element_id, element_order, element, element_criteria, competency_id):
-        if not isinstance (element_id, int):
-            raise Exception ("element id must be string")
+        #element id is nullable
         if not isinstance (element_order, int):
             raise Exception ("element_order not int")
         if not isinstance (element, str):
@@ -37,6 +36,6 @@ class ElementForm(FlaskForm):
     element_id = StringField('Element id', validators=[DataRequired()])
     element_order = StringField('Element_order', validators=[DataRequired()])
     element = StringField('Element', validators=[DataRequired()])
-    element_criteria = StringField('Element', validators=[DataRequired()])
+    element_criteria = StringField('Element criteria', validators=[DataRequired()])
     competency_id = StringField('Competency_id',validators=[DataRequired()])
         

@@ -15,9 +15,6 @@ nav {
 body {
     background-color: rgb(226, 195, 255);
     color: rgb(15, 7, 128);
-    background-color: navy;
-    color: white;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
  }
 
 form {
@@ -50,6 +47,11 @@ ul {
     font-family: 'Courier New', Courier, monospace;
     margin-left: 20px;
     list-style-type: none;
+}
+
+ol {
+    font-family: 'Courier New', Courier, monospace;
+    margin-left: 30px;
 }
 
 li {
@@ -97,32 +99,6 @@ a:active {
     text-align:center;
     font-family: 'Lucida Sans';
 }
-#login_section {
-    text-align: center;
-    margin-top:100px;
-}
-#login_section fieldset {
-    margin: auto;
-    border-radius: 10px;
-}
-#login_section fieldset input {
-    margin-top: 10px;
-}
-#signup_section {
-    text-align: center;
-}
-#signup_section fieldset {
-    margin: auto;
-    border-radius: 10px;
-    width: 200px;
-}
-#signup_section fieldset label, #signup_section fieldset input {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    margin-top: 20px;
-}
-legend {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
 
 #txt404 {
     font-size:30px;
@@ -143,3 +119,5 @@ legend {
     margin-top: 10px;
     display: inline-block;
 }
+
+

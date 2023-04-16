@@ -17,12 +17,12 @@
         <li><b>Type:</b> {{competency.competency_type}}</li>
     </ul>
     <h2>Elements: </h2>
-    <ul>
+    <ol>
         {% for element in elements %}
         <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element}}</a></li>
         {% endfor %}
-    </ul>
-    <h1>??? Competency</h1>
+    </ol>
+    <h1>Add Competency</h1>
     <form method="post">
         {{form.csrf_token}}
         {{form.id.label}} {{form.id()}}

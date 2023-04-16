@@ -27,8 +27,10 @@ def list_courses():
 def find_course(the_id):
     try:
         result = get_db().get_course(the_id)
-        i = result.domain_id
-        return render_template('course.html', course = result, term = get_db().get_term(result.term_id), domain = get_db().get_domain(result.domain_id))
+        term = get_db().get_term(result.term_id)
+        domain = get_db().get_domain(result.domain_id)
+        competencies = get_db().get_course_def(result.course_id)
+        return render_template('course.html', course = result, term = term, domain = domain, competencies = competencies)
     except Exception as e:
         flash('Something went wrong, could not find the Course')
         # return redirect(url_for('courses.list_courses'))

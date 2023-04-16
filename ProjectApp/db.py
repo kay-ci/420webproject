@@ -1,3 +1,4 @@
+from ProjectApp.competencies.competency import Competency
 from .domains.domain import Domain
 from ProjectApp.user import User
 import oracledb
@@ -67,8 +68,15 @@ class Database:
             for row in results:
                 course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
             return course
+        
+    def get_course_def(self, courseid):
+        with self.__connection.cursor() as cursor:
+            output = []
+            results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from VIEW_COURSES_ELEMENTS_COMPETENCIES where course_id=:id", id=courseid)
+            for row in results:
+                output.append(Competency(row[0], row[1], row[2], row[3]))
+            return output
 
-    
     def add_course(course):
         pass
     

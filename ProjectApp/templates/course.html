@@ -21,4 +21,9 @@ Courses Information
 </ul>
 
 <h2>Competencies:</h2>
+<ul>
+    {% for competency in competencies %}
+    <li><a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
+    {% endfor %}
+</ul>
 {% endblock %}

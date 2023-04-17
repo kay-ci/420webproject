@@ -3,7 +3,7 @@ class CourseElement:
         if not isinstance (course_id, str):
             raise Exception ("course id is not a str")
         if not isinstance (element_id, int):
-            raise Exception ("Element id is not str")
+            raise Exception ("Element id is not an int")
         if not isinstance(hours, float):
             raise Exception ("hours is not int or float")
         self.course_id = course_id

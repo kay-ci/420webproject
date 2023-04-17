@@ -1,7 +1,7 @@
 class Element:
     def __init__(self, element_id, element_order, element, element_criteria, competency_id):
-        if not isinstance (element_id, int):
-            raise Exception ("element id must be string")
+        if not isinstance (element_id, int) and element_id != None:
+            raise Exception ("element id must be an int")
         if not isinstance (element_order, int):
             raise Exception ("element_order not int")
         if not isinstance (element, str):
@@ -31,12 +31,11 @@ class Element:
         ##return Element
         
 from flask_wtf import FlaskForm 
-from wtforms import StringField
+from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
 class ElementForm(FlaskForm):
-    element_id = StringField('Element id', validators=[DataRequired()])
-    element_order = StringField('Element_order', validators=[DataRequired()])
+    element_order = IntegerField('Element order', validators=[DataRequired()])
     element = StringField('Element', validators=[DataRequired()])
-    element_criteria = StringField('Element', validators=[DataRequired()])
-    competency_id = StringField('Competency_id',validators=[DataRequired()])
+    element_criteria = StringField('Element criteria', validators=[DataRequired()])
+    competency_id = StringField('Competency id',validators=[DataRequired()])
         

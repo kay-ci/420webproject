@@ -5,7 +5,7 @@ create table users (
     email VARCHAR2(100) NOT NULL,
     password VARCHAR2(102) NOT NULL,
     name VARCHAR2(1000) NOT NULL,
-    avatar_path VARCHAR2(2000),
     member_type VARCHAR2(30) DEFAULT 'Member'
 ); 
 
+INSERT INTO users (email,password,name,member_type) VALUES ('instructor@dawsoncollege.qc.ca','dawson1234', 'Dirk', 'admin')

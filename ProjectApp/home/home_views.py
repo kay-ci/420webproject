@@ -20,6 +20,7 @@ def login_index():
                 pwd = form.password.data
                 if check_password_hash(user.password, pwd):
                     login_user(user, remember=form.remember_me.data)
+                    return redirect(url_for('courses.list_courses'))
                 else:
                     flash("Invalid information")
             else:

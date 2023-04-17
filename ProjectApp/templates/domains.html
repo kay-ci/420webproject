@@ -7,16 +7,13 @@
               <li>{{ domain }}</li><br>
             {% endfor %}
         </ul>
-        <section>
-            <fieldset>
-                <legend>Insert a domain</legend>
-                <form method="post">
-                    {{ form.csrf_token }} 
-                    <p>{{ form.id.label }} {{form.id(size=4)}}</p>
-                    <p>{{ form.domain.label }} {{form.domain(size=20)}}</p>
-                    <p>{{ form.description.label }} {{form.description(size=50)}}</p>
-                    <input type="submit" />
-                </form>
-            </fieldset>
-        </section>    
+
+        <h1>Insert a domain</h1>
+        <form method="post">
+            {{ form.csrf_token }} 
+            {{ form.id.label }} {{form.id(size=4)}}
+            {{ form.domain.label }} {{form.domain(size=20)}}
+            {{ form.description.label }} {{form.description(size=50)}}
+            <input class="submit" type="submit" />
+        </form>  
 {% endblock %}

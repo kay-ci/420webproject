@@ -127,4 +127,8 @@ legend {
 #out_sent {
     margin: 10px;
 }
+#out_link {
+    text-align: right;
+    margin: 10px;
+}
 

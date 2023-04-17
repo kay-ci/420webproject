@@ -20,7 +20,8 @@
             <a href={{url_for('courses.list_courses')}}>Courses</a>
             <p id="web_name">Dawson College Database Manager</p>
         </div> 
-        <h2 id="user_name">Connected: {{current_user.name}} <a href={{url_for('auth.logout')}}>Log out</a></h2>
+        <div id="out_link"><a href={{url_for('auth.logout')}}>Log out</a><div>
+        <h2 id="user_name">Connected: {{current_user.name}}</h2>
         {% block content%}
         {% endblock%}
         <section id="flash_messages">

@@ -1,3 +1,5 @@
+drop table users;
+
 create table users (
     id NUMBER GENERATED ALWAYS as IDENTITY primary key,
     email VARCHAR2(100) NOT NULL,

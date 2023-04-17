@@ -2,7 +2,7 @@ from flask import Blueprint, abort, render_template, redirect, url_for, flash, r
 from .courses_element import CourseElement, CourseElementForm
 from ..dbmanager import get_db
 
-bp = Blueprint("courses_elements", __name__, url_prefix="/coursesElements")
+bp = Blueprint("courses_elements", __name__, url_prefix="/courses-elements")
 
 @bp.route("/", methods = ["GET", "POST"])
 def list_courses_elements():

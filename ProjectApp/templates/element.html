@@ -4,13 +4,12 @@
 
 {% block content %}
     <section id= "element_info">
-        <p>Element ID: {{element.element_id}}</p>
-        <p>Element order: {{element.element_order}}</p>
-        <p>Element: {{element.element}}</p>
-        <p>Element criteria: {{element.element_criteria}}</p>
-        <p>Competency ID: {{element.competency_id}}</p>
+        <li><b>Element order:</b> {{element.element_order}}</li>
+        <li><b>Element:</b> {{element.element}}</li>
+        <li><b>Element criteria:</b> {{element.element_criteria}}</li>
+        <li><b>Competency ID:</b> {{element.competency_id}}</li>
     </section>
-
+    <h1>Add Element</h1>
     <section clas = "element_form">
         <form method="post">
             {{form.csrf_token}}
@@ -18,7 +17,7 @@
             {{form.element.label}} {{form.element()}}
             {{form.element_criteria.label}} {{form.element_criteria()}}
             {{form.competency_id.label}} {{form.competency_id()}}
-            <input type="submit"/>
+            <input class="submit" type="submit"/>
         </form>
     </section
 {% endblock %}

@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html>
-    <body style="background-color:lightgrey;">
-        <h1 style="background-color:powderblue; font-size:200px; text-align:center;">404!</h1>
-        <p style="font-size:30px; text-align:center;">Server Encountered an Error!</p>
+    <head>
+        <title>
+            404
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    </head>
+    <body id="body404">
+        <h1 id="alert404">404!</h1>
+        <p id="txt404">Page not Found!</p>
     </body>
 </html>

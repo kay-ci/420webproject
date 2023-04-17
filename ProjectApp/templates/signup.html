@@ -1,0 +1,15 @@
+{%extends 'base.html' %}
+    {% block title %}Sign Up{% endblock %}
+{% block content%}
+        <section id="signup_section">
+            <h1>Sign up</h1>
+            <form method="post" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                {{ form.email.label }} {{ form.email() }}
+                {{ form.password.label }} {{ form.password() }}
+                {{ form.name.label }} {{ form.name() }}
+                {{ form.avatar.label }} {{ form.avatar() }}
+                <input class="submit" type="submit" />
+            </form>
+        </section>    
+{% endblock %}

@@ -17,15 +17,20 @@ def show_elements():
 @bp.route("/<element_id>", methods = ["GET", "POST"])
 def show_element(element_id):
     form = ElementForm()
-    element = get_db().get_element(int(element_id))
+    try:
+        element = get_db().get_element(int(element_id))
+    except Exception:
+        element = None
+
     if element == None:
         flash("Element with that id not found")
         abort(404)
     if request.method == "POST" and form.validate_on_submit():
         try:
             get_db().update_element(element_id, form.element_order.data, form.element.data, form.element_criteria.data, form.competency_id.data)
-            element = get_db().get_element(form.element_id.data)
-            return redirect(url_for("element.show_elements"))
+            element = get_db().get_element(int(element.element_id))
+            flash("Element updated succesfully")
+            return redirect(url_for("element.show_element"))
         except:
             flash("Something went wrong could not update")
     return render_template("element.html", element = element, form = form)

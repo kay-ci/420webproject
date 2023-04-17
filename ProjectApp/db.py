@@ -237,6 +237,7 @@ class Database:
                            element_criteria = element.element_criteria,
                            competency_id = element.competency_id)
     def update_element(self, element_id, element_order, element, element_criteria, competency_id ):
+        # add checking of each paramater
         check = self.get_element(int(element_id))
         if check == None:
             raise Exception("Could not update! element does not exist")

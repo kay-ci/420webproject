@@ -4,7 +4,6 @@
 
 {% block content %}
     <section id= "element_info">
-        <p>Element ID: {{element.element_id}}</p>
         <p>Element order: {{element.element_order}}</p>
         <p>Element: {{element.element}}</p>
         <p>Element criteria: {{element.element_criteria}}</p>
@@ -14,7 +13,6 @@
     <section clas = "element_form">
         <form method="post">
             {{form.csrf_token}}
-            {{form.element_order.label}} {{form.element_order()}}
             {{form.element.label}} {{form.element()}}
             {{form.element_criteria.label}} {{form.element_criteria()}}
             {{form.competency_id.label}} {{form.competency_id()}}

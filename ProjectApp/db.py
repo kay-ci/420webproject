@@ -1,3 +1,4 @@
+from ProjectApp.competencies.competency import Competency
 from .domains.domain import Domain
 from ProjectApp.user import User
 import oracledb
@@ -67,14 +68,21 @@ class Database:
             for row in results:
                 course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
             return course
+        
+    def get_course_def(self, courseid):
+        with self.__connection.cursor() as cursor:
+            output = []
+            results = cursor.execute("select unique competency_id, competency, competency_achievement, competency_type from VIEW_COURSES_ELEMENTS_COMPETENCIES where course_id=:id", id=courseid)
+            for row in results:
+                output.append(Competency(row[0], row[1], row[2], row[3]))
+            return output
 
-    
     def add_course(course):
         pass
     
     def get_domain(self, domain_id):
         with self.__connection.cursor() as cursor:
-            results = cursor.execute('select domain, domain_description where domain_id=:id', domain_id=domain_id)
+            results = cursor.execute('select domain, domain_description from domains where domain_id=:id', id=domain_id)
             for row in results:
                 domain = Domain(domain_id,row[0],row[1])
                 return domain; 
@@ -105,7 +113,7 @@ class Database:
         return users
     
     def get_user(self, email):
-         with self.__conn.cursor() as cursor:
+         with self.__connection.cursor() as cursor:
             results = cursor.execute('select email, password, id, name from users where email=:email', email=email)
             for row in results:
                 user = User(row[0], row[1], row[3])
@@ -116,9 +124,18 @@ class Database:
         if not isinstance(user, User):
             raise TypeError()
         # Insert the post to the DB
-        with self.__conn.cursor() as cursor:
+        with self.__connection.cursor() as cursor:
             cursor.execute('insert into users (email, password, name) values (:email, :password, :name)',
                            email=user.email, password=user.password, name=user.name)
+    
+    def get_user_id(self, id):
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute('select email, password, id, name from users where id=:id', id=id)
+            for row in results:
+                user = User(row[0], row[1], row[3])
+                user.id = row[2]
+                return user
+
     
     def get_competencies(self):
         from .competencies.competency import Competency
@@ -190,7 +207,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute("select course_id, element_id, element_hours from courses_elements")
             for row in results:
-                courses_elements.append(CourseElement(row[0], row[1], float(row[2])))
+                courses_elements.append(CourseElement(row[0], int(row[1]), float(row[2])))
         return courses_elements
     
     def add_courses_element(self, course_element):

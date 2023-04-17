@@ -1,16 +1,13 @@
 from flask_login import UserMixin
 
 class User(UserMixin):
-    def __init__(self, email, password, name, avatar_path):
+    def __init__(self, email, password, name):
         if not isinstance(email, str):
             raise Exception('Email must be a string')
         if not isinstance(password, str):
             raise TypeError('Password must be a string')
         if not isinstance(name, str):
             raise TypeError('Name must be a string')
-        if not isinstance(avatar_path, str):
-            raise TypeError('Avatar path must be as string')
-        self.avatar_path = avatar_path
         self.email = email
         self.name= name
         self.password = password
@@ -25,15 +22,17 @@ class User(UserMixin):
     
 
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField
 from wtforms import EmailField, PasswordField, StringField, BooleanField
 from wtforms.validators import DataRequired
 
 class SignupForm(FlaskForm):
-    email = EmailField("email", validators=[DataRequired()])
-    password = PasswordField("password", validators=[DataRequired()])
-    name = StringField("name", validators=[DataRequired()])
+    email = EmailField("Email", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    name = StringField("Name", validators=[DataRequired()])
+    avatar = FileField("Choose your own avatar!")
 
 class LoginForm(FlaskForm):
-    email = EmailField("email", validators=[DataRequired()])
-    password = PasswordField("password", validators=[DataRequired()])
-    remember_me = BooleanField("remember_me", validators=[DataRequired()])
+    email = EmailField("Email", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    remember_me = BooleanField("Remember me", validators=[DataRequired()])

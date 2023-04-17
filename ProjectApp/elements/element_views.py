@@ -31,7 +31,7 @@ def show_element(element_id):
     return render_template("element.html", element = element, form = form)
 
 @bp.route("/delete/<element_id>/")
-def delete_competency(element_id):
+def delete_element(element_id):
     try:
         get_db().delete_element(element_id)
         message = f'deleted element with id {element_id}'

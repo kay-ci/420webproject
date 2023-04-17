@@ -1,15 +1,9 @@
 class CourseElement:
     def __init__ (self, course_id, element_id, hours):
         if not isinstance (course_id, str):
-<<<<<<< HEAD
             raise Exception ("course id is not a str")
         if not isinstance (element_id, int):
             raise Exception ("Element id is not an int")
-=======
-            raise Exception ("course id is not a string")
-        if not isinstance (element_id, int):
-            raise Exception ("Element id is not number")
->>>>>>> 313ab3297152e6c44019677b185e418a37b651e0
         if not isinstance(hours, float):
             raise Exception ("hours is not int or float")
         self.course_id = course_id

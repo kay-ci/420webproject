@@ -1,14 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text&display=swap');
+
 body, html {
     border: 0;
     padding: 0;
     margin: 0;
-    background-color: rgb(226, 195, 255);
     color: rgb(15, 7, 128);
     background-color: navy;
     color: white;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
- }
-
+    font-family: 'DM Serif Text', serif;
+}
 #course_form {
     display: flex;
     flex-wrap: wrap;
@@ -25,7 +25,7 @@ body, html {
 }
 
 ul {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'DM Serif Text', serif;
 }
 a:link {
     text-decoration: none;
@@ -90,7 +90,7 @@ fieldset {
 }
 #login_section {
     text-align: center;
-    margin-top:100px;
+    margin-top: 60px;
 }
 #login_section fieldset {
     margin: auto;
@@ -101,17 +101,30 @@ fieldset {
 }
 #signup_section {
     text-align: center;
+    margin-top: 40px;
 }
 #signup_section fieldset {
     margin: auto;
     border-radius: 10px;
-    width: 200px;
+    width: 250px;
 }
 #signup_section fieldset label, #signup_section fieldset input {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'DM Serif Text', serif;
     margin-top: 20px;
 }
 legend {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'DM Serif Text', serif;
+    font-style: italic;
+}
+#user_name {
+    margin: 10px;
+    text-align: right;
+    font-size: 20px;
+}
+.flash {
+    margin: 10px;
+}
+#out_sent {
+    margin: 10px;
 }
 

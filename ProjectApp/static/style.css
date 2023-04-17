@@ -1,23 +1,15 @@
-* {
-    padding:0px;
-    margin:0px;
-    box-sizing:border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text&display=swap');
 
-nav {
-    background-color: black;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    padding: 10px;
-}
-
-body {
-    background-color: rgb(226, 195, 255);
+body, html {
+    border: 0;
+    padding: 0;
+    margin: 0;
     color: rgb(15, 7, 128);
- }
-
-form {
+    background-color: navy;
+    color: white;
+    font-family: 'DM Serif Text', serif;
+}
+#course_form {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -44,14 +36,7 @@ label {
 }
 
 ul {
-    font-family: 'Courier New', Courier, monospace;
-    margin-left: 20px;
-    list-style-type: none;
-}
-
-ol {
-    font-family: 'Courier New', Courier, monospace;
-    margin-left: 30px;
+    font-family: 'DM Serif Text', serif;
 }
 
 li {
@@ -115,9 +100,46 @@ a:active {
 }
 
 #account_yet {
-    margin-left: 20px;
+    display: inline-block;
+}
+#login_section {
+    text-align: center;
+    margin-top: 60px;
+}
+#login_section fieldset {
+    margin: auto;
+    border-radius: 10px;
+}
+#login_section fieldset input {
     margin-top: 10px;
     display: inline-block;
 }
-
+#signup_section {
+    text-align: center;
+    margin-top: 40px;
+}
+#signup_section fieldset {
+    margin: auto;
+    border-radius: 10px;
+    width: 250px;
+}
+#signup_section fieldset label, #signup_section fieldset input {
+    font-family: 'DM Serif Text', serif;
+    margin-top: 20px;
+}
+legend {
+    font-family: 'DM Serif Text', serif;
+    font-style: italic;
+}
+#user_name {
+    margin: 10px;
+    text-align: right;
+    font-size: 20px;
+}
+.flash {
+    margin: 10px;
+}
+#out_sent {
+    margin: 10px;
+}
 

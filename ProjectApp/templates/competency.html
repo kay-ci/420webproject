@@ -33,7 +33,6 @@
 
     <form method="post">
         {{element_form.csrf_token}}
-        {{element_form.element_order.label}} {{element_form.element_order()}}
         {{element_form.element.label}} {{element_form.element()}}
         {{element_form.element_criteria.label}} {{element_form.element_criteria()}}
         <input type="submit"/>

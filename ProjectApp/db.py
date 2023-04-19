@@ -201,6 +201,21 @@ class Database:
             for row in results:
                 output.append(Element(row[0], row[1], row[2], row[3], row[4]))
         return output
+    
+    def get_next_competency_element_order(self, id):
+        if not isinstance(id, str):
+            raise TypeError("id must be a string")
+        check = self.get_competency(id)
+        if check == None:
+            raise ValueError("could not find a competency with given id")
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select max(element_order) from elements where competency_id = :competency_id",
+                                     competency_id = id)
+            for row in results:
+                if isinstance(row[0], int):
+                    return row[0]+1
+                return 1
+
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement
         courses_elements = []

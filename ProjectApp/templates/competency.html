@@ -22,10 +22,9 @@
         <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">(id: {{element.element_id}}) {{element.element_order}} {{element.element}} {{element.element_criteria}}</a></li>
         {% endfor %}
     </ol>
-    <h1>Add Competency</h1>
+    <h3>Add Competency</h3>
     <form method="post">
         {{competency_form.csrf_token}}
-        {{competency_form.competency_id.label}} {{competency_form.competency_id()}}
         {{competency_form.competency.label}} {{competency_form.competency()}}
         {{competency_form.competency_achievement.label}} {{competency_form.competency_achievement()}}
         {{competency_form.competency_type.label}} {{competency_form.competency_type()}}
@@ -37,7 +36,6 @@
         {{element_form.element_order.label}} {{element_form.element_order()}}
         {{element_form.element.label}} {{element_form.element()}}
         {{element_form.element_criteria.label}} {{element_form.element_criteria()}}
-        {{element_form.competency_id.label}} {{element_form.competency_id()}}
         <input type="submit"/>
     </form>
 

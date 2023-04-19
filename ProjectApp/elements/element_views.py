@@ -29,12 +29,13 @@ def show_element(element_id):
         if form.validate_on_submit():
             try:
                 # add casting
-                get_db().update_element(int(element_id), element.element_order, form.element.data, form.element_criteria.data, form.competency_id.data)
+                get_db().update_element(int(element_id), int(element.element_order), form.element.data, form.element_criteria.data, form.competency_id.data)
                 element = get_db().get_element(int(element.element_id))
                 flash("Element updated succesfully")
                 return redirect(url_for("element.show_element"))
             except Exception as e:
                 flash("Something went wrong could not update")
+                flash(str(e))
         else: 
             flash("invalid form")
     return render_template("element.html", element = element, form = form)

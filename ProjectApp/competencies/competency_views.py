@@ -46,11 +46,15 @@ def show_competency(id):
     if request.method == "POST":
         if element_form.element_order.data == None:#if true then its the competency form that was submitted
             competency_form.validate_on_submit()#what does validate_on_submit even do?
-            get_db().update_competency(competency_form.competency_id.data, competency_form.competency.data, competency_form.competency_achievement.data, competency_form.competency_type.data)
+            get_db().update_competency(id, competency_form.competency.data, competency_form.competency_achievement.data, competency_form.competency_type.data)
         else:# means the submitted form is element
             element = Element(None, element_form.element_order.data, element_form.element.data, element_form.element_criteria.data, id)
-            get_db().add_element(element)
+            try:
+                get_db().add_element(element)
+            except ValueError:#raised if order isn't directly above current max
+                flash('this element would break the order')
         return redirect(url_for("competency.show_competency", id = id))
     achievements = competency.competency_achievement.split("*")
-    achievements.pop(0)
+    if len(achievements) != 1:
+        achievements.pop(0)
     return render_template("competency.html", competency = competency, competency_form = competency_form, element_form = element_form, achievements = achievements, elements = get_db().get_competency_elements(id))

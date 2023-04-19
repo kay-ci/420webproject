@@ -32,7 +32,7 @@ class Course:
         return f'Course({self.course_id}, {self.course_title}, {self.theory_hours}, {self.lab_hours}, {self.work_hours}, {self.description}, {self.domain_id}, {self.term_id})'
         
     def __str__(self):
-        value = f'{self.course_title}: {self.course_id}, {self.theory_hours}, {self.lab_hours}, {self.work_hours}, {self.description}'
+        value = f'{self.course_title}: {self.course_id}, {self.theory_hours}, {self.lab_hours}, {self.work_hours}, {self.description}, {self.domain_id}, {self.term_id}'
         return value
     
 from flask_wtf import FlaskForm

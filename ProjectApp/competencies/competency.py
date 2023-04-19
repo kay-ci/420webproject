@@ -37,7 +37,6 @@ class CompetencyForm(FlaskForm):
     competency_type = SelectField('competency type', choices=[("mandatory"),("optional")], validators=[DataRequired()])
 
 class CompleteCompetencyForm(CompetencyForm):
-    element_order = IntegerField('Element_order', validators=[DataRequired()])
     element = StringField('Element', validators=[DataRequired()])
     element_criteria = StringField('Element Criteria', validators=[DataRequired()])
     course_number = StringField("Course Number", validators=[DataRequired()])

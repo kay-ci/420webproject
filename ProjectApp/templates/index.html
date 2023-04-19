@@ -1,0 +1,16 @@
+{%extends 'base.html' %}
+    {% block title %}Home{% endblock %}
+{% block content%}
+        <section id="login_section">
+            <h1>Log In</h1>
+            <form method="POST">
+                {{ form.csrf_token }}
+                {{ form.email.label }} {{ form.email() }}
+                {{ form.password.label }} {{ form.password() }}
+                {{ form.remember_me.label }} {{ form.remember_me() }}
+                <input class="submit" type="submit" />
+            </form>
+            <p id='account_yet'>Don't have an account yet?</p>
+            <a href={{url_for('auth.signup')}}>Sign up</a>
+        </section>    
+{% endblock %}

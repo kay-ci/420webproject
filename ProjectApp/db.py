@@ -1,3 +1,4 @@
+from ProjectApp.competencies.competency import Competency
 from .domains.domain import Domain
 from flask import flash
 from ProjectApp.user import User
@@ -68,14 +69,21 @@ class Database:
             for row in results:
                 course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
             return course
+        
+    def get_course_def(self, courseid):
+        with self.__connection.cursor() as cursor:
+            output = []
+            results = cursor.execute("select unique competency_id, competency, competency_achievement, competency_type from VIEW_COURSES_ELEMENTS_COMPETENCIES where course_id=:id", id=courseid)
+            for row in results:
+                output.append(Competency(row[0], row[1], row[2], row[3]))
+            return output
 
-    
     def add_course(course):
         pass
     
     def get_domain(self, domain_id):
         with self.__connection.cursor() as cursor:
-            results = cursor.execute('select domain, domain_description where domain_id=:id', domain_id=domain_id)
+            results = cursor.execute('select domain, domain_description from domains where domain_id=:id', id=domain_id)
             for row in results:
                 domain = Domain(domain_id,row[0],row[1])
                 return domain; 
@@ -106,7 +114,7 @@ class Database:
         return users
     
     def get_user(self, email):
-         with self.__conn.cursor() as cursor:
+         with self.__connection.cursor() as cursor:
             results = cursor.execute('select email, password, id, name from users where email=:email', email=email)
             for row in results:
                 user = User(row[0], row[1], row[3])
@@ -117,9 +125,18 @@ class Database:
         if not isinstance(user, User):
             raise TypeError()
         # Insert the post to the DB
-        with self.__conn.cursor() as cursor:
+        with self.__connection.cursor() as cursor:
             cursor.execute('insert into users (email, password, name) values (:email, :password, :name)',
                            email=user.email, password=user.password, name=user.name)
+    
+    def get_user_id(self, id):
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute('select email, password, id, name from users where id=:id', id=id)
+            for row in results:
+                user = User(row[0], row[1], row[3])
+                user.id = row[2]
+                return user
+
     
     def get_competencies(self):
         from .competencies.competency import Competency
@@ -148,15 +165,14 @@ class Database:
         with self.__connection.cursor() as cursor:
             cursor.execute("delete from competencies where competency_id = :id", id = id)
     
-    def update_competency(self, old_competency_id, competency_id, competency, competency_achievement, competency_type):
+    def update_competency(self, competency_id, competency, competency_achievement, competency_type):
         from .competencies.competency import Competency
-        fromDb = self.get_competency(old_competency_id)
+        fromDb = self.get_competency(competency_id)
         if fromDb == None:
             raise ValueError("couldn't find a competency with that id to update")
         newCompetency = Competency(competency_id, competency, competency_achievement, competency_type)#for the validation
         with self.__connection.cursor() as cursor:
-            cursor.execute("update competencies set competency_id = :id, competency = :competency, competency_achievement = :achievement, competency_type = :type where competency_id = :old_id",
-                           old_id = old_competency_id,
+            cursor.execute("update competencies set competency = :competency, competency_achievement = :achievement, competency_type = :type where competency_id = :id",
                            id = competency_id,
                            competency = competency,
                            achievement = competency_achievement,
@@ -182,10 +198,25 @@ class Database:
             raise TypeError("id must be a string")
         from .elements.element import Element
         with self.__connection.cursor() as cursor:
-            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from view_competencies_elements where competency_id = :id", id = id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from view_competencies_elements where competency_id = :id order by element_order", id = id)
             for row in results:
                 output.append(Element(row[0], row[1], row[2], row[3], row[4]))
         return output
+    
+    def get_next_competency_element_order(self, id):
+        if not isinstance(id, str):
+            raise TypeError("id must be a string")
+        check = self.get_competency(id)
+        if check == None:
+            raise ValueError("could not find a competency with given id")
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select max(element_order) from elements where competency_id = :competency_id",
+                                     competency_id = id)
+            for row in results:
+                if isinstance(row[0], int):
+                    return row[0]+1
+                return 1
+
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement
         courses_elements = []
@@ -238,22 +269,12 @@ class Database:
                            element_criteria = element.element_criteria,
                            competency_id = element.competency_id)
     # change this method to take in an element instead
-    def update_element(self, element_id, element_order, element, element_criteria, competency_id ):
-        # add checking of each paramater
-        try:
-            Element(element_id, element_order, element, element_criteria, competency_id)
-        except Exception as e:
-            flash("wrong types provided for update")
-        check = self.get_element(int(element_id))
+    def update_element(self, element):
+        check = self.get_element(int(element.element_id))
         if check == None:
             raise Exception("Could not update! element does not exist")
         with self.__get_cursor() as cursor:
-            cursor.execute('update elements set element_order=:order, element=:element, element_criteria=:criteria, competency_id=:compId where element_id=:id',
-                            element_order,
-                            element,
-                            element_criteria,
-                            competency_id,
-                            element_id)
+            cursor.execute("update elements set element_order=:element_order, element=:element, element_criteria=:criteria, competency_id=:compId where element_id=:id", element_order = element.element_order, element = element.element, criteria = element.element_criteria, compId = element.competency_id, id = element.element_id)
     def delete_element(self, element_id):
         element = self.get_element(int(element_id))
         if element == None:

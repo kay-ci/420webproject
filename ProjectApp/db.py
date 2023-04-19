@@ -69,7 +69,7 @@ class Database:
                 course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
             return course
         
-    def get_course_def(self, courseid):
+    def get_course_competency(self, courseid):
         with self.__connection.cursor() as cursor:
             output = []
             results = cursor.execute("select unique competency_id, competency, competency_achievement, competency_type from VIEW_COURSES_ELEMENTS_COMPETENCIES where course_id=:id", id=courseid)
@@ -77,8 +77,12 @@ class Database:
                 output.append(Competency(row[0], row[1], row[2], row[3]))
             return output
 
-    def add_course(course):
-        pass
+    def add_course(self, course):
+        if not isinstance(course, Course):
+            raise TypeError()
+        with self.__connection.cursor() as cursor:
+            cursor.execute('insert into courses (course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id) values (:course_id, :course_title, :theory_hours, :lab_hours, :work_hours, :description, :domain_id, :term_id)',
+                           course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
     
     def get_domain(self, domain_id):
         with self.__connection.cursor() as cursor:

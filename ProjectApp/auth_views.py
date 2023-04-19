@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, current_app, flash, render_template, request, send_from_directory
+from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, url_for
 from werkzeug.security import generate_password_hash
 from .dbmanager import get_db
 from .user import SignupForm, User
@@ -23,6 +23,7 @@ def signup():
             user = User(form.email.data, hash, form.name.data)
             get_db().insert_user(user)
             flash("User added")
+            return redirect(url_for('courses.list_courses'))
     return render_template('signup.html', form=form)
 
 @bp.route('/logout/')

@@ -12,7 +12,7 @@
     <body>
         <div id="nav_bar">
             {% if not current_user.is_authenticated %}
-            <a class="active" href={{url_for('home.login_index')}}>Home</a>
+            <a class="active" href={{url_for('home.login_index')}}>Log In</a>
             {% endif %}
             <a href={{url_for('competency.show_competencies')}}>Competencies</a>
             <a href={{url_for('domain_views.get_domains')}}>Domains</a>

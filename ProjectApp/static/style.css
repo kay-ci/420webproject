@@ -146,4 +146,14 @@ legend {
     text-align: right;
     margin: 10px;
 }
-
+#avatar_image {
+    width: 9%;
+    height: 9%;
+    border: solid white thin;
+    padding: 3px;
+}
+#field_users {
+   width: 30%;
+   margin: auto;
+   border-radius: 3%;
+}

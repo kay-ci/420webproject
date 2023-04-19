@@ -33,4 +33,4 @@ def find_course(the_id):
         return render_template('course.html', course = result, term = term, domain = domain, competencies = competencies)
     except Exception as e:
         flash('Something went wrong, could not find the Course')
-        # return redirect(url_for('courses.list_courses'))
+        return redirect(url_for('courses.list_courses'))

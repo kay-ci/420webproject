@@ -1,16 +1,13 @@
 from flask_login import UserMixin
 
 class User(UserMixin):
-    def __init__(self, email, password, name, avatar_path):
+    def __init__(self, email, password, name):
         if not isinstance(email, str):
             raise Exception('Email must be a string')
         if not isinstance(password, str):
             raise TypeError('Password must be a string')
         if not isinstance(name, str):
             raise TypeError('Name must be a string')
-        if not isinstance(avatar_path, str):
-            raise TypeError('Avatar path must be as string')
-        self.avatar_path = avatar_path
         self.email = email
         self.name= name
         self.password = password

@@ -113,7 +113,7 @@ class Database:
         return users
     
     def get_user(self, email):
-         with self.__conn.cursor() as cursor:
+         with self.__connection.cursor() as cursor:
             results = cursor.execute('select email, password, id, name from users where email=:email', email=email)
             for row in results:
                 user = User(row[0], row[1], row[3])
@@ -124,9 +124,18 @@ class Database:
         if not isinstance(user, User):
             raise TypeError()
         # Insert the post to the DB
-        with self.__conn.cursor() as cursor:
+        with self.__connection.cursor() as cursor:
             cursor.execute('insert into users (email, password, name) values (:email, :password, :name)',
                            email=user.email, password=user.password, name=user.name)
+    
+    def get_user_id(self, id):
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute('select email, password, id, name from users where id=:id', id=id)
+            for row in results:
+                user = User(row[0], row[1], row[3])
+                user.id = row[2]
+                return user
+
     
     def get_competencies(self):
         from .competencies.competency import Competency

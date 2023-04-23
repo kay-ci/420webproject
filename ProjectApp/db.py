@@ -84,6 +84,18 @@ class Database:
             cursor.execute('insert into courses (course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id) values (:course_id, :course_title, :theory_hours, :lab_hours, :work_hours, :description, :domain_id, :term_id)',
                            course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
     
+    def del_course(self, id):
+        course = self.get_course(id)
+        if course == None:
+            raise ValueError("can't delete course, course does not exist")
+        with self.__connection.cursor() as cursor:
+            cursor.execute("delete from courses where course_id=:id", id = id)
+            
+    def update_course(self, course):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update courses set course_title=:course_title, theory_hours=:theory_hours, lab_hours=:lab_hours, work_hours=:work_hours, description=:description, domain_id=:domain_id, term_id=:term_id where course_id=:course_id",
+                           course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
+            
     def get_domain(self, domain_id):
         with self.__connection.cursor() as cursor:
             results = cursor.execute('select domain, domain_description from domains where domain_id=:id', id=domain_id)
@@ -142,7 +154,6 @@ class Database:
 
     
     def get_competencies(self):
-        from .competencies.competency import Competency
         output = []
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies")
@@ -154,7 +165,6 @@ class Database:
         output = None
         if not isinstance(id, str):
             raise TypeError("id must be a string")
-        from .competencies.competency import Competency
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies where competency_id = :id", id = id)
             for row in results:
@@ -169,7 +179,6 @@ class Database:
             cursor.execute("delete from competencies where competency_id = :id", id = id)
     
     def update_competency(self, old_competency_id, competency_id, competency, competency_achievement, competency_type):
-        from .competencies.competency import Competency
         fromDb = self.get_competency(old_competency_id)
         if fromDb == None:
             raise ValueError("couldn't find a competency with that id to update")
@@ -183,7 +192,6 @@ class Database:
                            type = competency_type)
 
     def add_competency(self, competency):
-        from .competencies.competency import Competency
         if not isinstance(competency, Competency):
             raise TypeError("expecting first argument to be an instance of Competency")
         fromDb = self.get_competency(competency.id)
@@ -248,6 +256,7 @@ class Database:
             for row in result:
                 element = Element(int(row[0]), int(row[1]), row[2], row[3], row[4])
             return element
+        
     def add_element(self, element):
         if not isinstance(element, Element):
             raise TypeError("Expected Type Element")
@@ -259,6 +268,7 @@ class Database:
                            element = element.element,
                            criteria = element.element_criteria,
                            comp_id = element.competency_id)
+            
     def update_element(self, element_id, element_order, element, element_criteria, competency_id ):
         check = self.get_element(int(element_id))
         if check == None:
@@ -270,12 +280,14 @@ class Database:
                            criteria = element_criteria,
                            comp_id = competency_id,
                            old_id = element_id)
+            
     def delete_element(self, element_id):
         element = self.get_element(int(element_id))
         if element == None:
             raise ValueError("Element does not exist could not delete!")
         with self.__get_cursor() as cursor:
             cursor.execute("delete from elements where element_id = :id", id = element_id )
+    
     def get_terms(self):
         from .terms.term import Term
         output = []

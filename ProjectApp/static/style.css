@@ -153,7 +153,13 @@ legend {
     padding: 3px;
 }
 #field_users {
-   width: 30%;
+   width: 35%;
    margin: auto;
    border-radius: 3%;
+}
+.users_listed {
+    list-style: none;
+}
+.users_listed li {
+    margin: 0;
 }

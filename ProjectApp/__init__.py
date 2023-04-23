@@ -50,7 +50,7 @@ def create_app(test_config=None):
         return render_template('404.html'), 404
     
     login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'login_index'
     login_manager.init_app(app)
 
     @login_manager.user_loader

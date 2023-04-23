@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            {%block title%}
+            {%endblock%}
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+        {% block script %}
+        {% endblock %}
+    </head>
+    <body>
+        <div id="nav_bar">
+            <a class="active" href={{url_for('home.login_index')}}>Home</a>
+            <a href={{url_for('competency.show_competencies')}}>Competencies</a>
+            <a href={{url_for('domain_views.get_domains')}}>Domains</a>
+            <a href={{url_for('courses_elements.list_courses_elements')}}>Course Elements</a>
+            <a href={{url_for('term.show_terms')}}>Terms</a>
+            <a href={{url_for('element.show_elements')}}>Elements</a>
+            <a href={{url_for('courses.list_courses')}}>Courses</a>
+            <p id="web_name">Dawson College Database Manager</p>
+        </div> 
+        <h2 id="user_name">Connected: {{current_user.name}} <a href={{url_for('auth.logout')}}>Log out</a></h2>
+        {% block content%}
+        {% endblock%}
+        <section id="flash_messages">
+            {% for message in get_flashed_messages() %}
+                <div class="flash"> {{message}} </div>
+            {% endfor %}
+        </section>
+    </body>
+</html>

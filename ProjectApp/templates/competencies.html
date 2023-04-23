@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block header %}Competencies{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for competency in competencies %}
+        <li><a href="{{url_for('competency.delete_competency', id = competency.id)}}">Delete this Competency</a> <a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{{url_for('competency.add_competency')}}">Add a Competency</a></p>
+
+{% endblock %}

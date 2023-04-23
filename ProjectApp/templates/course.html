@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{%block title%}
+Course Information
+{%endblock%}
+
+{% block header %}
+Courses Information
+{% endblock %}
+
+{% block content %}
+<ul class="info_course">
+    <li><b>Course ID:</b> {{ course.course_id }}</li>
+    <li><b>Course Title:</b> {{ course.course_title }}</li>
+    <li><b>Thoery Hours:</b> {{ course.thoery_hours }}</li>
+    <li><b>Lab Hours:</b> {{ course.lab_hours }}</li>
+    <li><b>Work Hours:</b> {{ course.work_hours }}</li>
+    <li><b>Description:</b> {{ course.description }}</li>
+    <li><b>Term:</b> {{ term }}</li>
+    <li><b>Domain:</b> {{ domain }}</li>
+</ul>
+
+<h2>Competencies:</h2>
+<ul>
+    {% for competency in competencies %}
+    <li><a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

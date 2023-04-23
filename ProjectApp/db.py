@@ -1,5 +1,6 @@
 from ProjectApp.competencies.competency import Competency
 from .domains.domain import Domain
+from flask import flash
 from ProjectApp.user import User
 import oracledb
 import os
@@ -280,18 +281,13 @@ class Database:
                            element = element.element,
                            element_criteria = element.element_criteria,
                            competency_id = element.competency_id)
-    def update_element(self, element_id, element_order, element, element_criteria, competency_id ):
-        check = self.get_element(int(element_id))
+    # change this method to take in an element instead
+    def update_element(self, element):
+        check = self.get_element(int(element.element_id))
         if check == None:
             raise Exception("Could not update! element does not exist")
         with self.__get_cursor() as cursor:
-            cursor.execute("update elements set element_order = :order, element = :element, element_criteria = :criteria, competency_id = :comp_id where element_id = :old_id",
-                           order = element_order,
-                           element = element,
-                           criteria = element_criteria,
-                           comp_id = competency_id,
-                           old_id = element_id)
-            
+            cursor.execute("update elements set element_order=:element_order, element=:element, element_criteria=:criteria, competency_id=:compId where element_id=:id", element_order = element.element_order, element = element.element, criteria = element.element_criteria, compId = element.competency_id, id = element.element_id)
     def delete_element(self, element_id):
         element = self.get_element(int(element_id))
         if element == None:

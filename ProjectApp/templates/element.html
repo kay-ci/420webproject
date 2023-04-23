@@ -12,11 +12,10 @@
             <li><b>Competency ID:</b> {{element.competency_id}}</li>
         </ul>
     </section>
-    <h1>Add Element</h1>
+    <h1>Edit Element</h1>
     <section clas = "element_form">
         <form method="post">
             {{form.csrf_token}}
-            {{form.element_order.label}} {{form.element_order()}}
             {{form.element.label}} {{form.element()}}
             {{form.element_criteria.label}} {{form.element_criteria()}}
             {{form.competency_id.label}} {{form.competency_id()}}

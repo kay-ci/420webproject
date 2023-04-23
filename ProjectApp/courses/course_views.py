@@ -34,3 +34,12 @@ def find_course(the_id):
     except Exception as e:
         flash('Something went wrong, could not find the Course')
         return redirect(url_for('courses.list_courses'))
+
+@bp.route('/delete/<id>/')
+def delete_from_courses(id):
+    try:
+        get_db().del_course(id)
+    except ValueError:
+        flash("couldn't find Course to delete")
+    return redirect(url_for('courses.list_courses'))
+

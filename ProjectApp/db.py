@@ -178,14 +178,13 @@ class Database:
         with self.__connection.cursor() as cursor:
             cursor.execute("delete from competencies where competency_id = :id", id = id)
     
-    def update_competency(self, old_competency_id, competency_id, competency, competency_achievement, competency_type):
-        fromDb = self.get_competency(old_competency_id)
+    def update_competency(self, competency_id, competency, competency_achievement, competency_type):
+        fromDb = self.get_competency(competency_id)
         if fromDb == None:
             raise ValueError("couldn't find a competency with that id to update")
         newCompetency = Competency(competency_id, competency, competency_achievement, competency_type)#for the validation
         with self.__connection.cursor() as cursor:
-            cursor.execute("update competencies set competency_id = :id, competency = :competency, competency_achievement = :achievement, competency_type = :type where competency_id = :old_id",
-                           old_id = old_competency_id,
+            cursor.execute("update competencies set competency = :competency, competency_achievement = :achievement, competency_type = :type where competency_id = :id",
                            id = competency_id,
                            competency = competency,
                            achievement = competency_achievement,
@@ -210,11 +209,25 @@ class Database:
             raise TypeError("id must be a string")
         from .elements.element import Element
         with self.__connection.cursor() as cursor:
-            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from view_competencies_elements where competency_id = :id", id = id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from view_competencies_elements where competency_id = :id order by element_order", id = id)
             for row in results:
                 output.append(Element(row[0], row[1], row[2], row[3], row[4]))
         return output
-                
+    
+    def get_next_competency_element_order(self, id):
+        if not isinstance(id, str):
+            raise TypeError("id must be a string")
+        check = self.get_competency(id)
+        if check == None:
+            raise ValueError("could not find a competency with given id")
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select max(element_order) from elements where competency_id = :competency_id",
+                                     competency_id = id)
+            for row in results:
+                if isinstance(row[0], int):
+                    return row[0]+1
+                return 1
+
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement
         courses_elements = []
@@ -262,13 +275,11 @@ class Database:
             raise TypeError("Expected Type Element")
         #check integrity todo
         with self.__get_cursor() as cursor:
-            cursor.execute("insert into elements (element_id, element_order, element, element_criteria, competency_id) values (:id, :order, :element, :criteria, :comp_id)",
-                           id = element.element_id,
-                           order = element.element_order,
+            cursor.execute("insert into elements(element_order, element, element_criteria, competency_id) values(:element_order, :element, :element_criteria, :competency_id)",
+                           element_order = element.element_order,
                            element = element.element,
-                           criteria = element.element_criteria,
-                           comp_id = element.competency_id)
-            
+                           element_criteria = element.element_criteria,
+                           competency_id = element.competency_id)
     def update_element(self, element_id, element_order, element, element_criteria, competency_id ):
         check = self.get_element(int(element_id))
         if check == None:

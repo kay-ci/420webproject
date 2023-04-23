@@ -27,11 +27,16 @@ class Competency:
         return f"Competency: {self.id}, {self.competency}, {self.competency_achievement}, {self.competency_type}"
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField
+from wtforms import StringField, TextAreaField, SelectField, IntegerField
 from wtforms.validators import DataRequired, Length
     
 class CompetencyForm(FlaskForm):
-    id = StringField('competency id', validators=[DataRequired(), Length(max = 4)])
+    competency_id = StringField('competency id', validators=[DataRequired(), Length(max = 4)])
     competency = StringField('competency title', validators=[DataRequired(), Length(max = 250)])
     competency_achievement = TextAreaField('competency achievement', validators=[DataRequired(), Length(max = 500)])
     competency_type = SelectField('competency type', choices=[("mandatory"),("optional")], validators=[DataRequired()])
+
+class CompleteCompetencyForm(CompetencyForm):
+    element = StringField('Element', validators=[DataRequired()])
+    element_criteria = StringField('Element Criteria', validators=[DataRequired()])
+    course_number = StringField("Course Number", validators=[DataRequired()])

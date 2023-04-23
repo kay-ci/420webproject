@@ -7,7 +7,7 @@
         <p>Element {{element.element_order}}</p>
         <p>Element: {{element.element}}</p>
         <p>Element criteria: {{element.element_criteria}}</p>
-        <p>Competency ID: {{element.competency_id}}</p>
+        <p>Competency ID: <a href="{{url_for('competency.show_competency', id = element.competency_id)}}">{{element.competency_id }}</a> </p>
     </section>
     <h1>Edit Element</h1>
     <section clas = "element_form">
@@ -15,7 +15,6 @@
             {{form.csrf_token}}
             {{form.element.label}} {{form.element()}}
             {{form.element_criteria.label}} {{form.element_criteria()}}
-            {{form.competency_id.label}} {{form.competency_id()}}
             <input class="submit" type="submit"/>
         </form>
     </section>

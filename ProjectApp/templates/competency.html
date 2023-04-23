@@ -22,13 +22,8 @@
         {% for element in elements %}
         <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">(id: {{element.element_id}}) {{element.element_order}} {{element.element}} {{element.element_criteria}}</a></li>
         {% endfor %}
-<<<<<<< HEAD
     </ul>
     <h1>Add Competency</h1>
-=======
-    </ol>
-    <h3>Add Competency</h3>
->>>>>>> f62c8ad03732f8f94d24bc5e6e5e37d427d2f8f0
     <form method="post">
         {{competency_form.csrf_token}}
         {{competency_form.competency.label}} {{competency_form.competency()}}

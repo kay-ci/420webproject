@@ -1,7 +1,8 @@
-from ProjectApp.competencies.competency import Competency
+from .competencies.competency import Competency
 from .domains.domain import Domain
 from flask import flash
 from ProjectApp.user import User
+from .user import User
 import oracledb
 import os
 from .elements.element import Element
@@ -123,18 +124,19 @@ class Database:
     def get_users(self):
         users = []
         with self.__connection.cursor() as cursor:
-            result = cursor.execute('select email, password, name, avatar_path from users')
+            result = cursor.execute('select email, password, name, member_type from users')
             for row in result:
-                user = User(row[0],row[1],row[2], row[3])
+                user = User(row[0],row[1],row[2])
+                user.member_type = row[3]
                 users.append(user)
         return users
     
     def get_user(self, email):
          with self.__connection.cursor() as cursor:
-            results = cursor.execute('select email, password, id, name from users where email=:email', email=email)
+            results = cursor.execute('select email, password, name, member_type from users where email=:email', email=email)
             for row in results:
-                user = User(row[0], row[1], row[3])
-                user.id = row[2]
+                user = User(row[0], row[1], row[2])
+                user.member_type = row[3]
                 return user
             
     def insert_user(self, user):

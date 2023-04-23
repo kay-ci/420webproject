@@ -4,9 +4,9 @@
         <section id="login_section">
             <h1>Log In</h1>
             <fieldset>
-                <legend>Enter your account</legend>
+                <legend>Insert your account</legend>
                 <form method="POST">
-                {{ form.csrf_token }}
+                    {{ form.csrf_token }}
                     {{ form.email.label }} {{ form.email() }}
                     {{ form.password.label }} {{ form.password() }}
                     {{ form.remember_me.label }} {{ form.remember_me() }}

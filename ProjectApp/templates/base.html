@@ -10,17 +10,22 @@
         {% endblock %}
     </head>
     <body>
-        <nav id="nav_bar">
-            <p><a class="active" href={{url_for('home.login_index')}}>Home</a></p>
-            <p><a href={{url_for('competency.show_competencies')}}>Competencies</a></p>
-            <p><a href={{url_for('domain_views.get_domains')}}>Domains</a></p>
-            <p><a href={{url_for('courses_elements.list_courses_elements')}}>Course Elements</a></p>
-            <p><a href={{url_for('term.show_terms')}}>Terms</a></p>
-            <p><a href={{url_for('element.show_elements')}}>Elements</a></p>
-            <p><a href={{url_for('courses.list_courses')}}>Courses</a></p>
+        <div id="nav_bar">
+            {% if not current_user.is_authenticated %}
+            <a class="active" href={{url_for('home.login_index')}}>Log In</a>
+            {% endif %}
+            <a href={{url_for('competency.show_competencies')}}>Competencies</a>
+            <a href={{url_for('domain_views.get_domains')}}>Domains</a>
+            <a href={{url_for('courses_elements.list_courses_elements')}}>Course Elements</a>
+            <a href={{url_for('term.show_terms')}}>Terms</a>
+            <a href={{url_for('element.show_elements')}}>Elements</a>
+            <a href={{url_for('courses.list_courses')}}>Courses</a>
             <p id="web_name">Dawson College Database Manager</p>
-        </nav> 
-        <h2 id="user_name">Connected: {{current_user.name}} <a href={{url_for('auth.logout')}}>Log out</a></h2>
+        </div> 
+        {% if current_user.is_authenticated %}
+        <div id="out_link"><a href={{url_for('auth.logout')}}>Log out</a><div>
+        <h2 id="user_name">Connected: {{current_user.name}}</h2>
+        {% endif %}
         {% block content%}
         {% endblock%}
         <section id="flash_messages">

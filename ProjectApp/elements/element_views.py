@@ -41,6 +41,6 @@ def delete_element(element_id):
         get_db().delete_element(element_id)
         message = f'deleted element with id {element_id}'
         flash(message)
-    except ValueError:
-        flash("couldn't find element with this id to delete")
+    except ValueError as e:
+        flash(str(e))#there can be many reasons for this: element id doesnt exist or its the last of its competency
     return redirect(url_for("element.show_elements"))

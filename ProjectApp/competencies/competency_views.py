@@ -60,5 +60,8 @@ def show_competency(id):
 def delete_competency_element(competency_id, element_id):
     #get some validation
     element_id = int(element_id)
-    get_db().delete_competency_element(competency_id, get_db().get_element(element_id))
+    try:
+        get_db().delete_competency_element(competency_id, get_db().get_element(element_id))
+    except ValueError as e:
+        flash(str(e))
     return redirect(url_for('competency.show_competency', id = competency_id))

@@ -16,4 +16,4 @@ def show_term(id):
     if term == None:
         flash("could not find a term with this id")
         return redirect(url_for('term.show_terms')), 404
-    return render_template("term.html", term = term)
+    return render_template("term.html", term = term, courses = get_db().get_term_courses(id))

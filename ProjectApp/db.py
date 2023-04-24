@@ -291,6 +291,18 @@ class Database:
             for row in results:
                 output = Term(row[0], row[1])
             return output
+        
+    def get_term_courses(self, id):
+        if not isinstance(id, int):
+            raise TypeError("expecting an integer id parameter")
+        if self.get_term(id) == None:
+            raise ValueError("given id does not correspond to any term")
+        output = []
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, course_title, theory_hours, work_hours, lab_hours, description, domain_id from view_courses_terms where term_id = :term_id", term_id = id)
+            for row in results:
+                output.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], id))
+        return output
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

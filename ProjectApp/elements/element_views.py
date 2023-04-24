@@ -26,7 +26,7 @@ def show_element(element_id):
     if request.method == "POST":
         if form.validate_on_submit():
             try:
-                new_element = Element(int(element_id), int(element.element_order), form.element.data, form.element_criteria.data, form.competency_id.data)
+                new_element = Element(int(element_id), int(element.element_order), form.element.data, form.element_criteria.data, element.competency_id)
                 get_db().update_element(new_element)
                 flash("Element updated succesfully")
                 return redirect(url_for("element.show_element", element_id = new_element.element_id))

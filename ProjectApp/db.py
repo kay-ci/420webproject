@@ -79,12 +79,12 @@ class Database:
                 output.append(Competency(row[0], row[1], row[2], row[3]))
             return output
         
-    def get_course_competency(self, courseid):
+    def get_course_competency_element(self, courseid):
         with self.__connection.cursor() as cursor:
             output = []
-            results = cursor.execute("select unique competency_id, competency, competency_achievement, competency_type from VIEW_COURSES_ELEMENTS_COMPETENCIES where course_id=:id", id=courseid)
+            results = cursor.execute("select unique element_id, element_order, element, element_criteria, competency_id from VIEW_COURSES_ELEMENTS_COMPETENCIES where course_id=:courseid", courseid=courseid)
             for row in results:
-                output.append(Competency(row[0], row[1], row[2], row[3]))
+                output.append(Element(int(row[0]), int(row[1]), row[2], row[3], row[4]))
             return output
 
     def add_course(self, course):

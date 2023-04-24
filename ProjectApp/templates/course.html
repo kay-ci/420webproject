@@ -24,7 +24,16 @@ Courses Information
 <h2>Competencies:</h2>
 <ul>
     {% for competency in competencies %}
-    <li><a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
+    <li>
+        <a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a>
+        <ul>
+            {% for element in elements %}
+                {%if element.competency_id == competency.id%}
+                <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element.element}}</a> </li>
+                {%endif%}
+            {% endfor %}
+        </ul>
+    </li>
     {% endfor %}
 </ul>
 <a class="delete_button" href="{{url_for('courses.delete_from_courses', id = course.course_id)}}">Delete</a>

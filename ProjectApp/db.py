@@ -220,8 +220,7 @@ class Database:
     def get_next_competency_element_order(self, id):
         if not isinstance(id, str):
             raise TypeError("id must be a string")
-        check = self.get_competency(id)
-        if check == None:
+        if self.get_competency(id) == None:
             raise ValueError("could not find a competency with given id")
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select max(element_order) from elements where competency_id = :competency_id",
@@ -230,6 +229,26 @@ class Database:
                 if isinstance(row[0], int):
                     return row[0]+1
                 return 1
+    
+    def delete_competency_element(self, competency_id, element):
+        if not isinstance(element, Element):
+            raise TypeError("expecting the 2nd argument to be of type Element")
+        if not isinstance(competency_id, str):
+            raise TypeError("competency id must be a string")
+        if self.get_competency(competency_id) == None:
+            raise ValueError("could not find a competency with given id")
+        if self.get_element(element.element_id) == None:
+            raise ValueError("could not find the element to delete given its id")
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select count(*) from elements where competency_id = :competency_id", competency_id = element.competency_id)
+            for row in results:
+                if row[0] <= 1:
+                    raise ValueError("Cannot delete this element as it is the last one of its competency")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from elements where element_id = :element_id", element_id = element.element_id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = competency_id, deleted_order = element.element_order)
+            for row in results:
+                self.update_element(row[0], row[1]-1, row[2], row[3])
 
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement
@@ -295,8 +314,15 @@ class Database:
         if element == None:
             raise ValueError("Element does not exist could not delete!")
         with self.__get_cursor() as cursor:
-            cursor.execute("delete from elements where element_id = :id", id = element_id )
-    
+            results = cursor.execute("select count(*) from elements where competency_id = :competency_id", competency_id = element.competency_id)
+            for row in results:
+                if row[0] <= 1:
+                    raise ValueError("Cannot delete this element as it is the last one of its competency")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from elements where element_id = :id", id = element_id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
+            for row in results:
+                self.update_element(row[0], row[1]-1, row[2], row[3])
     def get_terms(self):
         from .terms.term import Term
         output = []

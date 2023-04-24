@@ -16,6 +16,7 @@
         <h1>Add Element</h1>
         <form method="post">
             {{form.csrf_token}}
+            {{form.element_order.label}} {{form.element_order()}}
             {{form.element.label}} {{form.element()}}
             {{form.element_criteria.label}} {{form.element_criteria()}}
             <input class="submit" type="submit"/>

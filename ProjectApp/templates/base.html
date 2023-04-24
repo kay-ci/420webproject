@@ -22,6 +22,7 @@
             <p id="web_name">Dawson College Database Manager</p>
         </div> 
         {% if current_user.is_authenticated %}
+        <a href={{url_for('users.get_users')}}>Dashboard</a>
         <div id="out_link"><a href={{url_for('auth.logout')}}>Log out</a><div>
         <h2 id="user_name">Connected: {{current_user.name}}</h2>
         {% endif %}

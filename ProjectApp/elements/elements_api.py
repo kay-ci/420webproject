@@ -24,7 +24,7 @@ def get_elements():
     except:
         flash("Could not fetch elements")
 
-@bp.route("/add-element", methods= ["GET","POST"])
+@bp.route("/add-element", methods = ["GET","POST"])
 def add_element():
     if request.method == "POST":
         json_element = request.json
@@ -43,3 +43,11 @@ def add_element():
         return jsonify(json_elements)
     except:
         flash("Could not fetch elements")
+        
+@bp.route("/update-element", methods = ["put"])
+def update_element():
+    pass
+
+@bp.route("/delete-element", methods = ["DELETE"])
+def delete_element():
+    pass

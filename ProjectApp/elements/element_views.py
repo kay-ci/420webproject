@@ -6,8 +6,9 @@ bp = Blueprint("element", __name__, url_prefix='/elements')
 @bp.route("/", methods = ["GET", "POST"])
 def show_elements():
     form = ElementForm()
+    # ask teammates about what to make of new_element since element_orde and competency_id are no longers forms
     if request.method == "POST" and form.validate_on_submit():
-        new_element = Element(form.element_id.data, form.element_order.data, form.element.data, form.element_criteria.data, form.competency_id.data)
+        new_element = Element(None, form.element_order.data, form.element.data, form.element_criteria.data, form.competency_id.data)
         try:
             get_db().add_element(new_element)
         except ValueError as e:

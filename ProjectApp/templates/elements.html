@@ -4,6 +4,7 @@
 
 {% block content %}
     <section id = "elements info">
+        <a href="{{url_for('competency.show_competencies')}}">Add Element</a>
         <h1>Elements</h1>
         <ul>
             {% for element in elements %}
@@ -11,16 +12,5 @@
             {% endfor %}
         </ul>
     </section>
-
-    <section clas = "element_form">
-        <h1>Add Element</h1>
-        <form method="post">
-            {{form.csrf_token}}
-            {{form.element_order.label}} {{form.element_order()}}
-            {{form.element.label}} {{form.element()}}
-            {{form.element_criteria.label}} {{form.element_criteria()}}
-            <input class="submit" type="submit"/>
-        </form>
-    </section
 
 {% endblock %}

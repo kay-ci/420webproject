@@ -99,15 +99,18 @@ class Database:
                            course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
             
     def get_domain(self, domain_id):
+        domain = None
         with self.__connection.cursor() as cursor:
             results = cursor.execute('select domain, domain_description from domains where domain_id=:id', id=domain_id)
             for row in results:
                 domain = Domain(domain_id,row[0],row[1])
-                return domain; 
+        return domain
             
     def insert_domain(self, domain):
         if not isinstance(domain, Domain):
             raise TypeError()
+        if self.get_domain(domain.domain_id) != None:
+            raise ValueError("this domain id is already being used")
         with self.__connection.cursor() as cursor:
             cursor.execute('insert into domains (domain_id, domain, domain_description) values (:domain_id,        :domain, :domain_description)',
                            domain_id = domain.domain_id, domain = domain.domain, domain_description = domain.domain_description)
@@ -115,7 +118,7 @@ class Database:
     def get_domains(self):
         domains = []
         with self.__connection.cursor() as cursor:
-            result = cursor.execute('select domain_id, domain, domain_description from domains')
+            result = cursor.execute('select domain_id, domain, domain_description from domains order by domain_id')
             for row in result:
                 domain = Domain(row[0],row[1],row[2])
                 domains.append(domain)

@@ -224,3 +224,6 @@ legend {
 .users_listed li {
     margin: 0;
 }
+#flash_messages{
+    color: red;
+}

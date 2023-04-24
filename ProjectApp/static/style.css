@@ -18,6 +18,9 @@ form {
     margin-left: 40px;
     width:30%;
 }
+.options_admin {
+    display: inline-block;
+}
 
 label {
     color: rgb(154, 206, 219);
@@ -175,6 +178,7 @@ a:active.delete_button {
 legend {
     font-family: 'DM Serif Text', serif;
     font-style: italic;
+    text-align: center;
 }
 
 #user_name {
@@ -210,7 +214,13 @@ legend {
     padding: 3px;
 }
 #field_users {
-   width: 30%;
+   width: 35%;
    margin: auto;
    border-radius: 3%;
+}
+.users_listed {
+    list-style: none;
+}
+.users_listed li {
+    margin: 0;
 }

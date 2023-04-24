@@ -124,7 +124,7 @@ class Database:
     def get_users(self):
         users = []
         with self.__connection.cursor() as cursor:
-            result = cursor.execute('select email, password, name, member_type from users')
+            result = cursor.execute('select email, password, name, member_type from USERS')
             for row in result:
                 user = User(row[0],row[1],row[2])
                 user.member_type = row[3]
@@ -133,10 +133,11 @@ class Database:
     
     def get_user(self, email):
          with self.__connection.cursor() as cursor:
-            results = cursor.execute('select email, password, name, member_type from users where email=:email', email=email)
+            results = cursor.execute('select email, password, name, member_type, id from USERS where email=:email', email=email)
             for row in results:
                 user = User(row[0], row[1], row[2])
                 user.member_type = row[3]
+                user.id = row[4]
                 return user
             
     def insert_user(self, user):
@@ -144,18 +145,34 @@ class Database:
             raise TypeError()
         # Insert the post to the DB
         with self.__connection.cursor() as cursor:
-            cursor.execute('insert into users (email, password, name) values (:email, :password, :name)',
+            cursor.execute('insert into USERS (email, password, name) values (:email, :password, :name)',
                            email=user.email, password=user.password, name=user.name)
     
     def get_user_id(self, id):
         with self.__connection.cursor() as cursor:
-            results = cursor.execute('select email, password, id, name from users where id=:id', id=id)
+            results = cursor.execute('select email, password, id, name, member_type from USERS where id=:id', id=id)
             for row in results:
                 user = User(row[0], row[1], row[3])
                 user.id = row[2]
+                user.member_type = row[4]
                 return user
-
+            
+    def promote_user(self, user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
+                           new_member_type = 'admin',
+                           email = user.email)
     
+    def demote_user(self, user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
+                           new_member_type = 'member',
+                           email = user.email)
+
+    def delete_user(self, user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from USERS where email=:email", email=user.email)
+
     def get_competencies(self):
         output = []
         with self.__connection.cursor() as cursor:

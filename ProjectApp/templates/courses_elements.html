@@ -8,6 +8,7 @@ Courses Elements
 
 {% block content %}
     <section id = "courses_element_block">
+        <h1>Course Elements</h1>
         <ul>
             {% for courses_element in courses_elements%}
                 <li>{{ courses_element | safe}}</li>
@@ -16,6 +17,7 @@ Courses Elements
     </section>
 
     <section id = "Courses_element_form">
+        <h1>Add Course Element</h1>
         <form method = "post">
             {{form.csrf_token}}
             {{form.course_id.label}}{{form.course_id()}}

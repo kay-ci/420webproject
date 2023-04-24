@@ -1,0 +1,17 @@
+{%extends 'base.html' %}
+    {% block title %}Home{% endblock %}
+{% block content%}
+        <section id="admin_section">
+            <fieldset id="field_users">
+                <legend>Administrative Dashboard</legend>
+                {% for user in users %}
+                    <ul>
+                        <li>
+                            {{ user }} <img src={{url_for('auth.get_avatar', email = user.email)}} alt='user_avatar' id="avatar_image">
+                        </li>
+                    </ul>
+                    <br>
+                {% endfor %}
+            </fieldset>
+        </section>    
+{% endblock %}

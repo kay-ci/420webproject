@@ -9,9 +9,10 @@ Courses List
 {% endblock %}
 
 {% block content%}
+    <h1>Courses</h1>
     <ul>
         {% for course in courses%}
-            <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}: {{ course.course_title }}</a></li>
+            <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}: {{ course.course_title }}</a><a class="delete_button" href="{{url_for('courses.delete_from_courses', id = course.course_id)}}">Delete</a></li>
         {% endfor%}
     </ul>
     <h1>Add Course</h1>
@@ -19,7 +20,7 @@ Courses List
         {{ form.csrf_token }}
         {{ form.course_id.label }} {{ form.course_id() }}
         {{ form.course_title.label }} {{ form.course_title() }}
-        {{ form.thoery_hours.label }} {{ form.thoery_hours() }}
+        {{ form.theory_hours.label }} {{ form.theory_hours() }}
         {{ form.lab_hours.label }} {{ form.lab_hours() }}
         {{ form.work_hours.label }} {{ form.work_hours() }}
         {{ form.description.label }} {{ form.description() }}

@@ -1,8 +1,9 @@
 import os
 import secrets
 from flask import Flask, render_template
-from ProjectApp.dbmanager import get_db
+from .dbmanager import get_db
 from flask_login import LoginManager
+from .dbmanager import close_db
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -130,7 +131,4 @@ def create_app(test_config=None):
     return app
     
 def init_app(app):
-    app.teardown_appcontext(cleanup)
-
-def cleanup(value):
-    pass
+    app.teardown_appcontext(close_db)

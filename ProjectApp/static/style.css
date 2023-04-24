@@ -20,6 +20,7 @@ form {
 }
 .options_admin {
     display: inline-block;
+    margin: 0;
 }
 
 label {
@@ -55,13 +56,16 @@ ul {
 }
 
 li {
+    text-align: left;
     margin-left: 40px;
     padding: 3px;
 }
 
 h1, h2 {
+    text-align: left;
     font-family: "Lucida Console";
     padding: 10px;
+    font-family: 'DM Serif Text', serif;
 }
 
 h1 {
@@ -174,6 +178,9 @@ a:active.delete_button {
     font-family: 'DM Serif Text', serif;
     margin-top: 20px;
 }
+label {
+    text-align: left;
+}
 
 legend {
     font-family: 'DM Serif Text', serif;
@@ -185,6 +192,7 @@ legend {
     margin: 10px;
     text-align: right;
     font-size: 20px;
+    display: inline-block;
 }
 
 .flash {
@@ -223,4 +231,7 @@ legend {
 }
 .users_listed li {
     margin: 0;
+}
+#user_desc {
+    text-align: right;
 }

@@ -16,23 +16,36 @@ def get_users():
         abort(404)
     return render_template('admin_dash.html', users=users)
 
-@bp.route('/promote/')
+@bp.route('/promote/<string:email>/')
 def promote_user(email):
     try:
         userChosen = get_db().get_user(email)
         get_db().promote_user(userChosen)
+        users = get_db().get_users()
     except Exception as e:
         userChosen = None
         flash('Unable to promote that user, not found')
-    return render_template('admin_dash.html',userChosen=userChosen)
+    return render_template('admin_dash.html', users=users)
 
-@bp.route('/demote/')
+@bp.route('/demote/<string:email>/')
 def demote_user(email):
     try:
         userChosen = get_db().get_user(email)
         get_db().demote_user(userChosen)
+        users = get_db().get_users()
     except Exception as e:
         userChosen = None
         flash('Unable to demote that user, not found')
-    return render_template('admin_dash.html',userChosen=userChosen)
+    return render_template('admin_dash.html', users=users)
+
+@bp.route('/remove/<string:email>/')
+def delete_user(email):
+    try:
+        userChosen = get_db().get_user(email)
+        users = get_db().get_users()
+        get_db().delete_user(userChosen)
+    except Exception as e:
+        userChosen = None
+        flash('Unable to remove that user, not found')
+    return render_template('admin_dash.html', users=users)
     

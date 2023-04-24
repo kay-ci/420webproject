@@ -16,6 +16,9 @@ body, html {
     margin-left: 40px;
     width: 20%;
 }
+.options_admin {
+    display: inline-block;
+}
 
 label {
     color: rgb(25, 151, 151);
@@ -130,6 +133,7 @@ a:active {
 legend {
     font-family: 'DM Serif Text', serif;
     font-style: italic;
+    text-align: center;
 }
 #user_name {
     margin: 10px;

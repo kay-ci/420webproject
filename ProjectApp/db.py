@@ -151,12 +151,9 @@ class Database:
                            new_member_type = 'member',
                            email = user.email)
 
-    def delete_user(self,id):
-        user = self.get_user_id(id)
-        if user == None:
-            raise ValueError("can't delete user that wasn't there to begin with")
-        with self.__connection.cursor() as cursor:
-            cursor.execute("delete from users where id = :id", id=id)
+    def delete_user(self, user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from USERS where email=:email", email=user.email)
 
     def get_competencies(self):
         from .competencies.competency import Competency

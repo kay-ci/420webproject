@@ -8,12 +8,12 @@
                     <ul class="users_listed" >
                         <li>
                             {{ user }} <img src={{url_for('auth.get_avatar', email = user.email)}} alt='user_avatar' id="avatar_image">
-                            {% if current_user.member_type == 'admin' or current_user.member_type == 'super_admin'%}
-                            <form method="GET" action="{{ url_for('dashboard.promote', email = user.email) }}">
-                                <button type='submit'>Promote</button>
+                            {%  if current_user.is_authenticated %}
+                            <form method="GET" action="{{url_for('users.promote_user', email=user.email)}}">
+                                <button type="submit">Promote</button>
                             </form>
-                            <form method="GET" action="{{ url_for('dashboard.demote', email = user.email) }}">
-                                <button type='submit'>Demote</button>
+                            <form method="GET" action="{{url_for('users.demote_user', email=user.email)}}">
+                                <button type="submit">Demote</button>
                             </form>
                             {% endif %}
                         </li>

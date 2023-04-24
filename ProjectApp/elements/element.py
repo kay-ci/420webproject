@@ -34,8 +34,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
 class ElementForm(FlaskForm):
-    element_order = IntegerField('Element order', validators=[DataRequired()])
     element = StringField('Element', validators=[DataRequired()])
     element_criteria = StringField('Element criteria', validators=[DataRequired()])
-    competency_id = StringField('Competency id',validators=[DataRequired()])
         

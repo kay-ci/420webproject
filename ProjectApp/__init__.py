@@ -109,6 +109,9 @@ def create_app(test_config=None):
     
     from .auth_views import bp as auth_bp
     app.register_blueprint(auth_bp)
+    
+    from .elements.elements_api import bp as elements_api_bp
+    app.register_blueprint(elements_api_bp)
 
     @app.errorhandler(404)
     def page_not_found(error):

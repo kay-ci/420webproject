@@ -5,7 +5,7 @@
 {% block content %}
     <ul>
         {% for competency in competencies %}
-        <li><a href="{{url_for('competency.delete_competency', id = competency.id)}}">Delete this Competency</a> <a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
+        <li><a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
         {% endfor %}
     </ul>
 

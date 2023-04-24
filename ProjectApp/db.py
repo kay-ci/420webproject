@@ -320,6 +320,8 @@ class Database:
                            competency_id = element.competency_id)
     # change this method to take in an element instead
     def update_element(self, element):
+        if not isinstance(element, Element):
+            raise TypeError("expecting an argument of type Element")
         check = self.get_element(int(element.element_id))
         if check == None:
             raise Exception("Could not update! element does not exist")

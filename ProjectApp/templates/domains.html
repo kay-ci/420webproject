@@ -1,14 +1,14 @@
 {%extends 'base.html' %}
     {% block title %}Domains{% endblock %}
 {% block content%}
-        <h1>Domain List</h1>
+        <h1>Domains</h1>
         <ul>
             {% for domain in domains %}
               <li>{{ domain }}</li><br>
             {% endfor %}
         </ul>
 
-        <h1>Insert a domain</h1>
+        <h1>Add Domain</h1>
         <form method="post">
             {{ form.csrf_token }} 
             {{ form.id.label }} {{form.id(size=4)}}

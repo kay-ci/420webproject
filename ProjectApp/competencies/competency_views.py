@@ -12,7 +12,6 @@ def show_competencies():
     except:
         flash("Could not load competencies")
         abort(404)
-        
     return render_template("competencies.html", competencies = competencies)
 
 @bp.route("/add/", methods = ["GET", "POST"])#login required

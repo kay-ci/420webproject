@@ -3,6 +3,7 @@
 {% block header %}Terms{% endblock %}
 
 {% block content %}
+    <h1>Terms</h1>
     <ul>
         {% for term in terms %}
         <li><a href="{{url_for('term.show_term', id = term.id)}}">{{term.id}}: {{term.name}}</a></li>

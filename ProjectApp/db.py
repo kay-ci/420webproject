@@ -1,7 +1,8 @@
-from ProjectApp.competencies.competency import Competency
+from .competencies.competency import Competency
 from .domains.domain import Domain
 from flask import flash
 from ProjectApp.user import User
+from .user import User
 import oracledb
 import os
 from .elements.element import Element
@@ -70,7 +71,7 @@ class Database:
                 course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
             return course
         
-    def get_course_def(self, courseid):
+    def get_course_competency(self, courseid):
         with self.__connection.cursor() as cursor:
             output = []
             results = cursor.execute("select unique competency_id, competency, competency_achievement, competency_type from VIEW_COURSES_ELEMENTS_COMPETENCIES where course_id=:id", id=courseid)
@@ -78,9 +79,25 @@ class Database:
                 output.append(Competency(row[0], row[1], row[2], row[3]))
             return output
 
-    def add_course(course):
-        pass
+    def add_course(self, course):
+        if not isinstance(course, Course):
+            raise TypeError()
+        with self.__connection.cursor() as cursor:
+            cursor.execute('insert into courses (course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id) values (:course_id, :course_title, :theory_hours, :lab_hours, :work_hours, :description, :domain_id, :term_id)',
+                           course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
     
+    def del_course(self, id):
+        course = self.get_course(id)
+        if course == None:
+            raise ValueError("can't delete course, course does not exist")
+        with self.__connection.cursor() as cursor:
+            cursor.execute("delete from courses where course_id=:id", id = id)
+            
+    def update_course(self, course):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update courses set course_title=:course_title, theory_hours=:theory_hours, lab_hours=:lab_hours, work_hours=:work_hours, description=:description, domain_id=:domain_id, term_id=:term_id where course_id=:course_id",
+                           course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
+            
     def get_domain(self, domain_id):
         with self.__connection.cursor() as cursor:
             results = cursor.execute('select domain, domain_description from domains where domain_id=:id', id=domain_id)
@@ -107,18 +124,19 @@ class Database:
     def get_users(self):
         users = []
         with self.__connection.cursor() as cursor:
-            result = cursor.execute('select email, password, name, avatar_path from users')
+            result = cursor.execute('select email, password, name, member_type from users')
             for row in result:
-                user = User(row[0],row[1],row[2], row[3])
+                user = User(row[0],row[1],row[2])
+                user.member_type = row[3]
                 users.append(user)
         return users
     
     def get_user(self, email):
          with self.__connection.cursor() as cursor:
-            results = cursor.execute('select email, password, id, name from users where email=:email', email=email)
+            results = cursor.execute('select email, password, name, member_type from users where email=:email', email=email)
             for row in results:
-                user = User(row[0], row[1], row[3])
-                user.id = row[2]
+                user = User(row[0], row[1], row[2])
+                user.member_type = row[3]
                 return user
             
     def insert_user(self, user):
@@ -139,7 +157,6 @@ class Database:
 
     
     def get_competencies(self):
-        from .competencies.competency import Competency
         output = []
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies")
@@ -151,7 +168,6 @@ class Database:
         output = None
         if not isinstance(id, str):
             raise TypeError("id must be a string")
-        from .competencies.competency import Competency
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies where competency_id = :id", id = id)
             for row in results:
@@ -166,7 +182,6 @@ class Database:
             cursor.execute("delete from competencies where competency_id = :id", id = id)
     
     def update_competency(self, competency_id, competency, competency_achievement, competency_type):
-        from .competencies.competency import Competency
         fromDb = self.get_competency(competency_id)
         if fromDb == None:
             raise ValueError("couldn't find a competency with that id to update")
@@ -179,7 +194,6 @@ class Database:
                            type = competency_type)
 
     def add_competency(self, competency):
-        from .competencies.competency import Competency
         if not isinstance(competency, Competency):
             raise TypeError("expecting first argument to be an instance of Competency")
         fromDb = self.get_competency(competency.id)
@@ -206,8 +220,7 @@ class Database:
     def get_next_competency_element_order(self, id):
         if not isinstance(id, str):
             raise TypeError("id must be a string")
-        check = self.get_competency(id)
-        if check == None:
+        if self.get_competency(id) == None:
             raise ValueError("could not find a competency with given id")
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select max(element_order) from elements where competency_id = :competency_id",
@@ -216,6 +229,26 @@ class Database:
                 if isinstance(row[0], int):
                     return row[0]+1
                 return 1
+    
+    def delete_competency_element(self, competency_id, element):
+        if not isinstance(element, Element):
+            raise TypeError("expecting the 2nd argument to be of type Element")
+        if not isinstance(competency_id, str):
+            raise TypeError("competency id must be a string")
+        if self.get_competency(competency_id) == None:
+            raise ValueError("could not find a competency with given id")
+        if self.get_element(element.element_id) == None:
+            raise ValueError("could not find the element to delete given its id")
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select count(*) from elements where competency_id = :competency_id", competency_id = element.competency_id)
+            for row in results:
+                if row[0] <= 1:
+                    raise ValueError("Cannot delete this element as it is the last one of its competency")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from elements where element_id = :element_id", element_id = element.element_id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = competency_id, deleted_order = element.element_order)
+            for row in results:
+                self.update_element(row[0], row[1]-1, row[2], row[3])
 
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement
@@ -258,6 +291,7 @@ class Database:
             for row in result:
                 element = Element(int(row[0]), int(row[1]), row[2], row[3], row[4])
             return element
+        
     def add_element(self, element):
         if not isinstance(element, Element):
             raise TypeError("Expected Type Element")
@@ -279,7 +313,15 @@ class Database:
         if element == None:
             raise ValueError("Element does not exist could not delete!")
         with self.__get_cursor() as cursor:
-            cursor.execute("delete from elements where element_id = :id", id = element_id )
+            results = cursor.execute("select count(*) from elements where competency_id = :competency_id", competency_id = element.competency_id)
+            for row in results:
+                if row[0] <= 1:
+                    raise ValueError("Cannot delete this element as it is the last one of its competency")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from elements where element_id = :id", id = element_id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
+            for row in results:
+                self.update_element(row[0], row[1]-1, row[2], row[3])
     def get_terms(self):
         from .terms.term import Term
         output = []
@@ -299,6 +341,18 @@ class Database:
             for row in results:
                 output = Term(row[0], row[1])
             return output
+        
+    def get_term_courses(self, id):
+        if not isinstance(id, int):
+            raise TypeError("expecting an integer id parameter")
+        if self.get_term(id) == None:
+            raise ValueError("given id does not correspond to any term")
+        output = []
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, course_title, theory_hours, work_hours, lab_hours, description, domain_id from view_courses_terms where term_id = :term_id", term_id = id)
+            for row in results:
+                output.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], id))
+        return output
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

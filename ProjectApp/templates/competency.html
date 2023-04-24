@@ -3,6 +3,7 @@
 {% block header %}{{competency.competency}}{% endblock %}
 
 {% block content %}
+    <h1>Competency</h1>
     <ul>
         <li><b>Id:</b> {{competency.id}}</li>
         <li><b>Name:</b> {{competency.competency}}</li>
@@ -17,12 +18,12 @@
         <li><b>Type:</b> {{competency.competency_type}}</li>
     </ul>
     <h2>Elements: </h2>
-    <ol>
+    <ul>
         {% for element in elements %}
-        <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">(id: {{element.element_id}}) {{element.element_order}} {{element.element}} {{element.element_criteria}}</a></li>
+        <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">(id: {{element.element_id}}) {{element.element_order}} {{element.element}} {{element.element_criteria}}</a> <a href="{{url_for('competency.delete_competency_element', competency_id = competency.id, element_id = element.element_id)}}">Delete</a></li>
         {% endfor %}
-    </ol>
-    <h3>Add Competency</h3>
+    </ul>
+    <h1>Add Competency</h1>
     <form method="post">
         {{competency_form.csrf_token}}
         {{competency_form.competency.label}} {{competency_form.competency()}}

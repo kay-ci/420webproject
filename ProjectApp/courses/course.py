@@ -42,7 +42,7 @@ from wtforms.validators import DataRequired
 class CourseForm(FlaskForm):
     course_id = StringField('course_id', validators=[DataRequired()])
     course_title = StringField('course_title', validators=[DataRequired()])
-    thoery_hours = IntegerField('thoery_hours', validators=[DataRequired()])
+    theory_hours = IntegerField('theory_hours', validators=[DataRequired()])
     lab_hours = IntegerField('lab_hours', validators=[DataRequired()])
     work_hours = IntegerField('work_hours', validators=[DataRequired()])
     description = StringField('description', validators=[DataRequired()])

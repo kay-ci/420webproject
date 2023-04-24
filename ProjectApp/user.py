@@ -36,4 +36,4 @@ class SignupForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
-    remember_me = BooleanField("Remember me", validators=[DataRequired()])
+    remember_me = BooleanField("Remember me")

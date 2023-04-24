@@ -9,8 +9,12 @@
                         <li>
                             {{ user }} <img src={{url_for('auth.get_avatar', email = user.email)}} alt='user_avatar' id="avatar_image">
                             {% if current_user.member_type == 'admin' or current_user.member_type == 'super_admin'%}
-                                <button type='button'>Promote</button>
-                                <button type='button'>Demote</button>
+                            <form method="GET" action="{{ url_for('dashboard.promote', email = user.email) }}">
+                                <button type='submit'>Promote</button>
+                            </form>
+                            <form method="GET" action="{{ url_for('dashboard.demote', email = user.email) }}">
+                                <button type='submit'>Demote</button>
+                            </form>
                             {% endif %}
                         </li>
                     </ul>

@@ -139,24 +139,24 @@ class Database:
                 user.member_type = row[4]
                 return user
             
-    def promote_user(self, id):
+    def promote_user(self, user):
         with self.__get_cursor() as cursor:
-            cursor.execute("update USERS set member_type = :new_member_type where id=:id",
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
                            new_member_type = 'admin',
-                           id = User.id)
+                           email = user.email)
     
-    def demote_user(self,id):
+    def demote_user(self, user):
         with self.__get_cursor() as cursor:
-            cursor.execute("update USERS set member_type = :new_member_type where id=:id",
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
                            new_member_type = 'member',
-                           id = User.id)
-    
+                           email = user.email)
+
     def delete_user(self,id):
         user = self.get_user_id(id)
         if user == None:
             raise ValueError("can't delete user that wasn't there to begin with")
         with self.__connection.cursor() as cursor:
-            cursor.execute("delete from users where id = :id", id = id)
+            cursor.execute("delete from users where id = :id", id=id)
 
     def get_competencies(self):
         from .competencies.competency import Competency

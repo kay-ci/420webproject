@@ -65,11 +65,12 @@ class Database:
             return addresses
         
     def get_course(self, id):
+        course = None
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses where course_id=:given_id", given_id=id)
             for row in results:
                 course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
-            return course
+        return course
         
     def get_course_competency(self, courseid):
         with self.__connection.cursor() as cursor:
@@ -82,6 +83,8 @@ class Database:
     def add_course(self, course):
         if not isinstance(course, Course):
             raise TypeError()
+        if self.get_course(course.course_id) != None:
+            raise ValueError("this id is already being used by an existing course")
         with self.__connection.cursor() as cursor:
             cursor.execute('insert into courses (course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id) values (:course_id, :course_title, :theory_hours, :lab_hours, :work_hours, :description, :domain_id, :term_id)',
                            course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)

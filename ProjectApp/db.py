@@ -296,7 +296,10 @@ class Database:
         if element == None:
             raise ValueError("Element does not exist could not delete!")
         with self.__get_cursor() as cursor:
-            cursor.execute("delete from elements where element_id = :id", id = element_id )
+            cursor.execute("delete from elements where element_id = :id", id = element_id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
+            for row in results:
+                self.update_element(row[0], row[1]-1, row[2], row[3])
     def get_terms(self):
         from .terms.term import Term
         output = []

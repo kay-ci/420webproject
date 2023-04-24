@@ -19,7 +19,7 @@
     <h2>Elements: </h2>
     <ol>
         {% for element in elements %}
-        <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">(id: {{element.element_id}}) {{element.element_order}} {{element.element}} {{element.element_criteria}}</a></li>
+        <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">(id: {{element.element_id}}) {{element.element_order}} {{element.element}} {{element.element_criteria}}</a> <a href="{{url_for('competency.delete_competency_element', competency_id = competency.id, element_id = element.element_id)}}">Delete</a></li>
         {% endfor %}
     </ol>
     <h3>Add Competency</h3>

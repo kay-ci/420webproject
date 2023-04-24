@@ -205,8 +205,7 @@ class Database:
     def get_next_competency_element_order(self, id):
         if not isinstance(id, str):
             raise TypeError("id must be a string")
-        check = self.get_competency(id)
-        if check == None:
+        if self.get_competency(id) == None:
             raise ValueError("could not find a competency with given id")
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select max(element_order) from elements where competency_id = :competency_id",
@@ -215,6 +214,21 @@ class Database:
                 if isinstance(row[0], int):
                     return row[0]+1
                 return 1
+    
+    def delete_competency_element(self, competency_id, element):
+        if not isinstance(element, Element):
+            raise TypeError("expecting the 2nd argument to be of type Element")
+        if not isinstance(competency_id, str):
+            raise TypeError("competency id must be a string")
+        if self.get_competency(competency_id) == None:
+            raise ValueError("could not find a competency with given id")
+        if self.get_element(element.element_id) == None:
+            raise ValueError("could not find the element to delete given its id")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from elements where element_id = :element_id", element_id = element.element_id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = competency_id, deleted_order = element.element_order)
+            for row in results:
+                self.update_element(row[0], row[1]-1, row[2], row[3])
 
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement
@@ -267,17 +281,16 @@ class Database:
                            element = element.element,
                            element_criteria = element.element_criteria,
                            competency_id = element.competency_id)
-    def update_element(self, element_id, element_order, element, element_criteria, competency_id ):
+    def update_element(self, element_id, element_order, element, element_criteria):
         check = self.get_element(int(element_id))
         if check == None:
             raise Exception("Could not update! element does not exist")
-        with self.__get_cursor() as cursor:
-            cursor.execute("update elements set element_order = :order, element = :element, element_criteria = :criteria, competency_id = :comp_id where element_id = :old_id",
-                           order = element_order,
-                           element = element,
-                           criteria = element_criteria,
-                           comp_id = competency_id,
-                           old_id = element_id)
+        with self.__connection.cursor() as cursor:
+            cursor.execute("update elements set element_order = :element_order, element = :element, element_criteria = :element_criteria where element_id = :element_id", 
+                           element_order = element_order, 
+                           element = element, 
+                           element_criteria = element_criteria, 
+                           element_id = element_id)
     def delete_element(self, element_id):
         element = self.get_element(int(element_id))
         if element == None:

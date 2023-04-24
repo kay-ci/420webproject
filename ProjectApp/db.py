@@ -295,7 +295,6 @@ class Database:
     def add_element(self, element):
         if not isinstance(element, Element):
             raise TypeError("Expected Type Element")
-        #check integrity todo
         with self.__get_cursor() as cursor:
             cursor.execute("insert into elements(element_order, element, element_criteria, competency_id) values(:element_order, :element, :element_criteria, :competency_id)",
                            element_order = element.element_order,

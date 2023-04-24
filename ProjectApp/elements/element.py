@@ -22,13 +22,13 @@ class Element:
     def __str__(self):
         return f'{self.element_id} {self.element_order} {self.element_order} {self.element} {self.element_criteria} {self.competency_id}'
     
-    def to_json():
-        pass
+    def to_json(self):
+        return self.__dict__
     
     def from_json(element_str):
         if not isinstance (element_str, dict):
             raise Exception ("Expected type dict")
-        ##return Element
+        return Element(None, element_str['element_order'], element_str['element'], element_str['element_criteria'], element_str['competency_id'])
         
 from flask_wtf import FlaskForm 
 from wtforms import StringField, IntegerField

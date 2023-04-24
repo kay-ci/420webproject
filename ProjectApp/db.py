@@ -265,7 +265,7 @@ class Database:
             cursor.execute("delete from elements where element_id = :element_id", element_id = element.element_id)
             results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = competency_id, deleted_order = element.element_order)
             for row in results:
-                self.update_element(row[0], row[1]-1, row[2], row[3])
+                self.update_element(Element(row[0], row[1]-1, row[2], row[3], row[4]))
 
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement

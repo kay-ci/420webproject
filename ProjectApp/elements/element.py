@@ -28,7 +28,7 @@ class Element:
     def from_json(element_str):
         if not isinstance (element_str, dict):
             raise Exception ("Expected type dict")
-        ##return Element
+        return Element(None, element_str['element_order'], element_str['element'], element_str['element_criteria'], element_str['competency_id'])
         
 from flask_wtf import FlaskForm 
 from wtforms import StringField, IntegerField

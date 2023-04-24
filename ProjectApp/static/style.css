@@ -143,3 +143,6 @@ legend {
     margin: 10px;
 }
 
+#flash_messages{
+    color: red;
+}

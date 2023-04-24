@@ -4,6 +4,7 @@
 
 {% block content %}
     <section id = "elements info">
+        <h1>Elements</h1>
         <ul>
             {% for element in elements %}
             <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element.element | safe}}</a> </li>
@@ -12,10 +13,9 @@
     </section>
 
     <section clas = "element_form">
+        <h1>Add Element</h1>
         <form method="post">
             {{form.csrf_token}}
-            {{form.element_id.label}} {{form.element_id()}}
-            {{form.element_order.label}} {{form.element_order()}}
             {{form.element.label}} {{form.element()}}
             {{form.element_criteria.label}} {{form.element_criteria()}}
             {{form.competency_id.label}} {{form.competency_id()}}

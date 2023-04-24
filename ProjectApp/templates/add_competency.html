@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block header %}Add a Competency{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {{form.csrf_token}}
+        {{form.competency_id.label}} {{form.competency_id()}}
+        {{form.competency.label}} {{form.competency()}}
+        {{form.competency_achievement.label}} {{form.competency_achievement()}}
+        {{form.competency_type.label}} {{form.competency_type()}}<br/>
+        <p>A competency must at least have one element, you can add more later (after initial creation of this competency)</p>
+        {{form.element.label}} {{form.element()}}
+        {{form.element_criteria.label}} {{form.element_criteria()}}
+        {{form.course_number.label}} <a href="{{url_for('courses.list_courses')}}">browse</a>{{form.course_number()}}
+        <br/>
+        <input type="submit"/>
+    </form>
+{% endblock %}

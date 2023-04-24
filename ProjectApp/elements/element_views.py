@@ -21,22 +21,24 @@ def show_element(element_id):
         element = get_db().get_element(int(element_id))
     except Exception:
         element = None
-
-    if element == None:
-        flash("Element with that id not found")
         abort(404)
-    if request.method == "POST" and form.validate_on_submit():
-        try:
-            get_db().update_element(element_id, form.element_order.data, form.element.data, form.element_criteria.data, form.competency_id.data)
-            element = get_db().get_element(int(element.element_id))
-            flash("Element updated succesfully")
-            return redirect(url_for("element.show_element"))
-        except:
-            flash("Something went wrong could not update")
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            try:
+                new_element = Element(int(element_id), int(element.element_order), form.element.data, form.element_criteria.data, form.competency_id.data)
+                get_db().update_element(new_element)
+                flash("Element updated succesfully")
+                return redirect(url_for("element.show_element", element_id = new_element.element_id))
+            except Exception as e:
+                flash("Something went wrong could not update")
+                flash(str(e))
+        else: 
+            flash("invalid form")
     return render_template("element.html", element = element, form = form)
 
 @bp.route("/delete/<element_id>/")
-def delete_competency(element_id):
+def delete_element(element_id):
     try:
         get_db().delete_element(element_id)
         message = f'deleted element with id {element_id}'

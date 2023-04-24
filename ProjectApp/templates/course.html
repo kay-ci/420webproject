@@ -27,4 +27,5 @@ Courses Information
     <li><a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
     {% endfor %}
 </ul>
+<a class="delete_button" href="{{url_for('courses.delete_from_courses', id = course.course_id)}}">Delete</a>
 {% endblock %}

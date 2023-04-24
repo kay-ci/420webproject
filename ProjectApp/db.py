@@ -78,6 +78,14 @@ class Database:
             for row in results:
                 output.append(Competency(row[0], row[1], row[2], row[3]))
             return output
+        
+    def get_course_competency(self, courseid):
+        with self.__connection.cursor() as cursor:
+            output = []
+            results = cursor.execute("select unique competency_id, competency, competency_achievement, competency_type from VIEW_COURSES_ELEMENTS_COMPETENCIES where course_id=:id", id=courseid)
+            for row in results:
+                output.append(Competency(row[0], row[1], row[2], row[3]))
+            return output
 
     def add_course(self, course):
         if not isinstance(course, Course):

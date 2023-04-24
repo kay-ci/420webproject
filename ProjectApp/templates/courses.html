@@ -12,7 +12,7 @@ Courses List
     <h1>Courses</h1>
     <ul>
         {% for course in courses%}
-            <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}: {{ course.course_title }}</a><a class="delete_button" href="{{url_for('courses.delete_from_courses', id = course.course_id)}}">Delete</a></li>
+            <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}: {{ course.course_title }}</a></li>
         {% endfor%}
     </ul>
     <h1>Add Course</h1>

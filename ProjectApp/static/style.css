@@ -40,13 +40,6 @@ b {
     margin-bottom: 10px;
 }
 
-.delete_button {
-    margin-left: 10px;
-    background-color: rgb(0, 5, 49);
-    padding: 3px;
-    border-radius: 15px;
-}
-
 ul {
     font-family: 'DM Serif Text', serif;
 }
@@ -99,13 +92,26 @@ a:active {
 
 a:link.delete_button, a:visited.delete_button, a:hover.delete_button {
     color: aliceblue;
-    font-size: 10px;
+    font-size: 13.5px;
 }
 
 a:active.delete_button {
     color: rgb(0, 204, 255);
-    
+    font-size: 13.5px;
 }
+
+.delete_button {
+    display: block;
+    margin-left: 10px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    background-color: rgb(0, 5, 49);
+    text-align: center;
+    padding: 6px;
+    border-radius: 5px;
+    width: 5%;
+}
+
 #alert404 {
     background-color: rgb(11, 11, 70);
     color:rgb(154, 243, 213);

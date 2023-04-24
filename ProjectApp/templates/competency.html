@@ -39,5 +39,5 @@
         <input type="submit"/>
     </form>
 
-    <a href="{{url_for('competency.delete_competency', id = competency.id)}}">Delete this competency</a>
+    <a class="delete_button" href="{{url_for('competency.delete_competency', id = competency.id)}}">Delete</a>
 {% endblock %}

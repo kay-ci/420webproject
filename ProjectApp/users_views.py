@@ -1,6 +1,7 @@
 from flask import (Blueprint, render_template, 
                    url_for, redirect, abort, flash, request)
 from .dbmanager import get_db
+from flask_login import current_user
 
 
 bp = Blueprint('users',__name__,url_prefix='/dashboard')
@@ -8,7 +9,11 @@ bp = Blueprint('users',__name__,url_prefix='/dashboard')
 @bp.route('/')
 def get_users():
     try:
-        users = get_db().get_users()
+        if not current_user.is_authenticated:
+            flash("You are not a member.")
+            return redirect(url_for('home.login_index'))
+        else: 
+            users = get_db().get_users()
     except Exception as e:
         users = None
         flash('Unable to connect with the database')

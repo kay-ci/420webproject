@@ -127,6 +127,14 @@ class Database:
                 domains.append(domain)
         return domains
     
+    def get_courses_domains(self, domain_id):
+        courses_title = []
+        with self.__connection.cursor() as cursor:
+            result = cursor.execute('select course_title from courses INNNER JOIN domains ON courses.domain_id = domains.domain_id where domains.domain_id:=id', id=domain_id)
+            for row in result:
+                courses_title.append(row[0])
+        return courses_title
+    
     def get_users(self):
         users = []
         with self.__connection.cursor() as cursor:

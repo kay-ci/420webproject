@@ -12,7 +12,7 @@ class User(UserMixin):
         self.name= name
         self.password = password
         self.id = None
-        self.member_type = 'member'
+        self.member_type = None
         
     def __repr__(self):
         return f'User({self.name}, {self.email})'

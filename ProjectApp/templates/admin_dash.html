@@ -7,8 +7,8 @@
                 {% for user in users %}
                     <ul class="users_listed" >
                         <li>
-                            <div>{{ user }} <img src={{url_for('auth.get_avatar', email = user.email)}} alt='user_avatar' id="avatar_image"></div>
-                            {%  if current_user.is_authenticated %}
+                            <div id="user_desc">{{ user }} <img src={{url_for('auth.get_avatar', email = user.email)}} alt='user_avatar' id="avatar_image"></div>
+                            {%  if current_user.is_authenticated and not current_user.member_type == 'member' %}
                             <form method="GET" class="options_admin" action="{{url_for('users.promote_user', email=user.email)}}">
                                 <button type="submit">Promote</button>
                             </form>

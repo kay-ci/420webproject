@@ -42,6 +42,8 @@ create table courses_elements (course_id REFERENCES courses(course_id) ON DELETE
                                 element_id REFERENCES elements(element_id) ON DELETE CASCADE, 
                                 element_hours number NOT NULL);
 
+@users.sql
+
 --calling creation of sample data
 @inserting.sql
 

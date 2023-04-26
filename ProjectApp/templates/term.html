@@ -7,10 +7,11 @@
     <ul>
         <li><b>Id:</b> {{term.id}}</li>
         <li><b>Name:</b> {{term.name}}</li>
-        <li><b>Courses:</b></li>
-        <li>
+        <li><b>Courses:</b>
             <ul>
-                <li>not implemented yet</li>
+                {% for course in courses %}
+                    <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
+                {% endfor %}
             </ul>
         </li>
     <ul>

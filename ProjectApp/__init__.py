@@ -42,9 +42,12 @@ def create_app(test_config=None):
     
     from .auth_views import bp as auth_bp
     app.register_blueprint(auth_bp)
-    
+
     from .users_views import bp as users_bp
     app.register_blueprint(users_bp)
+    
+    from .elements.elements_api import bp as elements_api
+    app.register_blueprint(elements_api)
 
     @app.errorhandler(404)
     def page_not_found(error):
@@ -63,4 +66,7 @@ def create_app(test_config=None):
     return app
     
 def init_app(app):
-    app.teardown_appcontext(close_db)
+    app.teardown_appcontext(cleanup)
+
+def cleanup(value):
+    pass

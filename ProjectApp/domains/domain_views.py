@@ -14,16 +14,12 @@ def get_domains():
         abort(404)
     form = DomainForm()
     if request.method == 'POST' and form.validate_on_submit():
-        domain = Domain(form.id.data, form.domain.data, 
-        form.description.data)
-        domainGot = domain
-        for domain in domains:
-            if domain.domain == domainGot.domain:
-                    alreadyADomain = True
-        if alreadyADomain == False:
-            domains.append(get_db().insert_domain(domainGot))
-        else:
-            flash("")
+        domain = Domain(form.id.data, form.domain.data, form.description.data)
+        try:
+            get_db().insert_domain(domain)
+            return redirect(url_for('domain_views.get_domains'))
+        except ValueError as e:
+            flash(str(e))
     return render_template('domains.html',domains=domains, form=form)
 
 

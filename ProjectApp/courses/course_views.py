@@ -23,7 +23,7 @@ def list_courses():
         print(e)
         return render_template('404.html')
 
-@bp.route("/<string:the_id>/")
+@bp.route("/<the_id>/")
 def find_course(the_id):
     try:
         result = get_db().get_course(the_id)

@@ -55,3 +55,13 @@ def show_competency(id):
     if len(achievements) != 1:
         achievements.pop(0)
     return render_template("competency.html", competency = competency, competency_form = competency_form, element_form = element_form, achievements = achievements, elements = get_db().get_competency_elements(id))
+
+@bp.route("/<competency_id>/delete-element/<element_id>")
+def delete_competency_element(competency_id, element_id):
+    #get some validation
+    element_id = int(element_id)
+    try:
+        get_db().delete_competency_element(competency_id, get_db().get_element(element_id))
+    except ValueError as e:
+        flash(str(e))
+    return redirect(url_for('competency.show_competency', id = competency_id))

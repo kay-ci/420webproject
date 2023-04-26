@@ -65,11 +65,12 @@ class Database:
             return addresses
         
     def get_course(self, id):
+        course = None
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses where course_id=:given_id", given_id=id)
             for row in results:
                 course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
-            return course
+        return course
         
     def get_course_competency(self, courseid):
         with self.__connection.cursor() as cursor:
@@ -90,6 +91,8 @@ class Database:
     def add_course(self, course):
         if not isinstance(course, Course):
             raise TypeError()
+        if self.get_course(course.course_id) != None:
+            raise ValueError("this id is already being used by an existing course")
         with self.__connection.cursor() as cursor:
             cursor.execute('insert into courses (course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id) values (:course_id, :course_title, :theory_hours, :lab_hours, :work_hours, :description, :domain_id, :term_id)',
                            course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
@@ -107,15 +110,18 @@ class Database:
                            course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
             
     def get_domain(self, domain_id):
+        domain = None
         with self.__connection.cursor() as cursor:
             results = cursor.execute('select domain, domain_description from domains where domain_id=:id', id=domain_id)
             for row in results:
                 domain = Domain(domain_id,row[0],row[1])
-                return domain; 
+        return domain
             
     def insert_domain(self, domain):
         if not isinstance(domain, Domain):
             raise TypeError()
+        if self.get_domain(domain.domain_id) != None:
+            raise ValueError("this domain id is already being used")
         with self.__connection.cursor() as cursor:
             cursor.execute('insert into domains (domain_id, domain, domain_description) values (:domain_id,        :domain, :domain_description)',
                            domain_id = domain.domain_id, domain = domain.domain, domain_description = domain.domain_description)
@@ -123,7 +129,7 @@ class Database:
     def get_domains(self):
         domains = []
         with self.__connection.cursor() as cursor:
-            result = cursor.execute('select domain_id, domain, domain_description from domains')
+            result = cursor.execute('select domain_id, domain, domain_description from domains order by domain_id')
             for row in result:
                 domain = Domain(row[0],row[1],row[2])
                 domains.append(domain)
@@ -132,7 +138,7 @@ class Database:
     def get_users(self):
         users = []
         with self.__connection.cursor() as cursor:
-            result = cursor.execute('select email, password, name, member_type from users')
+            result = cursor.execute('select email, password, name, member_type from USERS')
             for row in result:
                 user = User(row[0],row[1],row[2])
                 user.member_type = row[3]
@@ -141,10 +147,11 @@ class Database:
     
     def get_user(self, email):
          with self.__connection.cursor() as cursor:
-            results = cursor.execute('select email, password, name, member_type from users where email=:email', email=email)
+            results = cursor.execute('select email, password, name, member_type, id from USERS where email=:email', email=email)
             for row in results:
                 user = User(row[0], row[1], row[2])
                 user.member_type = row[3]
+                user.id = row[4]
                 return user
             
     def insert_user(self, user):
@@ -152,18 +159,34 @@ class Database:
             raise TypeError()
         # Insert the post to the DB
         with self.__connection.cursor() as cursor:
-            cursor.execute('insert into users (email, password, name) values (:email, :password, :name)',
+            cursor.execute('insert into USERS (email, password, name) values (:email, :password, :name)',
                            email=user.email, password=user.password, name=user.name)
     
     def get_user_id(self, id):
         with self.__connection.cursor() as cursor:
-            results = cursor.execute('select email, password, id, name from users where id=:id', id=id)
+            results = cursor.execute('select email, password, id, name, member_type from USERS where id=:id', id=id)
             for row in results:
                 user = User(row[0], row[1], row[3])
                 user.id = row[2]
+                user.member_type = row[4]
                 return user
-
+            
+    def promote_user(self, user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
+                           new_member_type = 'admin',
+                           email = user.email)
     
+    def demote_user(self, user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
+                           new_member_type = 'member',
+                           email = user.email)
+
+    def delete_user(self, user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from USERS where email=:email", email=user.email)
+
     def get_competencies(self):
         output = []
         with self.__connection.cursor() as cursor:
@@ -228,8 +251,7 @@ class Database:
     def get_next_competency_element_order(self, id):
         if not isinstance(id, str):
             raise TypeError("id must be a string")
-        check = self.get_competency(id)
-        if check == None:
+        if self.get_competency(id) == None:
             raise ValueError("could not find a competency with given id")
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select max(element_order) from elements where competency_id = :competency_id",
@@ -238,6 +260,26 @@ class Database:
                 if isinstance(row[0], int):
                     return row[0]+1
                 return 1
+    
+    def delete_competency_element(self, competency_id, element):
+        if not isinstance(element, Element):
+            raise TypeError("expecting the 2nd argument to be of type Element")
+        if not isinstance(competency_id, str):
+            raise TypeError("competency id must be a string")
+        if self.get_competency(competency_id) == None:
+            raise ValueError("could not find a competency with given id")
+        if self.get_element(element.element_id) == None:
+            raise ValueError("could not find the element to delete given its id")
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select count(*) from elements where competency_id = :competency_id", competency_id = element.competency_id)
+            for row in results:
+                if row[0] <= 1:
+                    raise ValueError("Cannot delete this element as it is the last one of its competency")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from elements where element_id = :element_id", element_id = element.element_id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = competency_id, deleted_order = element.element_order)
+            for row in results:
+                self.update_element(Element(row[0], row[1]-1, row[2], row[3], row[4]))
 
     def get_courses_elements(self):
         from .courses.courses_element import CourseElement
@@ -284,7 +326,6 @@ class Database:
     def add_element(self, element):
         if not isinstance(element, Element):
             raise TypeError("Expected Type Element")
-        #check integrity todo
         with self.__get_cursor() as cursor:
             cursor.execute("insert into elements(element_order, element, element_criteria, competency_id) values(:element_order, :element, :element_criteria, :competency_id)",
                            element_order = element.element_order,
@@ -293,6 +334,8 @@ class Database:
                            competency_id = element.competency_id)
     # change this method to take in an element instead
     def update_element(self, element):
+        if not isinstance(element, Element):
+            raise TypeError("expecting an argument of type Element")
         check = self.get_element(int(element.element_id))
         if check == None:
             raise Exception("Could not update! element does not exist")
@@ -303,8 +346,15 @@ class Database:
         if element == None:
             raise ValueError("Element does not exist could not delete!")
         with self.__get_cursor() as cursor:
-            cursor.execute("delete from elements where element_id = :id", id = element_id )
-    
+            results = cursor.execute("select count(*) from elements where competency_id = :competency_id", competency_id = element.competency_id)
+            for row in results:
+                if row[0] <= 1:
+                    raise ValueError("Cannot delete this element as it is the last one of its competency")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from elements where element_id = :id", id = element_id)
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
+            for row in results:
+                self.update_element(row[0], row[1]-1, row[2], row[3])
     def get_terms(self):
         from .terms.term import Term
         output = []
@@ -324,6 +374,18 @@ class Database:
             for row in results:
                 output = Term(row[0], row[1])
             return output
+        
+    def get_term_courses(self, id):
+        if not isinstance(id, int):
+            raise TypeError("expecting an integer id parameter")
+        if self.get_term(id) == None:
+            raise ValueError("given id does not correspond to any term")
+        output = []
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, course_title, theory_hours, work_hours, lab_hours, description, domain_id from view_courses_terms where term_id = :term_id", term_id = id)
+            for row in results:
+                output.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], id))
+        return output
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

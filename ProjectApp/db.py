@@ -109,7 +109,7 @@ class Database:
                 domain = Domain(domain_id,row[0],row[1])
         return domain
             
-    def insert_domain(self, domain):
+    def add_domain(self, domain):
         if not isinstance(domain, Domain):
             raise TypeError()
         if self.get_domain(domain.domain_id) != None:
@@ -127,6 +127,35 @@ class Database:
                 domains.append(domain)
         return domains
     
+    def update_domain(self, domain):
+        if not isinstance(domain, Domain):
+            raise TypeError("expecting an arugment of type Domain")
+        if self.get_domain(domain.id):
+            raise ValueError("can't find domain with this id")
+        with self.__get_cursor() as cursor:
+            cursor.execute("update domains set domain = :domain, domain_description = :domain_description", domain = domain.domain, domain_description = domain.domain_description)
+    
+    def delete_domain(self, id):
+        if not isinstance(id, int):
+            raise TypeError("expecting an argument of type int")
+        if self.get_domain(id) == None:
+            raise ValueError("could not find domain with this id")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from domains where domain_id = :domain_id", domain_id = id)
+
+    def get_domain_courses(self, id):
+        courses = []
+        if not isinstance(id, int):
+            raise TypeError("expecting an argument of type int")
+        domain = self.get_domain(id)
+        if domain == None:
+            raise ValueError("could not find domain with this id")
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses where domain_id = :domain_id", domain_id = domain.domain_id)
+            for row in results:
+                courses.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], row[7]))
+        return courses
+
     def get_users(self):
         users = []
         with self.__connection.cursor() as cursor:

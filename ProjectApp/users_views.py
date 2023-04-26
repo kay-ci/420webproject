@@ -1,5 +1,7 @@
 from flask import (Blueprint, render_template, 
                    url_for, redirect, abort, flash, request)
+
+from ProjectApp.user import ProfileEdit
 from .dbmanager import get_db
 from flask_login import current_user
 
@@ -53,4 +55,13 @@ def delete_user(email):
         userChosen = None
         flash('Unable to remove that user, not found')
     return render_template('admin_dash.html', users=users)
+
+@bp.route('/edit/<string:email>')
+def edit_user(email):
+    try:
+        form = ProfileEdit()
+        userChosen = get_db().get_user(email)
+        return render_template('editUser.html', form=form, userChosen=userChosen)
+    except Exception as e:
+        abort(404)
     

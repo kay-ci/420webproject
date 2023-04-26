@@ -37,3 +37,9 @@ class LoginForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     remember_me = BooleanField("Remember me")
+    
+class ProfileEdit(FlaskForm):
+    email = EmailField("Email:", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    name = StringField("Name:", validators=[DataRequired()])
+    avatar_path = StringField("Avatar path:", validators=[DataRequired()])

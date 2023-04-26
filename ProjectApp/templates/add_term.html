@@ -1,0 +1,6 @@
+<form method="post">
+    {{form.csrf_token}}
+    {{form.id.label}} {{form.id()}}
+    {{form.name.label}} {{form.name()}}
+    <input type="submit"/>
+</form>

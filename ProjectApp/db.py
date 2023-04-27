@@ -95,7 +95,14 @@ class Database:
             raise ValueError("this id is already being used by an existing course")
         with self.__connection.cursor() as cursor:
             cursor.execute('insert into courses (course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id) values (:course_id, :course_title, :theory_hours, :lab_hours, :work_hours, :description, :domain_id, :term_id)',
-                           course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
+                           course_id=course.course_id,
+                           course_title=course.course_title,
+                           theory_hours=course.theory_hours,
+                           lab_hours=course.lab_hours,
+                           work_hours=course.work_hours,
+                           description=course.description,
+                           domain_id=course.domain_id,
+                           term_id=course.term_id)
     
     def del_course(self, id):
         course = self.get_course(id)
@@ -105,9 +112,21 @@ class Database:
             cursor.execute("delete from courses where course_id=:id", id = id)
             
     def update_course(self, course):
+        if not isinstance(course, Course):
+            raise TypeError("Not a course")
+        old_course = self.get_course(course.course_id)
+        if old_course is None:
+            raise TypeError("course does not exist")
         with self.__get_cursor() as cursor:
-            cursor.execute("update courses set course_title=:course_title, theory_hours=:theory_hours, lab_hours=:lab_hours, work_hours=:work_hours, description=:description, domain_id=:domain_id, term_id=:term_id where course_id=:course_id",
-                           course_id=course.course_id, course_title=course.course_title, theory_hours=course.theory_hours, lab_hours=course.lab_hours, work_hours=course.work_hours, description=course.description, domain_id=course.domain_id, term_id=course.term_id)
+            cursor.execute("update courses set course_title = :course_title, theory_hours = :theory_hours, lab_hours = :lab_hours, work_hours = :work_hours, description = :description, domain_id = :domain_id, term_id = :term_id where course_id = :course_id",
+                           course_id=course.course_id, 
+                           course_title=course.course_title, 
+                           theory_hours=course.theory_hours, 
+                           lab_hours=course.lab_hours, 
+                           work_hours=course.work_hours, 
+                           description=course.description, 
+                           domain_id=course.domain_id, 
+                           term_id=course.term_id)
             
     def get_domain(self, domain_id):
         domain = None
@@ -340,6 +359,7 @@ class Database:
                            element = element.element,
                            element_criteria = element.element_criteria,
                            competency_id = element.competency_id)
+
     # change this method to take in an element instead
     def update_element(self, element):
         if not isinstance(element, Element):
@@ -349,6 +369,7 @@ class Database:
             raise Exception("Could not update! element does not exist")
         with self.__get_cursor() as cursor:
             cursor.execute("update elements set element_order=:element_order, element=:element, element_criteria=:criteria, competency_id=:compId where element_id=:id", element_order = element.element_order, element = element.element, criteria = element.element_criteria, compId = element.competency_id, id = element.element_id)
+    
     def delete_element(self, element_id):
         element = self.get_element(int(element_id))
         if element == None:
@@ -363,6 +384,7 @@ class Database:
             results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
             for row in results:
                 self.update_element(row[0], row[1]-1, row[2], row[3])
+    
     def get_terms(self):
         from .terms.term import Term
         output = []

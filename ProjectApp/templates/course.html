@@ -36,5 +36,18 @@ Courses Information
     </li>
     {% endfor %}
 </ul>
+{% comment %} <h1>Update Course</h1>
+    <form method="post">
+        {{ form.csrf_token }}
+        {{ form.course_id.label }} {{ form.course_id() }}
+        {{ form.course_title.label }} {{ form.course_title() }}
+        {{ form.theory_hours.label }} {{ form.theory_hours() }}
+        {{ form.lab_hours.label }} {{ form.lab_hours() }}
+        {{ form.work_hours.label }} {{ form.work_hours() }}
+        {{ form.description.label }} {{ form.description() }}
+        {{ form.domain_id.label }} {{ form.domain_id() }}
+        {{ form.term_id.label }} {{ form.term_id() }}
+        <input class="submit" type="submit"/>
+    </form> {% endcomment %}
 <a class="delete_button" href="{{url_for('courses.delete_from_courses', id = course.course_id)}}">Delete</a>
 {% endblock %}

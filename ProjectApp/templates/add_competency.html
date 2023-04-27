@@ -3,6 +3,7 @@
 {% block header %}Add a Competency{% endblock %}
 
 {% block content %}
+    <h1>Add Competency</h1>
     <form method="post">
         {{form.csrf_token}}
         {{form.competency_id.label}} {{form.competency_id()}}

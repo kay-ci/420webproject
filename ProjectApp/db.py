@@ -92,7 +92,7 @@ class Database:
         if not isinstance(course, Course):
             raise TypeError()
         if self.get_course(course.course_id) != None:
-            raise ValueError("this id is already being used by an existing course")
+            raise ValueError("This id is already being used by an existing course")
         with self.__connection.cursor() as cursor:
             cursor.execute('insert into courses (course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id) values (:course_id, :course_title, :theory_hours, :lab_hours, :work_hours, :description, :domain_id, :term_id)',
                            course_id=course.course_id,
@@ -127,6 +127,7 @@ class Database:
                            description=course.description, 
                            domain_id=course.domain_id, 
                            term_id=course.term_id)
+
             
     def get_domain(self, domain_id):
         domain = None

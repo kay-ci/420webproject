@@ -32,7 +32,7 @@ def find_course(the_id):
         elements = get_db().get_course_competency_element(course.course_id)
         
         form = CourseFormPartial()
-        if request.method == 'POST':
+        if request.method == 'POST' and form.validate_on_submit():
             new_course = Course(course.course_id, form.course_title.data, float(form.theory_hours.data), float(form.work_hours.data), float(form.lab_hours.data), form.description.data, int(form.domain_id.data), int(form.term_id.data))
             old_course = [name for name in get_db().get_courses() if name.course_id == new_course.course_id]
             if len(old_course) == 1:

@@ -50,10 +50,10 @@ class CourseForm(FlaskForm):
     term_id = IntegerField('term_id', validators=[DataRequired()])
     
 class CourseFormPartial(FlaskForm):
-    course_title = StringField('course_title')
-    theory_hours = IntegerField('theory_hours')
-    lab_hours = IntegerField('lab_hours')
-    work_hours = IntegerField('work_hours')
-    description = StringField('description')
-    domain_id = IntegerField('domain_id')
-    term_id = IntegerField('term_id')
+    course_title = StringField('course_title', validators=[DataRequired()])
+    theory_hours = IntegerField('theory_hours', validators=[DataRequired()])
+    lab_hours = IntegerField('lab_hours', validators=[DataRequired()])
+    work_hours = IntegerField('work_hours', validators=[DataRequired()])
+    description = StringField('description', validators=[DataRequired()])
+    domain_id = IntegerField('domain_id', validators=[DataRequired()])
+    term_id = IntegerField('term_id', validators=[DataRequired()])

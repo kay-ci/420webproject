@@ -20,7 +20,7 @@ form {
 }
 .options_admin {
     display: inline-block;
-    margin: 0;
+    margin-left: 3%;
     width: 10%;
     height: 5.5%;
     padding: 3px;
@@ -243,4 +243,7 @@ legend {
 }
 #title_edit {
     text-align: center;
+}
+#edit_form {
+    width: 80%;
 }

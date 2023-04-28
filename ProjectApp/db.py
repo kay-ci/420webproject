@@ -186,7 +186,27 @@ class Database:
     def delete_user(self, user):
         with self.__get_cursor() as cursor:
             cursor.execute("delete from USERS where email=:email", email=user.email)
-
+    
+    def update_user_name(self,user,new_name):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set name=:name where email=:email",
+                           name = new_name,
+                           email = user.email)
+            
+    def udpate_user_email(self,user,new_email):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set email=:email where email=:email",
+                           email = new_email)
+            
+    def update_user_avatar():
+        pass
+    
+    def update_user_password(self,user,new_password):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set password=:password where email=:email",
+                           password = new_password,
+                           email = user.email)
+            
     def get_competencies(self):
         output = []
         with self.__connection.cursor() as cursor:

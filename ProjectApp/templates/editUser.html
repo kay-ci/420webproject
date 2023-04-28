@@ -4,11 +4,12 @@
         <section id="edit_section">
             <h1 id='title_edit'>User Editing</h1>
             <fieldset id='field_users'>
-                <form method="POST">
+                <form method="POST" id="edit_form">
                     {{ form.csrf_token }}
-                    {{ form.email.label }} {{ form.email() | default(userChosen.email, true)}}
-                    {{ form.name.label }} {{ form.password() | default(userChosen.password, true)}}
-                    {{ form.avatar_path.label }} {{ form.avatar_path() | default(userChosen.avatar_path, true)}}
+                    {{ form.email.label }} {{ form.email }}
+                    {{ form.name.label }} {{ form.name }}
+                    {{ form.avatar_path.label }} {{ form.avatar_path() }}
+                    {{ form.password.label }} {{ form.password }}
                     <input class="submit" type="submit" />
                 </form>
             </fieldset>

@@ -37,8 +37,7 @@ def find_course(the_id):
             old_course = [name for name in get_db().get_courses() if name.course_id == new_course.course_id]
             if len(old_course) == 1:
                 get_db().update_course(new_course)
-            return redirect(url_for('courses.find_course', the_id = new_course.course_id))
-
+                return redirect(url_for('courses.find_course', the_id = new_course.course_id))
         return render_template('course.html', course = course, term = term, domain = domain, competencies = competencies, elements = elements, form = form)
     except Exception as e:
         flash('Something went wrong, ' + str(e))

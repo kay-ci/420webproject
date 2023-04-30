@@ -1,3 +1,4 @@
+from flask import jsonify
 
 class Course:
     def __init__(self, course_id, course_title, theory_hours, work_hours, lab_hours, description, domain_id, term_id):
@@ -34,6 +35,15 @@ class Course:
     def __str__(self):
         value = f'{self.course_title}: {self.course_id}, {self.theory_hours}, {self.lab_hours}, {self.work_hours}, {self.description}, {self.domain_id}, {self.term_id}'
         return value
+    
+    def to_json(self):
+        return self.__dict__
+    
+    def from_json(course_str):
+        if not isinstance (course_str, dict):
+            raise Exception ("Expected type dict")
+        return Course(None, course_str['course_id'], course_str['course_title'], course_str['theory_hours'], course_str['lab_hours'], course_str['work_hours'], course_str['description'], course_str['domain_id'], course_str['term_id'])
+
     
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField

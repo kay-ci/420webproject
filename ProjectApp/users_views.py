@@ -64,13 +64,12 @@ def edit_user(email):
         if form.validate_on_submit():
             new_email = form.email.data
             name = form.name.data
-            new_password = form.password.data
-            new_password_hash = generate_password_hash(new_password)
+            hash = generate_password_hash(form.password.data)
             #get_db().update_user_email(new_email)
             get_db().update_user_name(userChosen,name)
             get_db().update_user_email(userChosen,new_email)
-            get_db().update_user_password(userChosen,new_password_hash)
-                #get_db().update_user_password(new_password_hash)
+            get_db().update_user_password(userChosen,hash)
+            #get_db().update_user_password(new_password_hash)
             return redirect(url_for('users.get_users'))
         return render_template('editUser.html', form=form, userChosen=userChosen)
     except Exception as e:

@@ -22,6 +22,7 @@
                                 <form method="GET" class="options_admin" action="{{url_for('users.edit_user', email=user.email)}}">
                                     <button type="submit">Edit</button>
                                 </form>
+                                <div>{{user.member_type}}</div>
                             </div>
                             {% endif %}
                         </li>

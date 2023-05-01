@@ -1,10 +1,5 @@
-#
-Flask Based Web App Project
+#Flask Based Web App Project
 
-##
-Simona Georgiana Dragomir
-Jimmy Xu
-Kayci Nicole Davila
-Hernan Mathias Farina Forster
+##Simona Georgiana Dragomir, Jimmy Xu, Kayci Nicole Davila, Hernan Mathias Farina Forster
 
 ##

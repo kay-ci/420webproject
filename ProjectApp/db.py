@@ -155,16 +155,6 @@ class Database:
                 domains.append(domain)
         return domains
     
-<<<<<<< HEAD
-    def get_courses_domains(self, domain_id):
-        courses_title = []
-        with self.__connection.cursor() as cursor:
-            result = cursor.execute('select course_title from courses INNNER JOIN domains ON courses.domain_id = domains.domain_id where domains.domain_id:=id', id=domain_id)
-            for row in result:
-                courses_title.append(row[0])
-        return courses_title
-    
-=======
     def update_domain(self, domain):
         if not isinstance(domain, Domain):
             raise TypeError("expecting an arugment of type Domain")
@@ -194,7 +184,6 @@ class Database:
                 courses.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], row[7]))
         return courses
 
->>>>>>> ef55a0bfce2ba21509f246648cfccf7a51e09a16
     def get_users(self):
         users = []
         with self.__connection.cursor() as cursor:

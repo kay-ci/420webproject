@@ -1,10 +1,12 @@
 from flask import (Blueprint, render_template, 
                    url_for, redirect, abort, flash, request)
 
-from ProjectApp.user import ProfileEdit
-from .dbmanager import get_db
+from .user import ProfileEdit
+from ..dbmanager import get_db
 from flask_login import current_user
 from werkzeug.security import generate_password_hash
+
+bp = Blueprint("users", __name__ ,url_prefix="/dashboard")
 
 @bp.route("/")
 def get_users():

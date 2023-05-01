@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "./ProjectApp/courses"
+        "./ProjectApp/courses",
+        "./ProjectApp/users"
     ]
 }

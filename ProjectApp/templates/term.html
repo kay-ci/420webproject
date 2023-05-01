@@ -6,8 +6,7 @@
     <h1>Term {{term.id}}</h1>
     <ul>
         <li><b>Semester:</b> {{term.name}}</li>
-        <li><b>Courses:</b></li>
-        <li>
+        <li><b>Courses:</b>
             <ul>
                 {% for course in courses %}
                     <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>

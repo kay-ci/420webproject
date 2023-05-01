@@ -43,7 +43,7 @@ def create_app(test_config=None):
     from .auth_views import bp as auth_bp
     app.register_blueprint(auth_bp)
 
-    from .users_views import bp as users_bp
+    from .users.users_views import bp as users_bp
     app.register_blueprint(users_bp)
     
     from .elements.elements_api import bp as elements_api
@@ -51,9 +51,6 @@ def create_app(test_config=None):
     
     from .courses.courses_api import bp as courses_api
     app.register_blueprint(courses_api)
-
-    from ProjectApp.users.users_views import bp as users_bp
-    app.register_blueprint(users_bp)
     
     @app.errorhandler(404)
     def page_not_found(error):

@@ -36,6 +36,7 @@ def add_term():
             return redirect(url_for("term.show_term", id = id))
         else:
             flash("term should be titled, winter, fall or summer")
+    return render_template("add_term.html", form = form) 
 
 @bp.route("/delete/<id>/")
 def delete_term(id):

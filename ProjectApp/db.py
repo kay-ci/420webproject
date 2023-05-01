@@ -7,6 +7,7 @@ import os
 from .elements.element import Element
 from .courses.course import Course
 from .terms.term import Term
+
 class Database:
     def __init__(self, autocommit=True):
         self.__connection = self.__connect()
@@ -371,6 +372,8 @@ class Database:
     def add_term(self, term):
         if not isinstance(term, Term):
             raise TypeError("expected type Term")
+    def delete_term(self, term):
+        pass
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

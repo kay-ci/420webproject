@@ -52,6 +52,9 @@ def create_app(test_config=None):
     from .courses.courses_api import bp as courses_api
     app.register_blueprint(courses_api)
 
+    from ProjectApp.users.users_views import bp as users_bp
+    app.register_blueprint(users_bp)
+    
     @app.errorhandler(404)
     def page_not_found(error):
         return render_template('404.html'), 404

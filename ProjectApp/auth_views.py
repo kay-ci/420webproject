@@ -2,8 +2,8 @@ import os
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, url_for
 from werkzeug.security import generate_password_hash
 from .dbmanager import get_db
-from .user import SignupForm, User
-from flask_login import login_user, logout_user
+from .users.user import SignupForm, User
+from flask_login import logout_user
 
 bp = Blueprint("auth", __name__, url_prefix='/auth/')
 

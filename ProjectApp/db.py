@@ -1,8 +1,7 @@
 from .competencies.competency import Competency
 from .domains.domain import Domain
 from flask import flash
-from ProjectApp.user import User
-from .user import User
+from .users.user import User
 import oracledb
 import os
 from .elements.element import Element

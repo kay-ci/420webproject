@@ -16,3 +16,15 @@ class Term:
         return f"{self.id}({self.name})"
     def __str__(self):
         return f"{self.id}: {self.name}"
+    def to_json(self):
+        return self.__dict__ 
+    def from_json(term_str):
+        if not isinstance (term_str, dict):
+            raise Exception ("Expected type dict")
+        return Term(None, term_str['name'])
+    
+from flask_wtf import FlaskForm 
+from wtforms import StringField, IntegerField
+from wtforms.validators import DataRequired
+class TermForm(FlaskForm):
+    name = StringField('Element', validators=[DataRequired()])

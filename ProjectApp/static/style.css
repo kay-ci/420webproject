@@ -238,6 +238,6 @@ legend {
 .users_listed li {
     margin: 0;
 }
-#user_desc {
-    text-align: right;
+#flash_messages{
+    color: red;
 }

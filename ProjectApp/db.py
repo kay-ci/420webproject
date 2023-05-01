@@ -115,8 +115,7 @@ class Database:
         if self.get_domain(domain.domain_id) != None:
             raise ValueError("this domain id is already being used")
         with self.__connection.cursor() as cursor:
-            cursor.execute('insert into domains (domain_id, domain, domain_description) values (:domain_id,        :domain, :domain_description)',
-                           domain_id = domain.domain_id, domain = domain.domain, domain_description = domain.domain_description)
+            cursor.execute('insert into domains (domain, domain_description) values (:domain, :domain_description)', domain = domain.domain, domain_description = domain.domain_description)
     
     def get_domains(self):
         domains = []

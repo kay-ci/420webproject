@@ -10,17 +10,25 @@ bp = Blueprint('domains', __name__, url_prefix='/domains/')
 def show_domains():
     domains = get_db().get_domains()
     form = DomainForm()
-    return render_template('domains.html',domains=domains)
+    if request.method == "POST" and form.validate_on_submit():
+        try:
+            get_db().add_domain(Domain(form.domain_id.data, form.domain.data, form.domain_description.data))
+            return redirect(url_for('domains.show_domain', id = form.domain_id.data))
+        except ValueError as e:
+            flash(str(e))
+    return render_template('domains.html',domains=domains, form = form)
 
-@bp.route("<int:id>")
-def show_domain(id, methods=["GET","POST"]):
+@bp.route("<int:id>", methods=["GET","POST"])
+def show_domain(id):
     if not isinstance(id, int):
         abort(404)
     domain = get_db().get_domain(id)
     if domain == None:
         abort(404)
     form = DomainForm()
-    if request.method == "POST":
+    if request.method == "POST" and form.validate_on_submit():
+        domain.domain = form.domain.data
+        domain.domain_description = form.domain_description.data
         get_db().update_domain(domain)
     return render_template("domain.html", domain = domain, form = form, courses = get_db().get_domain_courses(id))
 

@@ -1,19 +1,12 @@
 {%extends 'base.html' %}
-    {% block title %}Domains{% endblock %}
+    {% block title %}<h1>Domains</h1>{% endblock %}
 {% block content%}
         <h1>Domains</h1>
         <ul>
             {% for domain in domains %}
-              <li>{{ domain }}</li><br>
+              <li><a href="{{url_for('domains.delete_domain', id = domain.domain_id)}}">Delete this Domain</a> <a href ="{{url_for('domains.show_domain', id = domain.domain_id)}}">{{ domain.domain_id }}: {{domain.domain}}</a></li><br>
             {% endfor %}
         </ul>
 
-        <h1>Add Domain</h1>
-        <form method="post">
-            {{ form.csrf_token }} 
-            {{ form.id.label }} {{form.id(size=4)}}
-            {{ form.domain.label }} {{form.domain(size=20)}}
-            {{ form.description.label }} {{form.description(size=50)}}
-            <input class="submit" type="submit" />
-        </form>  
+        <a>Add a domain</a>
 {% endblock %}

@@ -12,8 +12,8 @@ def show_domains():
     form = DomainForm()
     if request.method == "POST" and form.validate_on_submit():
         try:
-            get_db().add_domain(Domain(form.domain_id.data, form.domain.data, form.domain_description.data))
-            return redirect(url_for('domains.show_domain', id = form.domain_id.data))
+            get_db().add_domain(Domain(None, form.domain.data, form.domain_description.data))
+            return redirect(url_for('domains.show_domains'))
         except ValueError as e:
             flash(str(e))
     return render_template('domains.html',domains=domains, form = form)

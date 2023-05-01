@@ -1,7 +1,7 @@
 class Domain:
     def __init__(self, domain_id, domain, domain_description):
         
-        if not isinstance(domain_id, int):
+        if not(domain_id == None or isinstance(domain_id, int)):
             raise Exception("domain id must be a number")
         if not isinstance(domain, str):
             raise Exception("course title must be a string")

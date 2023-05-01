@@ -24,7 +24,11 @@ from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
     
 class DomainForm(FlaskForm):
+<<<<<<< HEAD
     domain_id = IntegerField('Id', validators=[DataRequired()])
+=======
+    domain_id = IntegerField('Domain_Id', validators=[DataRequired()])
+>>>>>>> c38216f3d783a1f7c8ac682543585aeddb3d28f2
     domain = StringField('Name', validators=[DataRequired()])
     domain_description = StringField('Description', validators=[DataRequired()])
 

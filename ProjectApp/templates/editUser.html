@@ -1,0 +1,17 @@
+{%extends 'base.html' %}
+    {% block title %}User Editing{% endblock %}
+{% block content%}
+        <section id="edit_section">
+            <h1 id='title_edit'>User Editing</h1>
+            <fieldset id='field_users'>
+                <form  method="POST" id="edit_form">
+                    {{ form.csrf_token }}
+                    {{ form.email.label }} {{ form.email }}
+                    {{ form.name.label }} {{ form.name }}
+                    {{ form.avatar_path.label }} {{ form.avatar_path() }}
+                    {{ form.password.label }} {{ form.password }}
+                    <input class="submit" type="submit" />
+                </form>
+            </fieldset>
+        </section>    
+{% endblock %}

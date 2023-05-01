@@ -1,6 +1,16 @@
+<<<<<<< HEAD:ProjectApp/users/users_views.py
 from flask import Blueprint, render_template, url_for, redirect, abort, flash, request
 from ..dbmanager import get_db
 bp = Blueprint("users", __name__ ,url_prefix="/dashboard")
+=======
+from flask import (Blueprint, render_template, 
+                   url_for, redirect, abort, flash, request)
+
+from ProjectApp.user import ProfileEdit
+from .dbmanager import get_db
+from flask_login import current_user
+from werkzeug.security import generate_password_hash
+>>>>>>> c38216f3d783a1f7c8ac682543585aeddb3d28f2:ProjectApp/users_views.py
 
 @bp.route("/")
 def get_users():
@@ -37,7 +47,6 @@ def demote_user(email):
         users = get_db().get_users()
     except Exception as e:
         userChosen = None
-        flash('Unable to demote that user, not found')
     return render_template('admin_dash.html', users=users)
 
 @bp.route('/remove/<string:email>/')
@@ -50,4 +59,40 @@ def delete_user(email):
         userChosen = None
         flash('Unable to remove that user, not found')
     return render_template('admin_dash.html', users=users)
-    
+
+@bp.route('/edit/<string:email>', methods=['GET','POST'])
+def edit_user(email):
+    try:
+        form = ProfileEdit()
+        userChosen = get_db().get_user(email)
+        if form.validate_on_submit():
+            new_email = form.email.data
+            name = form.name.data
+            hash = generate_password_hash(form.password.data)
+            #get_db().update_user_email(new_email)
+            get_db().update_user_name(userChosen,name)
+            get_db().update_user_email(userChosen,new_email)
+            get_db().update_user_password(userChosen,hash)
+            #get_db().update_user_password(new_password_hash)
+            return redirect(url_for('users.get_users'))
+        return render_template('editUser.html', form=form, userChosen=userChosen)
+    except Exception as e:
+        abort(404)
+
+        
+#@bp.route('/edit/<string:email>/editcompleted/', methods=['GET','POST'])
+#def edit_completed(email):
+ #   try:
+  #      new_email = request.form['email']
+   #     new_name = request.form['name']
+    #    new_password = request.form['password']
+     #   new_password_hash = generate_password_hash(new_password)
+      #  avatar_path = request.form['avatar_path']
+       # 
+       # get_db().update_user_email(new_email)
+       # get_db().update_user_name(new_name)
+       # get_db().update_user_password(new_password_hash)
+        
+       # return render_template('editDone.html')
+    #except Exception as e:
+    #    abort(404)

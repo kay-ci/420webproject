@@ -22,6 +22,9 @@ def signup():
                 file.save(avatar_path)
                 #what should we do if user doesn't give a file for avatar
             hash = generate_password_hash(form.password.data)
+            if get_db().get_user(form.email.data) != None:
+                flash("this email is already being used")
+                return render_template("signup.html", form = form)
             user = User(form.email.data, hash, form.name.data)
             get_db().insert_user(user)
             userInserted = get_db().get_user(form.email.data)

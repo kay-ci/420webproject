@@ -20,7 +20,13 @@ form {
 }
 .options_admin {
     display: inline-block;
-    margin: 0;
+    margin-left: 3%;
+    width: 10%;
+    height: 5.5%;
+    padding: 3px;
+}
+#user_buttons {
+    text-align: right;
 }
 
 label {
@@ -240,4 +246,10 @@ legend {
 }
 #flash_messages{
     color: red;
+}
+#title_edit {
+    text-align: center;
+}
+#edit_form {
+    width: 80%;
 }

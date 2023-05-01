@@ -1,5 +1,9 @@
-#Flask Based Web App Project
+#420WebProject
 
-##Simona Georgiana Dragomir, Jimmy Xu, Kayci Nicole Davila, Hernan Mathias Farina Forster
+##Group Members List
+1. Simona Georgiana Dragomir
+2. Jimmy Xu
+3. Kayci Nicole Davila
+4. Hernan Mathias Farina Forster
 
 ##

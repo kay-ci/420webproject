@@ -14,6 +14,15 @@ def show_terms():
         abort(404)
     return render_template("terms.html", terms = terms)
 
+@bp.route("/<int:id>/")
+def show_term(id):
+    if not isinstance(id, int):
+        flash("could not find a term with this id")
+    term = get_db().get_term(id)
+    if term == None:
+        flash("could not find a term with this id")
+        return redirect(url_for('term.show_terms')), 404
+    return render_template("term.html", term = term, courses = get_db().get_term_courses(id))
 
 @bp.route("/add/", methods = ["GET", "POST"]) 
 def add_term():
@@ -27,14 +36,11 @@ def add_term():
             return redirect(url_for("term.show_term", id = id))
         else:
             flash("term should be titled, winter, fall or summer")
-            
 
-@bp.route("/<int:id>/")
-def show_term(id):
-    if not isinstance(id, int):
-        flash("could not find a term with this id")
-    term = get_db().get_term(id)
-    if term == None:
-        flash("could not find a term with this id")
-        return redirect(url_for('term.show_terms')), 404
-    return render_template("term.html", term = term, courses = get_db().get_term_courses(id))
+@bp.route("/delete/<id>/")
+def delete_term(id):
+    try:
+        get_db().delete_term(id)
+    except:
+        flash("Could not delete term")
+    return redirect(url_for("term.show_terms"))

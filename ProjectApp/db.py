@@ -6,7 +6,7 @@ import oracledb
 import os
 from .elements.element import Element
 from .courses.course import Course
-
+from .terms.term import Term
 class Database:
     def __init__(self, autocommit=True):
         self.__connection = self.__connect()
@@ -339,7 +339,6 @@ class Database:
             for row in results:
                 self.update_element(row[0], row[1]-1, row[2], row[3])
     def get_terms(self):
-        from .terms.term import Term
         output = []
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select term_id, term_name from terms")
@@ -351,7 +350,6 @@ class Database:
         output = None
         if not isinstance(id, int):
             raise TypeError("id must be an int")
-        from .terms.term import Term
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select term_id, term_name from terms where term_id = :id", id = id)
             for row in results:
@@ -369,6 +367,10 @@ class Database:
             for row in results:
                 output.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], id))
         return output
+    
+    def add_term(self, term):
+        if not isinstance(term, Term):
+            raise TypeError("expected type Term")
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

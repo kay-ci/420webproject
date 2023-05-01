@@ -15,14 +15,18 @@ def show_elements():
             flash(e)
     return render_template("elements.html", elements = get_db().get_elements(), form = form)
 
-@bp.route("/<element_id>")
+@bp.route("/<int:element_id>", methods=["GET", "POST"])
 def show_element(element_id):
     form = ElementForm()
-    try:
-        element = get_db().get_element(int(element_id))
-    except Exception:
-        element = None
+    if not isinstance(element_id, int):
         abort(404)
+    element = get_db().get_element(element_id)
+    if not element:
+        abort(404)
+    if request.method == "POST" and form.validate_on_submit():
+        element.element = form.element.data
+        element.element_criteria = form.element_criteria.data
+        get_db().update_element(element)
     return render_template("element.html", element = element, form = form)
 
 @bp.route("/delete/<element_id>/")

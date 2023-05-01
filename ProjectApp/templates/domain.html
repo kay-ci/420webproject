@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Domain</h1>
+    <ul>
+        <li>Id: {{domain.domain_id}}</li>
+        <li>Name: {{domain.domain}}</li>
+        <li>Description: {{domain.domain_description}}</li>
+    </ul>
+
+    <h2>Courses</h2>
+    <ul>
+        {% for course in courses %}
+            <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h1>Modify Domain</h1>
+    <form method="post">
+        {{form.csrf_token}}
+        {{form.domain.label}} {{form.domain()}}
+        {{form.domain_description.label}} {{form.domain_description()}}
+        <input class="submit" type="submit"/>
+    </form>
+{% endblock %}

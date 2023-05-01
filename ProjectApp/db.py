@@ -130,10 +130,10 @@ class Database:
     def update_domain(self, domain):
         if not isinstance(domain, Domain):
             raise TypeError("expecting an arugment of type Domain")
-        if self.get_domain(domain.id):
+        if self.get_domain(domain.domain_id) == None:
             raise ValueError("can't find domain with this id")
         with self.__get_cursor() as cursor:
-            cursor.execute("update domains set domain = :domain, domain_description = :domain_description", domain = domain.domain, domain_description = domain.domain_description)
+            cursor.execute("update domains set domain = :domain, domain_description = :domain_description where domain_id = :domain_id", domain = domain.domain, domain_description = domain.domain_description, domain_id  = domain.domain_id)
     
     def delete_domain(self, id):
         if not isinstance(id, int):

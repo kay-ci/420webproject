@@ -1,8 +1,3 @@
-<<<<<<< HEAD:ProjectApp/users/users_views.py
-from flask import Blueprint, render_template, url_for, redirect, abort, flash, request
-from ..dbmanager import get_db
-bp = Blueprint("users", __name__ ,url_prefix="/dashboard")
-=======
 from flask import (Blueprint, render_template, 
                    url_for, redirect, abort, flash, request)
 
@@ -10,7 +5,6 @@ from ProjectApp.user import ProfileEdit
 from .dbmanager import get_db
 from flask_login import current_user
 from werkzeug.security import generate_password_hash
->>>>>>> c38216f3d783a1f7c8ac682543585aeddb3d28f2:ProjectApp/users_views.py
 
 @bp.route("/")
 def get_users():

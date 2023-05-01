@@ -27,4 +27,5 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
 class TermForm(FlaskForm):
-    name = StringField('Element', validators=[DataRequired()])
+    id = IntegerField('Term_Id', validators=[DataRequired()])
+    name = StringField('Term Title', validators=[DataRequired()])

@@ -15,6 +15,8 @@ def login_index():
         if form.validate_on_submit():
             email = form.email.data
             user = get_db().get_user(email)
+            if user.member_type == 'blocked':
+                return render_template('userBlocked.html',form=form)
             if user:
                 # Check password
                 pwd = form.password.data

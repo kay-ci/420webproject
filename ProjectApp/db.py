@@ -183,6 +183,12 @@ class Database:
                            new_member_type = 'member',
                            email = user.email)
 
+    def block_user(self,user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
+                           new_member_type = 'blocked',
+                           email = user.email)
+
     def delete_user(self, user):
         with self.__get_cursor() as cursor:
             cursor.execute("delete from USERS where email=:email", email=user.email)

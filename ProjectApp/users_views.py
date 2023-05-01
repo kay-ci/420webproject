@@ -75,20 +75,13 @@ def edit_user(email):
     except Exception as e:
         abort(404)
 
-        
-#@bp.route('/edit/<string:email>/editcompleted/', methods=['GET','POST'])
-#def edit_completed(email):
- #   try:
-  #      new_email = request.form['email']
-   #     new_name = request.form['name']
-    #    new_password = request.form['password']
-     #   new_password_hash = generate_password_hash(new_password)
-      #  avatar_path = request.form['avatar_path']
-       # 
-       # get_db().update_user_email(new_email)
-       # get_db().update_user_name(new_name)
-       # get_db().update_user_password(new_password_hash)
-        
-       # return render_template('editDone.html')
-    #except Exception as e:
-    #    abort(404)
+@bp.route('/blocked/<string:email>/')
+def block_user(email):  
+    try:
+        userChosen = get_db().get_user(email)
+        users = get_db().get_users()
+        get_db().block_user(userChosen)
+    except Exception as e:
+        userChosen = None
+        flash('Unable to block that user, not found')
+    return render_template('admin_dash.html', users=users)   

@@ -20,10 +20,9 @@ form {
 }
 .options_admin {
     display: inline-block;
-    margin-left: 3%;
-    width: 10%;
+    margin-left: 1%;
+    width: 17%;
     height: 5.5%;
-    padding: 3px;
 }
 #user_buttons {
     text-align: right;

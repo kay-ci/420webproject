@@ -125,7 +125,9 @@ a:active.delete_button {
     text-align:center;
     font-family: 'Lucida Sans';
 }
-
+#pwd_container {
+    text-align: center;
+}
 #txt404 {
     font-size:30px;
     text-align:center;
@@ -251,7 +253,6 @@ legend {
 }
 #member_p {
     display: inline;
-    margin-left: 40%;
 }
 #field_pwd {
     margin: auto;

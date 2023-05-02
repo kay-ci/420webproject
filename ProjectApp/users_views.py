@@ -60,7 +60,7 @@ def delete_user(email):
 def edit_user(email):
     try:
         userChosen = get_db().get_user(email)
-        form = ProfileEdit(email=userChosen.email,name=userChosen.name)
+        form = ProfileEdit(email=userChosen.email,name=userChosen.name,avatar_path='not working')
         if form.validate_on_submit():
             new_email = form.email.data
             name = form.name.data

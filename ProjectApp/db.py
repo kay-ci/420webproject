@@ -7,6 +7,7 @@ import os
 from .elements.element import Element
 from .courses.course import Course
 from .terms.term import Term
+from .courses.courses_element import CourseElement
 
 class Database:
     def __init__(self, autocommit=True):
@@ -75,7 +76,7 @@ class Database:
     def get_course_competency(self, courseid):
         with self.__connection.cursor() as cursor:
             output = []
-            results = cursor.execute("select unique competency_id, competency, competency_achievement, competency_type from VIEW_COURSES_ELEMENTS_COMPETENCIES where course_id=:id", id=courseid)
+            results = cursor.execute("select unique competency_id, competency, competency_achievement, competency_type from courses join courses_elements using(course_id) join elements using(element_id) join competencies using(competency_id) where course_id=:id", id=courseid)
             for row in results:
                 output.append(Competency(row[0], row[1], row[2], row[3]))
             return output
@@ -87,6 +88,14 @@ class Database:
             for row in results:
                 output.append(Element(int(row[0]), int(row[1]), row[2], row[3], row[4]))
             return output
+    
+    def get_new_element_id(self):
+        with self.__connection.cursor() as cursor:
+            output = 0
+            results = cursor.execute("select count(*) from elements")
+            for row in results:
+                output = row[0]
+            return int(output)
 
     def add_course(self, course):
         if not isinstance(course, Course):
@@ -322,7 +331,7 @@ class Database:
         if not isinstance(id, str):
             raise TypeError("id must be a string")
         if self.get_competency(id) == None:
-            raise ValueError("could not find a competency with given id")
+            return 1
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select max(element_order) from elements where competency_id = :competency_id",
                                      competency_id = id)
@@ -352,7 +361,6 @@ class Database:
                 self.update_element(Element(row[0], row[1]-1, row[2], row[3], row[4]))
 
     def get_courses_elements(self):
-        from .courses.courses_element import CourseElement
         courses_elements = []
         with self.__get_cursor() as cursor:
             results = cursor.execute("select course_id, element_id, element_hours from courses_elements")
@@ -361,11 +369,13 @@ class Database:
         return courses_elements
     
     def add_courses_element(self, course_element):
+        if not isinstance(course_element, CourseElement):
+            raise TypeError("id must be a CourseElement")
         with self.__get_cursor() as cursor:
-            cursor.execute("insert into course_element values(:course_id, :elem_id, :elem_hours)",
+            cursor.execute("insert into courses_elements values(:course_id, :elem_id, :elem_hours)",
                            course_id = course_element.course_id,
                            elem_id = course_element.element_id,
-                           elem_hourse = course_element.hours)
+                           elem_hours = course_element.hours)
     
     #only update hours
     def update_courses_element(self, course_element):

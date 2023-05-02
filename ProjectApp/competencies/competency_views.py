@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
+
+from ..courses.courses_element import CourseElement
 from .competency import Competency, CompetencyForm, CompleteCompetencyForm
 from ..elements.element import ElementForm, Element
 from ..dbmanager import get_db
@@ -25,6 +27,12 @@ def add_competency():
         get_db().add_competency(competency)
         element = Element(None, get_db().get_next_competency_element_order(form.competency_id.data), form.element.data, form.element_criteria.data, form.competency_id.data)
         get_db().add_element(element)
+        new_course_element = CourseElement(form.course_number.data, get_db().get_new_element_id(), float(0))
+        try:
+            get_db().add_courses_element(new_course_element)
+        except ValueError as e:
+            print(e)
+            flash(e)
         return redirect(url_for('competency.show_competency', id = competency.id))
     return render_template("add_competency.html", form = form)
         

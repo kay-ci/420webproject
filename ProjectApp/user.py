@@ -40,6 +40,8 @@ class LoginForm(FlaskForm):
     
 class ProfileEdit(FlaskForm):
     email = EmailField("Email:", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
     name = StringField("Name:", validators=[DataRequired()])
     avatar_path = StringField("Avatar path:", validators=[DataRequired()])
+
+class ChangePassword(FlaskForm):
+    password = PasswordField("Password", validators=[DataRequired()])

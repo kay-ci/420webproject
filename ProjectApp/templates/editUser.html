@@ -9,9 +9,10 @@
                     {{ form.email.label }} {{ form.email }}
                     {{ form.name.label }} {{ form.name }}
                     {{ form.avatar_path.label }} {{ form.avatar_path() }}
-                    {{ form.password.label }} {{ form.password }}
                     <input class="submit" type="submit" />
                 </form>
             </fieldset>
+            <p id='member_p'>To change the member's password</p>
+            <a href="{{ url_for('users.edit_user_password', email=userChosen.email) }}">Click Here</a> 
         </section>    
 {% endblock %}

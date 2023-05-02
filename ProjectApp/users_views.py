@@ -1,7 +1,7 @@
 from flask import (Blueprint, render_template, 
                    url_for, redirect, abort, flash, request)
 
-from ProjectApp.user import ProfileEdit
+from ProjectApp.user import ChangePassword, ProfileEdit
 from .dbmanager import get_db
 from flask_login import current_user
 from werkzeug.security import generate_password_hash
@@ -59,19 +59,28 @@ def delete_user(email):
 @bp.route('/edit/<string:email>', methods=['GET','POST'])
 def edit_user(email):
     try:
-        form = ProfileEdit()
         userChosen = get_db().get_user(email)
+        form = ProfileEdit(email=userChosen.email,name=userChosen.name)
         if form.validate_on_submit():
             new_email = form.email.data
             name = form.name.data
-            hash = generate_password_hash(form.password.data)
-            #get_db().update_user_email(new_email)
             get_db().update_user_name(userChosen,name)
             get_db().update_user_email(userChosen,new_email)
-            get_db().update_user_password(userChosen,hash)
-            #get_db().update_user_password(new_password_hash)
             return redirect(url_for('users.get_users'))
         return render_template('editUser.html', form=form, userChosen=userChosen)
+    except Exception as e:
+        abort(404)
+        
+@bp.route('/edit/<string:email>/passwordchange/', methods=['GET','POST'])
+def edit_user_password(email):
+    try:
+        userChosen = get_db().get_user(email)
+        form = ChangePassword()
+        if form.validate_on_submit():
+            hash = generate_password_hash(form.password.data)
+            get_db().update_user_password(userChosen,hash)
+            return redirect(url_for('users.get_users'))
+        return render_template('changePassword.html',form=form,userChosen=userChosen)
     except Exception as e:
         abort(404)
 

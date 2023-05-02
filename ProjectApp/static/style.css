@@ -231,6 +231,9 @@ legend {
    margin: auto;
    border-radius: 3%;
 }
+#field_users_p {
+    margin-left: 10px;
+}
 .users_listed {
     list-style: none;
 }
@@ -245,4 +248,18 @@ legend {
 }
 #edit_form {
     width: 80%;
+}
+#member_p {
+    display: inline;
+    margin-left: 40%;
+}
+#field_pwd {
+    margin: auto;
+    text-align: center;
+    width: 30%;
+    border-radius: 10px;
+}
+#field_pwd input {
+    margin-left: 0;
+    width: 320%;
 }

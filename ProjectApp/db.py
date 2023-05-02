@@ -415,7 +415,7 @@ class Database:
         if not isinstance(term, Term):
             raise TypeError("expected type")  
         with self.__get_cursor() as cursor:
-            cursor.execute("update terms set term_name = :term_name where term_id = :term_id", term_name = term.name, term_id = term.id)          
+            cursor.execute("update terms set term_name = :term_name where term_id = :term_id", term_name = str.capitalize(term.name), term_id = term.id)          
     def delete_term(self, term):
         pass
 

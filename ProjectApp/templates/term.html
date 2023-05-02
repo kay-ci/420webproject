@@ -15,5 +15,10 @@
             </ul>
         </li>
     <ul>
+    <form method="post">
+        {{form.csrf_token}}
+        {{form.name.label}} {{form.name()}}
+        <input type="submit"/>
+    </form>
     <!--list the courses here-->
 {% endblock %}

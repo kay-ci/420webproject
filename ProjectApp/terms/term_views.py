@@ -14,23 +14,38 @@ def show_terms():
         abort(404)
     return render_template("terms.html", terms = terms)
 
-@bp.route("/<int:id>/")
+@bp.route("/<int:id>/", methods = ["GET", "POST"])
 def show_term(id):
+    form = TermForm()
+    if request.method == "POST" and form.validate_on_submit():
+        try:
+            name = str.lower(form.name.data)
+            if(valid_name(name)):
+                get_db().update_term(Term(id, name))
+                flash("Term updated succefully!")
+                return redirect(url_for("term.show_term", id = id))
+            else:
+                flash("Term name must be Fall, Winter or Summer")
+        except:
+            flash("Could not update Term")
+   
     try:
         term = get_db().get_term(int(id))
-        courses = get_db().get_term_courses(int(id))
-        return render_template("term.html", term = term, courses = courses)
+        courses = get_db().get_term_courses(int(id))  
+        return render_template("term.html", term = term, courses = courses, form = form)
     except:
         if term == None:
             flash("could not find a term with this id")
             abort(404)
+    
+            
 
 @bp.route("/add/", methods = ["GET", "POST"]) 
 def add_term():
     form = TermForm()
     if request.method == "POST" and form.validate_on_submit():
         name = str.lower(form.name.data)
-        if (name == "winter" or name == "fall" or name == "summer"):
+        if (valid_name(name)):
             try:
                 term = Term(None, name)
                 get_db().add_term(term)
@@ -50,3 +65,8 @@ def delete_term(id):
     except:
         flash("Could not delete term")
     return redirect(url_for("term.show_terms"))
+
+def valid_name(name):
+    if (name == "winter" or name == "fall" or name == "summer"):
+        return True
+    return  False  

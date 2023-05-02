@@ -30,13 +30,12 @@ def add_term():
     form = TermForm()
     if request.method == "POST" and form.validate_on_submit():
         name = str.lower(form.name.data)
-        id = form.id.data
         if (name == "winter" or name == "fall" or name == "summer"):
             try:
-                term = Term(int(id), name)
+                term = Term(None, name)
                 get_db().add_term(term)
                 flash("Term added succesfully!")
-                return redirect(url_for("term.show_term", id = id))
+                return redirect(url_for("term.show_terms"))
             except Exception as e:
                 flash("A term with that Id already exists")
                 flash(str(e))

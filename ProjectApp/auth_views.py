@@ -18,7 +18,9 @@ def signup():
             if not os.path.exists(avatar_dir):
                 os.makedirs(avatar_dir)
             avatar_path = os.path.join(avatar_dir, 'avatar.png')
-            file.save(avatar_path)
+            if file != None:
+                file.save(avatar_path)
+                #what should we do if user doesn't give a file for avatar
             hash = generate_password_hash(form.password.data)
             user = User(form.email.data, hash, form.name.data)
             get_db().insert_user(user)

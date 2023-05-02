@@ -342,7 +342,7 @@ class Database:
     def get_terms(self):
         output = []
         with self.__connection.cursor() as cursor:
-            results = cursor.execute("select term_id, term_name from terms")
+            results = cursor.execute("select term_id, term_name from terms order by terms.term_id")
             for row in results:
                 output.append(Term(row[0], row[1]))
         return output
@@ -372,6 +372,12 @@ class Database:
     def add_term(self, term):
         if not isinstance(term, Term):
             raise TypeError("expected type Term")
+        term_exist = self.get_term(int(term.id))
+        if term_exist != None:
+            raise ValueError("an existing Term is already using this id")
+        with self.__get_cursor() as cursor:
+            cursor.execute("insert into terms (term_id, term_name) values (:my_term_id, :my_term_name)", my_term_id = term.id, my_term_name = term.name)
+                  
     def delete_term(self, term):
         pass
 

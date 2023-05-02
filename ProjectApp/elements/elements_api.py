@@ -44,7 +44,7 @@ def add_element():
     except:
         flash("Could not fetch elements")
         
-@bp.route("/update-element", methods = ["put"])
+@bp.route("/update-element", methods = ["PUT"])
 def update_element():
     pass
 

@@ -2,7 +2,7 @@
 --base course
 --PROGRAMMING I----------------------------------------------------------------------------------------------------------------------
     --Term
-    insert into terms values (1, 'Fall');
+    insert into terms(term_name) values ('Fall');
     --Domain
     insert into domains values (1/*GENERATED*/, 'Programming, Data Structures, and Algorithms',
         --Description
@@ -87,18 +87,18 @@
                                         '* Attitudes and behaviours that demonstrate thoroughness * Identification of all operational errors * Relevance of the corrective actions * Proper functioning of the program * Clear record of information concerning tests and their results',
                                          '00Q4');
     --course_elements
-    insert into courses_elements values ('420-110-DW', 1/*GENERATED 1*/, (66/4));
-    insert into courses_elements values ('420-110-DW', 2/*GENERATED 2*/, (66/4));
-    insert into courses_elements values ('420-110-DW', 3/*GENERATED 3*/, (66/4));
-    insert into courses_elements values ('420-110-DW', 4/*GENERATED 4*/, (66/4));
-    insert into courses_elements values ('420-110-DW', 5/*GENERATED 5*/, (18/2));
-    insert into courses_elements values ('420-110-DW', 7/*GENERATED 7*/, (18/2));
-    insert into courses_elements values ('420-110-DW', 11/*GENERATED 11*/, 6);
+    insert into courses_elements values ('420-110-DW'/*GENERATED 1*/,1, (66/4));
+    insert into courses_elements values ('420-110-DW'/*GENERATED 2*/,2, (66/4));
+    insert into courses_elements values ('420-110-DW'/*GENERATED 3*/,3, (66/4));
+    insert into courses_elements values ('420-110-DW'/*GENERATED 4*/,4, (66/4));
+    insert into courses_elements values ('420-110-DW'/*GENERATED 5*/,5, (18/2));
+    insert into courses_elements values ('420-110-DW'/*GENERATED 7*/,6, (18/2));
+    insert into courses_elements  values ('420-110-DW'/*GENERATED 11*/,7, 6);
     
 --course with different term
 --PROGRAMMING II----------------------------------------------------------------------------------------------------------------------
     --Term
-    insert into terms values (2, 'Winter');
+    insert into terms(term_name) values ('Winter');
     --Domain
         --Same as Programming I
     --Course
@@ -158,7 +158,7 @@
 --course with different domain
 --INFRASTRUCTURE III----------------------------------------------------------------------------------------------------------------------
     --Term
-    insert into terms values (4, 'Winter');
+    insert into terms (term_name) values ('Winter');
     --Domain
     insert into domains values (2/*GENERATED*/, 'Infrastructure, Operating Systems and Networking',
         --Description
@@ -379,7 +379,7 @@ methodologies; and data normalization techniques to create robust relations.',
 --course with bad course id
 --MOBILE DEVELOPMENT----------------------------------------------------------------------------------------------------------------------
 --Term
-    insert into terms values (5, 'Fall');
+    insert into terms (term_name) values ('Fall');
     --Domain
     --same domain as programming I and II
     --Course
@@ -495,17 +495,17 @@ development environment.',
 * Precise application of secure programming techniques',
                                         '00SS');
     --course_elements
-    insert into courses_elements values ('420-551-D', 38/*GENERATED 38*/, (45/5));
-    insert into courses_elements values ('420-551-D', 39/*GENERATED 39*/, (45/5));
-    insert into courses_elements values ('420-551-D', 40/*GENERATED 40*/, (45/5));
-    insert into courses_elements values ('420-551-D', 41/*GENERATED 41*/, (45/5));
-    insert into courses_elements values ('420-551-D', 42/*GENERATED 42*/, (45/5));
-    insert into courses_elements values ('420-551-D', 43/*GENERATED 43*/, (45/5));
-    insert into courses_elements values ('420-551-D', 44/*GENERATED 44*/,(45/5));
-    insert into courses_elements values ('420-551-D', 45/*GENERATED 45*/,(45/5));
-    insert into courses_elements values ('420-551-D', 46/*GENERATED 46*/,(45/5));
-    insert into courses_elements values ('420-551-D', 47/*GENERATED 47*/,(45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 38*/38, (45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 39*/39,(45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 40*/40, (45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 41*/41, (45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 42*/42, (45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 43*/43, (45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 44*/44,(45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 45*/45,(45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 46*/46,(45/5));
+    insert into courses_elements values ('420-551-D', /*GENERATED 47*/47, (45/5));
 
 --additional term inserts
-insert into terms values (3, 'Fall');
-insert into terms values (6, 'Winter');
+insert into terms values(term_name) ('Fall');
+insert into terms values(term_name) ('Winter');

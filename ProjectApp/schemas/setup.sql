@@ -6,7 +6,7 @@
 
 --Creating tables
 --Term
-create table terms (term_id number PRIMARY KEY, 
+create table terms (term_id number generated always as identity  PRIMARY KEY, 
                     term_name char(6) NOT NULL);
 
 --Domain

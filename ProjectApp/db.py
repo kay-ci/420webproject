@@ -305,7 +305,7 @@ class Database:
         from .courses.courses_element import CourseElement
         courses_elements = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute("select course_id, element_id, element_hours from courses_elements")
+            results = cursor.execute("select course_id, element_id, element_hours from courses_elements order by course_id")
             for row in results:
                 courses_elements.append(CourseElement(row[0], int(row[1]), float(row[2])))
         return courses_elements

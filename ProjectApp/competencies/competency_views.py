@@ -30,9 +30,9 @@ def add_competency():
         new_course_element = CourseElement(form.course_number.data, get_db().get_new_element_id(), float(0))
         try:
             get_db().add_courses_element(new_course_element)
-        except ValueError as e:
-            print(e)
-            flash(e)
+        except Exception as e:
+            flash(str(e))
+            return redirect(url_for('competency.show_competencies'))
         return redirect(url_for('competency.show_competency', id = competency.id))
     return render_template("add_competency.html", form = form)
         

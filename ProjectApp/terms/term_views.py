@@ -49,7 +49,8 @@ def add_term():
             try:
                 term = Term(None, name)
                 get_db().add_term(term)
-                flash("Term added succesfully!")
+                msg = f'{str.capitalize(term.name)} Term added succesfully!'
+                flash(msg)
                 return redirect(url_for("term.show_terms"))
             except Exception as e:
                 flash("A term with that Id already exists")
@@ -61,8 +62,10 @@ def add_term():
 @bp.route("/delete/<id>/")
 def delete_term(id):
     try:
-        get_db().delete_term(id)
-    except:
+        get_db().delete_term(int(id))
+        msg = f'Deleted Term {id}'
+        flash(msg)
+    except Exception as e:
         flash("Could not delete term")
     return redirect(url_for("term.show_terms"))
 

@@ -413,11 +413,15 @@ class Database:
             
     def update_term(self, term):
         if not isinstance(term, Term):
-            raise TypeError("expected type")  
+            raise TypeError("expected type Term")  
         with self.__get_cursor() as cursor:
             cursor.execute("update terms set term_name = :term_name where term_id = :term_id", term_name = str.capitalize(term.name), term_id = term.id)          
-    def delete_term(self, term):
-        pass
+    
+    def delete_term(self, id):
+        if not isinstance(id, int):
+            raise TypeError("expected type int")     
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from terms where term_id = :term_id", term_id = id)
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

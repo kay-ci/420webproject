@@ -11,7 +11,7 @@ Courses Elements
         <h1>Course Elements</h1>
         <ul>
             {% for courses_element in courses_elements%}
-                <li>{{ courses_element | safe}}</li>
+                <li>{{courses_element.course_id}} {{courses_element.element_id}}</li>
             {% endfor %}
         </ul>
     </section>
@@ -23,7 +23,7 @@ Courses Elements
             {{form.course_id.label}}{{form.course_id()}}
             {{form.element_id.label}}{{form.element_id()}}
             {{form.hours.label}}{{form.hours()}}
-            <input class="submit" type = "submit"
+            <input class="submit" type = "submit"/>
         </form>
     </section>
 {% endblock content %}

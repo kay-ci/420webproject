@@ -16,7 +16,7 @@ def show_elements():
             flash(e)
     return render_template("elements.html", elements = elements, form = form)
 
-@bp.route("/<int:element_id>", methods = ["GET", "POST"], methods=["GET", "POST"])
+@bp.route("/<int:element_id>", methods = ["GET", "POST"])
 def show_element(element_id):
     form = ElementForm()
     try:

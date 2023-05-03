@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, request, jsonify, flash
+from flask import Blueprint, abort, request, jsonify, flash, make_response, url_for
 from .element import Element
 from ..dbmanager import get_db
 bp = Blueprint("element-api", __name__, url_prefix="/api/elements")
@@ -11,9 +11,11 @@ def post_elements():
         if json_element:
             try:
                 element = Element.from_json(json_element)
-                get_db().add_element(element), 201 
-                flash("element added succesfully!")
-                # display the added element
+                get_db().add_element(element)
+                #making response
+                resp = make_response({}, 201)
+                element_id = get_db().get_element_id()
+                resp.headers["Location"] = url_for("element-api.element", element_id = element_id)
             except Exception as e:
                 flash("could not add element")
                 abort(409)
@@ -38,22 +40,32 @@ def post_elements():
         abort(404)
         
 @bp.route("/<int:element_id>", methods = [ "DELETE", "PUT", "GET"])
-def modify_element(element_id):
+def element(element_id):
     if request.method == "PUT":
         json_element = request.json
         if json_element:
             try:
                 element = Element.from_json(json_element)
-                get_db().add_element(element), 201 
-                flash("element added succesfully!")
-                # display the added element
+                element_in_db = get_db().get_element(int(element_id))
+                if element == element_in_db:
+                    get_db().update_element(element)
+                    resp = make_response({}, 204)
+                else: 
+                    get_db().add_element(element)
+                    #making response
+                    resp = make_response({}, 201)
+                    element_id = get_db().get_element_id()
+                    resp.headers["Location"] = url_for("element-api.element", element_id = element_id)
             except Exception as e:
                 flash("could not add element")
                 abort(409)
+    elif request.method == "DELETE":
+        pass
     elif request.method == "GET":    
         try:
             element = get_db().get_element(int(element_id))
-            return element.to_json(), 200
+            resp = make_response({}, 200)
+            return element.to_json()
         except:
             flash("Invalid ID, make sure url is correct")
             abort(404)

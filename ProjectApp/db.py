@@ -310,6 +310,15 @@ class Database:
                 courses_elements.append(CourseElement(row[0], int(row[1]), float(row[2])))
         return courses_elements
     
+    def get_elements_and_course_ids_as_tuples(self):
+        from .courses.courses_element import CourseElement
+        courses_elements = []
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, element_hours, element_id, element_order, element, element_criteria, competency_id from view_courses_elements order by course_id")
+            for row in results:
+                courses_elements.append((row[0], row[1], Element(row[2], row[3], row[4], row[5], row[6])))
+        return courses_elements
+    
     def add_courses_element(self, course_element):
         with self.__get_cursor() as cursor:
             cursor.execute("insert into course_element values(:course_id, :elem_id, :elem_hours)",

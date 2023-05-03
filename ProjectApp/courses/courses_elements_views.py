@@ -13,7 +13,7 @@ def list_courses_elements():
             get_db().add_courses_element(new_course_element)
         except ValueError as e:
             flash(e)
-    return render_template("courses_elements.html", courses_elements = get_db().get_courses_elements(), form = form)
+    return render_template("courses_elements.html", courses_elements = get_db().get_elements_and_course_ids_as_tuples(), form = form, courses = get_db().get_courses())
     
 #display all elements for a given course
 @bp.route("course/<element_id>/")

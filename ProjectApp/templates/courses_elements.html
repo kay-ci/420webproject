@@ -10,8 +10,15 @@ Courses Elements
     <section id = "courses_element_block">
         <h1>Course Elements</h1>
         <ul>
-            {% for courses_element in courses_elements%}
-                <li>{{courses_element.course_id}} {{courses_element.element_id}}</li>
+            {% for course in courses%}
+                <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
+                <ul>
+                    {%for course_element in courses_elements%}
+                        {% if course_element[0] == course.course_id%}
+                            <li><a href="{{url_for('element.show_element', element_id = course_element[2].element_id)}}">{{course_element[2].element_id}} {{course_element[2].element}} {{course_element[2].competency_id}}</a> {{course_element[1]}}</li>
+                        {% endif%}
+                    {% endfor %}
+                </ul>
             {% endfor %}
         </ul>
     </section>

@@ -8,13 +8,13 @@
         <li>Description: {{domain.domain_description}}</li>
     </ul>
 
-    <h2>Courses</h2>
+    <h2>Courses:</h2>
     <ul>
         {% for course in courses %}
             <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
         {% endfor %}
     </ul>
-
+    <h2><a href="{{url_for('courses.list_courses')}}">Add a course</a></h2>
     <h1>Modify Domain</h1>
     <form method="post">
         {{form.csrf_token}}

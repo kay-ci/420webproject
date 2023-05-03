@@ -12,7 +12,7 @@
                             {% if current_user.member_type != 'member'%}
                                 <div>{{user.member_type}}</div>
                             {% endif %}
-                            {% if (current_user.member_type == 'admin' and (user.member_type == 'admin' or user.member_type == 'member')) or current_user.member_type != 'admin'%}
+                            {% if (current_user.member_type == 'admin' and (user.member_type == 'admin' or user.member_type == 'member' or user.member_type == 'blocked')) or current_user.member_type != 'admin'%}
                                 {% if current_user.member_type != 'member'%}
                                     <form method="GET" class="options_admin" action="{{url_for('users.promote_user', email=user.email)}}">
                                         <button type="submit">To admin</button>

@@ -46,8 +46,8 @@ def create_app(test_config=None):
     
     from .elements.elements_api import bp as elements_api
     app.register_blueprint(elements_api)
-    # from .elements.element_views import bp as elem_bp
-    # app.register_blueprint(elem_bp)
+    from .elements.element_views import bp as elem_bp
+    app.register_blueprint(elem_bp)
     
     @app.errorhandler(404)
     def page_not_found(error):

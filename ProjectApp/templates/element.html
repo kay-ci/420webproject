@@ -9,7 +9,7 @@
             <li><b>Element order:</b> {{element.element_order}}</li>
             <li><b>Element:</b> {{element.element}}</li>
             <li><b>Element criteria:</b> {{element.element_criteria}}</li>
-            <li><b>Competency ID:</b> {{element.competency_id}}</li>
+            <li><a href="{{url_for('competency.show_competency', id = element.competency_id)}}"><b>Competency ID:</b> {{element.competency_id}}</a></li>
         </ul>
     </section>
     <h1>Edit Element</h1>

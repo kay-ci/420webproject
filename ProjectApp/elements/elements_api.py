@@ -33,7 +33,7 @@ def post_elements():
         json_elements = {
             "previous_page" : prev_page,
             "next_page": next_page,
-            "results:" : [element.to_json() for element in elements]}
+            "results" : [element.to_json() for element in elements]}
         return jsonify(json_elements)
     except:
         flash("could not fetch elements")

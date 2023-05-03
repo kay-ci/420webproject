@@ -34,7 +34,6 @@ def create_app(test_config=None):
     from .domains.domain_views import bp as domain_bp
     app.register_blueprint(domain_bp)
     
-    
     from .terms.term_views import bp as term_bp
     app.register_blueprint(term_bp)
     
@@ -44,10 +43,11 @@ def create_app(test_config=None):
     from .users.users_views import bp as users_bp
     app.register_blueprint(users_bp)
     
-    from .elements.elements_api import bp as elements_api
-    app.register_blueprint(elements_api)
-    # from .elements.element_views import bp as elem_bp
-    # app.register_blueprint(elem_bp)
+    from .elements.elements_api import bp as elements_api_bp
+    app.register_blueprint(elements_api_bp)
+    
+    from .elements.element_views import bp as elem_bp1
+    app.register_blueprint(elem_bp1)
     
     @app.errorhandler(404)
     def page_not_found(error):

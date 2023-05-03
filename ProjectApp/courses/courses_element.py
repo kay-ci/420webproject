@@ -21,9 +21,10 @@ class CourseElement:
         return CourseElement(course_element_str['course_id'], course_element_str['element_id'], course_element_str['hours'])
     
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField
-from wtforms.validators import DataRequired
+from wtforms import StringField, FloatField, DecimalField
+from wtforms.validators import DataRequired, NumberRange
+
 class CourseElementForm(FlaskForm):
     course_id = StringField('Course ID', [DataRequired()])
-    element_id = StringField('Element ID', [DataRequired()])
+    element_id = DecimalField('Element ID', [DataRequired()])
     hours = FloatField('Hours', [DataRequired()])

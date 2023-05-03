@@ -39,4 +39,3 @@ class CompetencyForm(FlaskForm):
 class CompleteCompetencyForm(CompetencyForm):
     element = StringField('Element', validators=[DataRequired()])
     element_criteria = StringField('Element Criteria', validators=[DataRequired()])
-    course_number = StringField("Course Number", validators=[DataRequired()])

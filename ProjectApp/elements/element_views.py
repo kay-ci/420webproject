@@ -12,7 +12,7 @@ def show_elements():
         try:
             get_db().add_element(new_element)
         except ValueError as e:
-            flash(e)
+            flash(str(e))
     return render_template("elements.html", elements = get_db().get_elements(), form = form)
 
 @bp.route("/<int:element_id>", methods=["GET", "POST"])

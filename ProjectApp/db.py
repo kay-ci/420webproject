@@ -89,7 +89,7 @@ class Database:
                 output.append(Element(int(row[0]), int(row[1]), row[2], row[3], row[4]))
             return output
     
-    def get_new_element_id(self):
+    def get_count_element_id(self):
         with self.__connection.cursor() as cursor:
             output = 0
             results = cursor.execute("select count(*) from elements")

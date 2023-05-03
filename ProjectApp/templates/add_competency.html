@@ -13,7 +13,6 @@
         <p>A competency must at least have one element, you can add more later (after initial creation of this competency)</p>
         {{form.element.label}} {{form.element()}}
         {{form.element_criteria.label}} {{form.element_criteria()}}
-        {{form.course_number.label}} <a href="{{url_for('courses.list_courses')}}">browse</a>{{form.course_number()}}
         <br/>
         <input class="submit" type="submit"/>
     </form>

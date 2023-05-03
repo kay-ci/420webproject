@@ -1,9 +1,9 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_user
-from ProjectApp.dbmanager import get_db
+from ..dbmanager import get_db
 from werkzeug.security import check_password_hash
 
-from ProjectApp.user import LoginForm
+from ..users.user import LoginForm
 
 bp = Blueprint('home', __name__, url_prefix="/")
 

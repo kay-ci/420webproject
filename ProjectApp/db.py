@@ -1,12 +1,12 @@
 from .competencies.competency import Competency
 from .domains.domain import Domain
 from flask import flash
-from ProjectApp.user import User
-from .user import User
+from .users.user import User
 import oracledb
 import os
 from .elements.element import Element
 from .courses.course import Course
+from .terms.term import Term
 
 class Database:
     def __init__(self, autocommit=True):
@@ -109,14 +109,13 @@ class Database:
                 domain = Domain(domain_id,row[0],row[1])
         return domain
             
-    def insert_domain(self, domain):
+    def add_domain(self, domain):
         if not isinstance(domain, Domain):
             raise TypeError()
         if self.get_domain(domain.domain_id) != None:
             raise ValueError("this domain id is already being used")
         with self.__connection.cursor() as cursor:
-            cursor.execute('insert into domains (domain_id, domain, domain_description) values (:domain_id,        :domain, :domain_description)',
-                           domain_id = domain.domain_id, domain = domain.domain, domain_description = domain.domain_description)
+            cursor.execute('insert into domains (domain, domain_description) values (:domain, :domain_description)', domain = domain.domain, domain_description = domain.domain_description)
     
     def get_domains(self):
         domains = []
@@ -127,14 +126,35 @@ class Database:
                 domains.append(domain)
         return domains
     
-    def get_courses_domains(self, domain_id):
-        courses_title = []
-        with self.__connection.cursor() as cursor:
-            result = cursor.execute('select course_title from courses INNNER JOIN domains ON courses.domain_id = domains.domain_id where domains.domain_id:=id', id=domain_id)
-            for row in result:
-                courses_title.append(row[0])
-        return courses_title
+    def update_domain(self, domain):
+        if not isinstance(domain, Domain):
+            raise TypeError("expecting an arugment of type Domain")
+        if self.get_domain(domain.domain_id) == None:
+            raise ValueError("can't find domain with this id")
+        with self.__get_cursor() as cursor:
+            cursor.execute("update domains set domain = :domain, domain_description = :domain_description where domain_id = :domain_id", domain = domain.domain, domain_description = domain.domain_description, domain_id  = domain.domain_id)
     
+    def delete_domain(self, id):
+        if not isinstance(id, int):
+            raise TypeError("expecting an argument of type int")
+        if self.get_domain(id) == None:
+            raise ValueError("could not find domain with this id")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from domains where domain_id = :domain_id", domain_id = id)
+
+    def get_domain_courses(self, id):
+        courses = []
+        if not isinstance(id, int):
+            raise TypeError("expecting an argument of type int")
+        domain = self.get_domain(id)
+        if domain == None:
+            raise ValueError("could not find domain with this id")
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses where domain_id = :domain_id", domain_id = domain.domain_id)
+            for row in results:
+                courses.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], row[7]))
+        return courses
+
     def get_users(self):
         users = []
         with self.__connection.cursor() as cursor:
@@ -332,13 +352,22 @@ class Database:
                            id = course_element.course_id,
                            elem_id = course_element.element_id)
 
-    def get_elements(self):
+    def get_elements(self, page_num=1, page_size=50):
         elements = []
+        prev_page = None
+        next_page = None
+        offset = (page_num - 1) * page_size
         with self.__get_cursor() as cursor:
-            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements")
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements order by element_id offset :offset rows fetch next :page_size rows only",
+                                     offset = offset,
+                                     page_size = page_size)
             for row in results:
                 elements.append(Element(int(row[0]), int(row[1]), row[2], row[3], row[4]))
-        return elements
+        if page_num > 1:
+            prev_page = page_num - 1
+        if len(elements) > 0 and (len(elements) >= page_size):
+            next_page = page_num + 1
+        return elements, prev_page, next_page
     
     def get_element(self, element_id):
         if not isinstance (element_id, int):
@@ -383,10 +412,9 @@ class Database:
             for row in results:
                 self.update_element(row[0], row[1]-1, row[2], row[3])
     def get_terms(self):
-        from .terms.term import Term
         output = []
         with self.__connection.cursor() as cursor:
-            results = cursor.execute("select term_id, term_name from terms")
+            results = cursor.execute("select term_id, term_name from terms order by terms.term_id")
             for row in results:
                 output.append(Term(row[0], row[1]))
         return output
@@ -395,7 +423,6 @@ class Database:
         output = None
         if not isinstance(id, int):
             raise TypeError("id must be an int")
-        from .terms.term import Term
         with self.__connection.cursor() as cursor:
             results = cursor.execute("select term_id, term_name from terms where term_id = :id", id = id)
             for row in results:
@@ -413,6 +440,24 @@ class Database:
             for row in results:
                 output.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], id))
         return output
+    
+    def add_term(self, term):
+        if not isinstance(term, Term):
+            raise TypeError("expected type Term")
+        with self.__get_cursor() as cursor:
+            cursor.execute("insert into terms (term_name) values (:my_term_name)", my_term_name = str.capitalize(term.name))
+            
+    def update_term(self, term):
+        if not isinstance(term, Term):
+            raise TypeError("expected type Term")  
+        with self.__get_cursor() as cursor:
+            cursor.execute("update terms set term_name = :term_name where term_id = :term_id", term_name = str.capitalize(term.name), term_id = term.id)          
+    
+    def delete_term(self, id):
+        if not isinstance(id, int):
+            raise TypeError("expected type int")     
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from terms where term_id = :term_id", term_id = id)
 
 if __name__ == '__main__':
     print('Provide file to initialize database')

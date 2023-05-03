@@ -2,15 +2,15 @@ import os
 from flask import (Blueprint, current_app, render_template, 
                    url_for, redirect, abort, flash, request)
 
-from ProjectApp.user import ChangePassword, ProfileEdit
-from .dbmanager import get_db
+from ProjectApp.users.user import ChangePassword, ProfileEdit
+from ..dbmanager import get_db
 from flask_login import current_user
 from werkzeug.security import generate_password_hash
 
 
 bp = Blueprint('users',__name__,url_prefix='/dashboard')
 
-@bp.route('/')
+@bp.route("/")
 def get_users():
     try:
         if not current_user.is_authenticated:
@@ -20,12 +20,13 @@ def get_users():
             users = get_db().get_users()
     except Exception as e:
         users = None
-        flash('Unable to connect with the database')
+        flash("Unable to connect with the database")
     if not users or len(users) == 0:
+        flash("Could not fetch users")
         abort(404)
-    return render_template('admin_dash.html', users=users)
+    return render_template("admin_dash.html", users=users)
 
-@bp.route('/promote/<string:email>/')
+@bp.route("/promote/<string:email>/")
 def promote_user(email):
     try:
         userChosen = get_db().get_user(email)

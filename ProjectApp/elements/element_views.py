@@ -11,11 +11,12 @@ def show_elements():
         new_element = Element(None, form.element_order.data, form.element.data, form.element_criteria.data, form.competency_id.data)
         try:
             get_db().add_element(new_element)
+            elements, prev_page, next_page = get_db().get_elements(page_num=1, page_size=50)
         except ValueError as e:
             flash(e)
-    return render_template("elements.html", elements = get_db().get_elements(), form = form)
+    return render_template("elements.html", elements = elements, form = form)
 
-@bp.route("/<element_id>")
+@bp.route("/<int:element_id>", methods = ["GET", "POST"], methods=["GET", "POST"])
 def show_element(element_id):
     form = ElementForm()
     try:
@@ -23,6 +24,18 @@ def show_element(element_id):
     except Exception:
         element = None
         abort(404)
+    if request.method == "POST":
+        if form.validate_on_submit():
+            try:
+                new_element = Element(int(element_id), int(element.element_order), form.element.data, form.element_criteria.data, element.competency_id)
+                get_db().update_element(new_element)
+                flash("Element updated succesfully")
+                return redirect(url_for("element.show_element", element_id = new_element.element_id))
+            except Exception as e:
+                flash("Something went wrong could not update")
+                flash(str(e))
+        else: 
+            flash("invalid form")
     return render_template("element.html", element = element, form = form)
 
 @bp.route("/delete/<element_id>/")

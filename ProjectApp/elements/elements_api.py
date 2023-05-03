@@ -3,7 +3,7 @@ from .element import Element
 from ..dbmanager import get_db
 bp = Blueprint("element-api", __name__, url_prefix="/api/elements")
 
-@bp.route("/", methods = ["GET","POST"])
+@bp.route("", methods = ["GET","POST"])
 def post_elements():
     page_num = 1
     if request.method == "POST":

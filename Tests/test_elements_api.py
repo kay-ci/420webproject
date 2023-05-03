@@ -12,11 +12,11 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         self.assertIsNone(json["previous_page"])
         
     def test_post_element(self, client):
-        resp = client.get('/api/elements/')
+        resp = client.get('/api/elements')
         self.assertEqual(resp.status_code, 200)
         posts = resp.json
         post = posts["results"][0]
-        post["element_id"] = 88
+        post["element_id"] = None
         
         resp = client.post("/api/elements", json = post)
         self.assertEqual(resp.status_code, 201)

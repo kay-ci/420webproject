@@ -4,7 +4,7 @@ from ProjectApp import create_app
 class TestAPIElements(flask_unittest.ClientTestCase):
     app = create_app()
     def test_get_elements(self, client):
-        resp = client.get('/api/elements/')
+        resp = client.get('/api/elements')
         self.assertEqual(resp.status_code, 200)
         json = resp.json
         self.assertIsNotNone(json)

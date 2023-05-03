@@ -16,10 +16,10 @@ def get_courses():
             abort(404)
 
     courses_json = [course.to_json() for course in courses]
-    return courses_json
+    return courses_json, 200
 
         
-@bp.route("/add-course", methods = ["GET","POST"])
+@bp.route("/add-course/", methods = ["GET","POST"])
 def add_course():
     if request.method == 'POST':
         result = request.json
@@ -30,7 +30,6 @@ def add_course():
             except Exception as e:
                 flash("could not add Course")
                 abort(409)
-            flash('Added Course to Database')
     try:            
         courses = get_db().get_courses()
         json_courses = [course.to_json() for course in courses]
@@ -38,3 +37,31 @@ def add_course():
     except:
         flash("Could not fetch Courses")
 
+@bp.route("/update-course", methods = ["GET","PUT"])
+def update_course():
+    if request.method == 'PUT':
+        result = request.json
+        if result:
+            course = Course.from_json(result)
+            try:
+                get_db().update_course(course)
+            except Exception as e:
+                flash("course does not exist")
+                abort(409)
+    try:            
+        courses = get_db().get_courses()
+        json_courses = [course.to_json() for course in courses]
+        return jsonify(json_courses)
+    except:
+        flash("Could not fetch Courses")
+        
+@bp.route("/delete-course", methods = ["GET","DELETE"])
+def delete_course():
+    if request.method == 'DELETE':
+        if request.args:
+            id = request.args.get("id")
+            try:
+                get_db().del_course(str(id))
+            except Exception as e:
+                flash("could not Delete Course")
+                abort(409)

@@ -325,13 +325,22 @@ class Database:
                            id = course_element.course_id,
                            elem_id = course_element.element_id)
 
-    def get_elements(self):
+    def get_elements(self, page_num=1, page_size=50):
         elements = []
+        prev_page = None
+        next_page = None
+        offset = (page_num - 1) * page_size
         with self.__get_cursor() as cursor:
-            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements")
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements order by element_id offset :offset rows fetch next :page_size rows only",
+                                     offset = offset,
+                                     page_size = page_size)
             for row in results:
                 elements.append(Element(int(row[0]), int(row[1]), row[2], row[3], row[4]))
-        return elements
+        if page_num > 1:
+            prev_page = page_num - 1
+        if len(elements) > 0 and (len(elements) >= page_size):
+            next_page = page_num + 1
+        return elements, prev_page, next_page
     
     def get_element(self, element_id):
         if not isinstance (element_id, int):

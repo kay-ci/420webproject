@@ -4,7 +4,7 @@
         <h1>Domains</h1>
         <ul>
             {% for domain in domains %}
-              <li><a href="{{url_for('domains.delete_domain', id = domain.domain_id)}}">Delete this Domain</a> <a href ="{{url_for('domains.show_domain', id = domain.domain_id)}}">{{ domain.domain_id }}: {{domain.domain}}</a></li><br>
+              <li> <a href ="{{url_for('domains.show_domain', id = domain.domain_id)}}">{{ domain.domain_id }}: {{domain.domain}}</a></li><br>
             {% endfor %}
         </ul>
 

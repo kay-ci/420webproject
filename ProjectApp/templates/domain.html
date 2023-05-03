@@ -22,4 +22,6 @@
         {{form.domain_description.label}} {{form.domain_description()}}
         <input class="submit" type="submit"/>
     </form>
+
+    <a class="delete_button" href="{{url_for('domains.delete_domain', id = domain.domain_id)}}">Delete</a>
 {% endblock %}

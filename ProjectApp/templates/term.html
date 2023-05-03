@@ -20,6 +20,6 @@
         {{form.name.label}} {{form.name()}}
         <input type="submit"/>
     </form>
-    <a href="{{url_for('term.delete_term', id = term.id)}}">Delete Term</a>
+    <a class="delete_button" href="{{url_for('term.delete_term', id = term.id)}}">Delete</a>
 
 {% endblock %}

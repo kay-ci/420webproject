@@ -2,9 +2,9 @@
 --base course
 --PROGRAMMING I----------------------------------------------------------------------------------------------------------------------
     --Term
-    insert into terms(term_name) values ('Fall');
+    insert into terms(term_name) values (/*GENERATED 1*/'Fall');
     --Domain
-    insert into domains (domain, domain_description)values ('Programming, Data Structures, and Algorithms',
+    insert into domains (domain, domain_description)values (/*GENERATED 1*/'Programming, Data Structures, and Algorithms',
         --Description
         'The courses in the Programming, Data Structures and Algorithms domain teach the knowledge and skills required to design and program solutions to typical information technology problems. The students are?taught?object-oriented programming in the context of standalone, event-driven and web-based programs.');
     --Course
@@ -98,7 +98,7 @@
 --course with different term
 --PROGRAMMING II----------------------------------------------------------------------------------------------------------------------
     --Term
-    insert into terms(term_name) values ('Winter');
+    insert into terms(term_name) values (/*GENERATED 2*/'Winter');
     --Domain
         --Same as Programming I
     --Course
@@ -158,7 +158,7 @@
 --course with different domain
 --INFRASTRUCTURE III----------------------------------------------------------------------------------------------------------------------
     --Term
-    insert into terms(term_name) values ('Winter');
+    insert into terms(term_name) values (/*GENERATED 3*/'Winter');
     --Domain
     insert into domains(domain, domain_description) values ('Infrastructure, Operating Systems and Networking',
         --Description
@@ -167,7 +167,7 @@
     insert into courses values ('420-440-DW', 'Infrastructure III', 3,3,2,
         --Description
         'The course will use Linux to reinforce student understanding of web development and distributed systems. The characteristics of a multi-user, multitasking, multi-threaded operating system will be examined. Topics related to networking, security, monitoring,industry best practice authentication and directory services operations will be covered. Aspects of connectivity using TCP/IP protocols, and application services such as DNS, DHCP, SSH, and web servers with HTTP will be introduced. The students will also be introduced to virtual machine concepts and creation.',
-        2, 4);
+        2, 3);
     --Competencies
     --00Q1
     insert into competencies values ('00Q1', 'Install and manage computers',
@@ -379,7 +379,7 @@ methodologies; and data normalization techniques to create robust relations.',
 --course with bad course id
 --MOBILE DEVELOPMENT----------------------------------------------------------------------------------------------------------------------
 --Term
-    insert into terms(term_name) values ('Fall');
+    insert into terms(term_name) values (/*GENERATED 4*/'Fall');
     --Domain
     --same domain as programming I and II
     --Course
@@ -389,7 +389,7 @@ methodologies; and data normalization techniques to create robust relations.',
 environment. Students will learn how to analyze, design, construct, and
 implement an e?ective mobile application using the Android mobile
 development environment.',
-        1, 5);
+        1, 4);
 
     --Uses 00SR
     --Uses 00SS

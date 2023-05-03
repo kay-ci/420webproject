@@ -438,6 +438,13 @@ class Database:
             for row in result:
                 element = Element(int(row[0]), int(row[1]), row[2], row[3], row[4])
             return element
+    def get_element_id(self):
+        element_id = None
+        with self.__get_cursor() as cursor:
+            result = cursor.execute("select count (element_id) from elements")
+            for row in result:
+                element_id = row[0]
+        return int(element_id)
         
     def add_element(self, element):
         if not isinstance(element, Element):

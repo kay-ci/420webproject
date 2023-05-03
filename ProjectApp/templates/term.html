@@ -3,18 +3,22 @@
 {% block header %}{{term.id}}{% endblock %}
 
 {% block content %}
-    <h1>Term</h1>
+    <h1>Term {{term.id}}</h1>
     <ul>
-        <li><b>Id:</b> {{term.id}}</li>
-        <li><b>Name:</b> {{term.name}}</li>
+        <li><b>Semester:</b> {{term.name}}</li>
         <li><b>Courses:</b></li>
-        <li>
-            <ul>
-                {% for course in courses %}
-                    <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
-                {% endfor %}
-            </ul>
-        </li>
+        <ul>
+            {% for course in courses %}
+                <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
+            {% endfor %}
+        </ul>
     <ul>
-    <!--list the courses here-->
+    <h2>Edit Term</h2>
+    <form method="post">
+        {{form.csrf_token}}
+        {{form.name.label}} {{form.name()}}
+        <input type="submit"/>
+    </form>
+    <a href="{{url_for('term.delete_term', id = term.id)}}">Delete Term</a>
+
 {% endblock %}

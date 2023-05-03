@@ -7,7 +7,12 @@ bp = Blueprint("competency", __name__, url_prefix="/competencies")
 
 @bp.route("/")
 def show_competencies():
-    return render_template("competencies.html", competencies = get_db().get_competencies())
+    try:
+        competencies = get_db().get_competencies()
+    except:
+        flash("Could not load competencies")
+        abort(404)
+    return render_template("competencies.html", competencies = competencies)
 
 @bp.route("/add/", methods = ["GET", "POST"])#login required
 def add_competency():
@@ -31,6 +36,7 @@ def delete_competency(id):
         get_db().delete_competency(id)
     except ValueError:
         flash("couldn't find competency with this id to delete")
+        abort(404)
     return redirect(url_for("competency.show_competencies"))
 
 @bp.route("/<id>/", methods = ["GET", "POST"])
@@ -55,13 +61,3 @@ def show_competency(id):
     if len(achievements) != 1:
         achievements.pop(0)
     return render_template("competency.html", competency = competency, competency_form = competency_form, element_form = element_form, achievements = achievements, elements = get_db().get_competency_elements(id))
-
-@bp.route("/<competency_id>/delete-element/<element_id>")
-def delete_competency_element(competency_id, element_id):
-    #get some validation
-    element_id = int(element_id)
-    try:
-        get_db().delete_competency_element(competency_id, get_db().get_element(element_id))
-    except ValueError as e:
-        flash(str(e))
-    return redirect(url_for('competency.show_competency', id = competency_id))

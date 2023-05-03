@@ -1,4 +1,5 @@
-from flask import (Blueprint, render_template, 
+import os
+from flask import (Blueprint, current_app, render_template, 
                    url_for, redirect, abort, flash, request)
 
 from ProjectApp.user import ChangePassword, ProfileEdit
@@ -60,12 +61,18 @@ def delete_user(email):
 def edit_user(email):
     try:
         userChosen = get_db().get_user(email)
-        form = ProfileEdit(email=userChosen.email,name=userChosen.name,avatar_path='not working')
+        form = ProfileEdit(name=userChosen.name)
         if form.validate_on_submit():
-            new_email = form.email.data
+            file = form.avatar_path.data
+            avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], 
+                                       email)
+            if not os.path.exists(avatar_dir):
+                os.makedirs(avatar_dir)
+            avatar_path = os.path.join(avatar_dir, 'avatar.png')
+            if file != None:
+                file.save(avatar_path)
             name = form.name.data
             get_db().update_user_name(userChosen,name)
-            get_db().update_user_email(userChosen,new_email)
             return redirect(url_for('users.get_users'))
         return render_template('editUser.html', form=form, userChosen=userChosen)
     except Exception as e:

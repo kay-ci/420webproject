@@ -11,11 +11,12 @@ def show_elements():
         new_element = Element(None, form.element_order.data, form.element.data, form.element_criteria.data, form.competency_id.data)
         try:
             get_db().add_element(new_element)
+            elements, prev_page, next_page = get_db().get_elements(page_num=1, page_size=50)
         except ValueError as e:
             flash(e)
-    return render_template("elements.html", elements = get_db().get_elements(), form = form)
+    return render_template("elements.html", elements = elements, form = form)
 
-@bp.route("/<element_id>", methods = ["GET", "POST"])
+@bp.route("/<int:element_id>", methods = ["GET", "POST"], methods=["GET", "POST"])
 def show_element(element_id):
     form = ElementForm()
     try:
@@ -23,7 +24,6 @@ def show_element(element_id):
     except Exception:
         element = None
         abort(404)
-
     if request.method == "POST":
         if form.validate_on_submit():
             try:

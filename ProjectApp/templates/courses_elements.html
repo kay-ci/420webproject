@@ -11,14 +11,15 @@ Courses Elements
         <h1>Course Elements</h1>
         <ul>
             {% for course in courses%}
-                <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
+                <li><a href="{{url_for('courses.find_course', the_id = course[0].course_id)}}">{{course[0].course_id}}</a></li>
                 <ul>
                     {%for course_element in courses_elements%}
-                        {% if course_element[0] == course.course_id%}
-                            <li><a href="{{url_for('element.show_element', element_id = course_element[2].element_id)}}">{{course_element[2].element_id}} {{course_element[2].element}} {{course_element[2].competency_id}}</a> {{course_element[1]}}</li>
+                        {% if course_element[0] == course[0].course_id%}
+                            <li><a href="{{url_for('element.show_element', element_id = course_element[2].element_id)}}">&#40;Id:{{course_element[2].element_id}}&#41; {{course_element[2].element}}</a> <a href="{{url_for('competency.show_competency', id = course_element[2].competency_id)}}">{{course_element[2].competency_id}}</a> {{course_element[1]}} hours</li>
                         {% endif%}
                     {% endfor %}
                 </ul>
+                <p>Total Hours: {{course[1]}}</p>
             {% endfor %}
         </ul>
     </section>

@@ -109,14 +109,13 @@ class Database:
                 domain = Domain(domain_id,row[0],row[1])
         return domain
             
-    def insert_domain(self, domain):
+    def add_domain(self, domain):
         if not isinstance(domain, Domain):
             raise TypeError()
         if self.get_domain(domain.domain_id) != None:
             raise ValueError("this domain id is already being used")
         with self.__connection.cursor() as cursor:
-            cursor.execute('insert into domains (domain_id, domain, domain_description) values (:domain_id,        :domain, :domain_description)',
-                           domain_id = domain.domain_id, domain = domain.domain, domain_description = domain.domain_description)
+            cursor.execute('insert into domains (domain, domain_description) values (:domain, :domain_description)', domain = domain.domain, domain_description = domain.domain_description)
     
     def get_domains(self):
         domains = []
@@ -127,14 +126,35 @@ class Database:
                 domains.append(domain)
         return domains
     
-    def get_courses_domains(self, domain_id):
-        courses_title = []
-        with self.__connection.cursor() as cursor:
-            result = cursor.execute('select course_title from courses INNNER JOIN domains ON courses.domain_id = domains.domain_id where domains.domain_id:=id', id=domain_id)
-            for row in result:
-                courses_title.append(row[0])
-        return courses_title
+    def update_domain(self, domain):
+        if not isinstance(domain, Domain):
+            raise TypeError("expecting an arugment of type Domain")
+        if self.get_domain(domain.domain_id) == None:
+            raise ValueError("can't find domain with this id")
+        with self.__get_cursor() as cursor:
+            cursor.execute("update domains set domain = :domain, domain_description = :domain_description where domain_id = :domain_id", domain = domain.domain, domain_description = domain.domain_description, domain_id  = domain.domain_id)
     
+    def delete_domain(self, id):
+        if not isinstance(id, int):
+            raise TypeError("expecting an argument of type int")
+        if self.get_domain(id) == None:
+            raise ValueError("could not find domain with this id")
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from domains where domain_id = :domain_id", domain_id = id)
+
+    def get_domain_courses(self, id):
+        courses = []
+        if not isinstance(id, int):
+            raise TypeError("expecting an argument of type int")
+        domain = self.get_domain(id)
+        if domain == None:
+            raise ValueError("could not find domain with this id")
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses where domain_id = :domain_id", domain_id = domain.domain_id)
+            for row in results:
+                courses.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], row[7]))
+        return courses
+
     def get_users(self):
         users = []
         with self.__connection.cursor() as cursor:

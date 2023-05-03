@@ -23,7 +23,7 @@
         <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">(id: {{element.element_id}}) {{element.element_order}} {{element.element}} {{element.element_criteria}}</a> <a href="{{url_for('competency.delete_competency_element', competency_id = competency.id, element_id = element.element_id)}}">Delete</a></li>
         {% endfor %}
     </ul>
-    <h1>Add Competency</h1>
+    <h1>Update Competency</h1>
     <form method="post">
         {{competency_form.csrf_token}}
         {{competency_form.competency.label}} {{competency_form.competency()}}
@@ -31,7 +31,7 @@
         {{competency_form.competency_type.label}} {{competency_form.competency_type()}}
         <input type="submit"/>
     </form>
-
+    <h1>Add Element</h1>
     <form method="post">
         {{element_form.csrf_token}}
         {{element_form.element.label}} {{element_form.element()}}

@@ -1,7 +1,7 @@
 class Domain:
     def __init__(self, domain_id, domain, domain_description):
         
-        if not isinstance(domain_id, int):
+        if not(domain_id == None or isinstance(domain_id, int)):
             raise Exception("domain id must be a number")
         if not isinstance(domain, str):
             raise Exception("course title must be a string")
@@ -24,8 +24,7 @@ from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired
     
 class DomainForm(FlaskForm):
-    id = IntegerField('Domain_Id', validators=[DataRequired()])
     domain = StringField('Name', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
+    domain_description = StringField('Description', validators=[DataRequired()])
 
 

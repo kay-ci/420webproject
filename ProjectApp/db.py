@@ -319,6 +319,25 @@ class Database:
                 courses_elements.append((row[0], row[1], Element(row[2], row[3], row[4], row[5], row[6])))
         return courses_elements
     
+    def calculate_course_hours(self, course_id):
+        output = 0
+        if not isinstance(course_id, str):
+            raise TypeError("expecting a string id")
+        if self.get_course(course_id) == None:
+            raise ValueError("could not find a course for this id")
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, element_id, element_hours from courses_elements where course_id = :course_id", course_id = course_id)
+            for row in results:
+                output += row[2]
+        return output
+    
+    def get_courses_with_sum_hours_from_elements(self):
+        output = []
+        courses = self.get_courses()
+        for course in courses:
+            output.append((course, self.calculate_course_hours(course.course_id)))
+        return output
+
     def add_courses_element(self, course_element):
         with self.__get_cursor() as cursor:
             cursor.execute("insert into course_element values(:course_id, :elem_id, :elem_hours)",

@@ -152,8 +152,7 @@ class Database:
         if self.get_domain(domain.domain_id) != None:
             raise ValueError("this domain id is already being used")
         with self.__connection.cursor() as cursor:
-            cursor.execute('insert into domains (domain_id, domain, domain_description) values (:domain_id,        :domain, :domain_description)',
-                           domain_id = domain.domain_id, domain = domain.domain, domain_description = domain.domain_description)
+            cursor.execute('insert into domains (domain, domain_description) values (:domain, :domain_description)', domain = domain.domain, domain_description = domain.domain_description)
     
     def get_domains(self):
         domains = []
@@ -167,10 +166,10 @@ class Database:
     def update_domain(self, domain):
         if not isinstance(domain, Domain):
             raise TypeError("expecting an arugment of type Domain")
-        if self.get_domain(domain.id):
+        if self.get_domain(domain.domain_id) == None:
             raise ValueError("can't find domain with this id")
         with self.__get_cursor() as cursor:
-            cursor.execute("update domains set domain = :domain, domain_description = :domain_description", domain = domain.domain, domain_description = domain.domain_description)
+            cursor.execute("update domains set domain = :domain, domain_description = :domain_description where domain_id = :domain_id", domain = domain.domain, domain_description = domain.domain_description, domain_id  = domain.domain_id)
     
     def delete_domain(self, id):
         if not isinstance(id, int):
@@ -363,11 +362,39 @@ class Database:
     def get_courses_elements(self):
         courses_elements = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute("select course_id, element_id, element_hours from courses_elements")
+            results = cursor.execute("select course_id, element_id, element_hours from courses_elements order by course_id")
             for row in results:
                 courses_elements.append(CourseElement(row[0], int(row[1]), float(row[2])))
         return courses_elements
     
+    def get_elements_and_course_ids_as_tuples(self):
+        from .courses.courses_element import CourseElement
+        courses_elements = []
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, element_hours, element_id, element_order, element, element_criteria, competency_id from view_courses_elements order by course_id")
+            for row in results:
+                courses_elements.append((row[0], row[1], Element(row[2], row[3], row[4], row[5], row[6])))
+        return courses_elements
+    
+    def calculate_course_hours(self, course_id):
+        output = 0
+        if not isinstance(course_id, str):
+            raise TypeError("expecting a string id")
+        if self.get_course(course_id) == None:
+            raise ValueError("could not find a course for this id")
+        with self.__get_cursor() as cursor:
+            results = cursor.execute("select course_id, element_id, element_hours from courses_elements where course_id = :course_id", course_id = course_id)
+            for row in results:
+                output += row[2]
+        return output
+    
+    def get_courses_with_sum_hours_from_elements(self):
+        output = []
+        courses = self.get_courses()
+        for course in courses:
+            output.append((course, self.calculate_course_hours(course.course_id)))
+        return output
+
     def add_courses_element(self, course_element):
         if not isinstance(course_element, CourseElement):
             raise TypeError("id must be a CourseElement")

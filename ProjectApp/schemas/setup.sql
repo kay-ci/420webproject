@@ -10,7 +10,7 @@ create table terms (term_id number PRIMARY KEY,
                     term_name char(6) NOT NULL);
 
 --Domain
-create table domains (domain_id number PRIMARY KEY, 
+create table domains (domain_id number generated always as identity PRIMARY KEY, 
                         domain varchar2(50) NOT NULL, 
                         domain_description varchar2(500) NOT NULL);
 
@@ -21,7 +21,7 @@ create table courses (course_id varchar2(10) PRIMARY KEY,
                     lab_hours number NOT NULL, 
                     work_hours number NOT NULL,
                     description varchar2(1000) NOT NULL, 
-                    domain_id REFERENCES domains(domain_id), 
+                    domain_id REFERENCES domains(domain_id) ON DELETE CASCADE, 
                     term_id REFERENCES terms(term_id));
 
 --Competency

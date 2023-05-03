@@ -10,8 +10,17 @@ Courses Elements
     <section id = "courses_element_block">
         <h1>Course Elements</h1>
         <ul>
-            {% for courses_element in courses_elements%}
-                <li>{{ courses_element | safe}}</li>
+            {% for course in courses%}
+                <li><a href="{{url_for('courses.find_course', the_id = course[0].course_id)}}">{{course[0].course_id}}</a>
+                    <ul>
+                        {%for course_element in courses_elements%}
+                            {% if course_element[0] == course[0].course_id%}
+                                <li><a href="{{url_for('element.show_element', element_id = course_element[2].element_id)}}">&#40;Id:{{course_element[2].element_id}}&#41; {{course_element[2].element}}</a> <a href="{{url_for('competency.show_competency', id = course_element[2].competency_id)}}">{{course_element[2].competency_id}}</a> {{course_element[1]}} hours</li>
+                            {% endif%}
+                        {% endfor %}
+                    </ul>
+                </li>
+                <p>Total Hours: {{course[1]}}</p>
             {% endfor %}
         </ul>
     </section>
@@ -23,7 +32,7 @@ Courses Elements
             {{form.course_id.label}}{{form.course_id()}}
             {{form.element_id.label}}{{form.element_id()}}
             {{form.hours.label}}{{form.hours()}}
-            <input class="submit" type = "submit"
+            <input class="submit" type = "submit"/>
         </form>
     </section>
 {% endblock content %}

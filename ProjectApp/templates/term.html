@@ -14,5 +14,12 @@
             </ul>
         </li>
     <ul>
-    <!--list the courses here-->
+    <h2>Edit Term</h2>
+    <form method="post">
+        {{form.csrf_token}}
+        {{form.name.label}} {{form.name()}}
+        <input type="submit"/>
+    </form>
+    <a href="{{url_for('term.delete_term', id = term.id)}}">Delete Term</a>
+
 {% endblock %}

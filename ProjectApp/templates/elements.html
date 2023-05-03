@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Elements Page{% endblock title %}
+{% block header %}Elements{% endblock %}
+
+{% block content %}
+    <section id = "elements info">
+        <a href="{{url_for('competency.show_competencies')}}">Add Element</a>
+        <h1>Elements</h1>
+        <ul>
+            {% for element in elements %}
+            <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element.element | safe}}</a> </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+{% endblock %}

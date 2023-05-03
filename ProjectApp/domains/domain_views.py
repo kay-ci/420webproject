@@ -8,7 +8,13 @@ bp = Blueprint('domains', __name__, url_prefix='/domains/')
 
 @bp.route('/', methods=['GET', 'POST']) 
 def show_domains():
-    domains = get_db().get_domains()
+    try:
+        domains = get_db().get_domains()
+    except Exception as e:
+        domains = None
+        flash("Could not load domains")
+        flash(str(e))
+        abort(404)
     form = DomainForm()
     if request.method == "POST" and form.validate_on_submit():
         try:

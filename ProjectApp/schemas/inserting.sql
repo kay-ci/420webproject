@@ -2,11 +2,11 @@
 --base course
 --PROGRAMMING I----------------------------------------------------------------------------------------------------------------------
     --Term
-    insert into terms values (1, 'Fall');
+    insert into terms(term_name) values ('Fall');
     --Domain
     insert into domains (domain, domain_description)values ('Programming, Data Structures, and Algorithms',
         --Description
-        'The courses in the Programming, Data Structures and Algorithms domain teach the knowledge and skills required to design and program solutions to typical information technology problems. The students are�taught�object-oriented programming in the context of standalone, event-driven and web-based programs.');
+        'The courses in the Programming, Data Structures and Algorithms domain teach the knowledge and skills required to design and program solutions to typical information technology problems. The students are?taught?object-oriented programming in the context of standalone, event-driven and web-based programs.');
     --Course
     insert into courses values ('420-110-DW', 'Programming I', 3,3,3,
         --Description
@@ -98,7 +98,7 @@
 --course with different term
 --PROGRAMMING II----------------------------------------------------------------------------------------------------------------------
     --Term
-    insert into terms values (2, 'Winter');
+    insert into terms(term_name) values ('Winter');
     --Domain
         --Same as Programming I
     --Course
@@ -158,7 +158,7 @@
 --course with different domain
 --INFRASTRUCTURE III----------------------------------------------------------------------------------------------------------------------
     --Term
-    insert into terms values (4, 'Winter');
+    insert into terms(term_name) values ('Winter');
     --Domain
     insert into domains(domain, domain_description) values ('Infrastructure, Operating Systems and Networking',
         --Description
@@ -379,7 +379,7 @@ methodologies; and data normalization techniques to create robust relations.',
 --course with bad course id
 --MOBILE DEVELOPMENT----------------------------------------------------------------------------------------------------------------------
 --Term
-    insert into terms values (5, 'Fall');
+    insert into terms(term_name) values ('Fall');
     --Domain
     --same domain as programming I and II
     --Course
@@ -507,5 +507,5 @@ development environment.',
     insert into courses_elements values ('420-551-D', 47/*GENERATED 47*/,(45/5));
 
 --additional term inserts
-insert into terms values (3, 'Fall');
-insert into terms values (6, 'Winter');
+insert into terms(term_name) values ('Fall');
+insert into terms(term_name) values ('Winter');

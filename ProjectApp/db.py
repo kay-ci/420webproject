@@ -301,23 +301,30 @@ class Database:
             for row in results:
                 self.update_element(Element(row[0], row[1]-1, row[2], row[3], row[4]))
 
-    def get_courses_elements(self):
+    def get_courses_elements(self, page_size, page):
+        if not (isinstance(page_size, int) and page_size > 0):
+            raise TypeError("expecting an argument of type int whose value is above 0")
+        if not (isinstance(page, int) and page > 0):
+            raise TypeError("expecting an argument of type int whose value is above 0")
         from .courses.courses_element import CourseElement
         courses_elements = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute("select course_id, element_id, element_hours from courses_elements order by course_id")
+            results = cursor.execute(f"select course_id, element_id, element_hours from courses_elements order by course_id offset {page_size * (page-1)} rows fetch next {page_size} rows only")
             for row in results:
-                courses_elements.append(CourseElement(row[0], int(row[1]), float(row[2])))
+                courses_elements.append(CourseElement(row[0], row[1], float(row[2])))
         return courses_elements
     
-    def get_elements_and_course_ids_as_tuples(self):
-        from .courses.courses_element import CourseElement
-        courses_elements = []
+    def get_elements_course_ids(self, page_size, page):
+        if not (isinstance(page_size, int) and page_size > 0):
+            raise TypeError("expecting an argument of type int whose value is above 0")
+        if not (isinstance(page, int) and page > 0):
+            raise TypeError("expecting an argument of type int whose value is above 0")
+        courses = []
         with self.__get_cursor() as cursor:
-            results = cursor.execute("select course_id, element_hours, element_id, element_order, element, element_criteria, competency_id from view_courses_elements order by course_id")
+            results = cursor.execute(f"select course_id from (select course_id from courses_elements order by course_id offset {page_size * (page-1)} rows fetch next {page_size} rows only) group by course_id")
             for row in results:
-                courses_elements.append((row[0], row[1], Element(row[2], row[3], row[4], row[5], row[6])))
-        return courses_elements
+                courses.append(row[0])
+        return courses
     
     def calculate_course_hours(self, course_id):
         output = 0
@@ -330,14 +337,6 @@ class Database:
             for row in results:
                 output += row[2]
         return output
-    
-    def get_courses_with_sum_hours_from_elements(self):
-        output = []
-        courses = self.get_courses()
-        for course in courses:
-            output.append((course, self.calculate_course_hours(course.course_id)))
-        return output
-
     def add_courses_element(self, course_element):
         with self.__get_cursor() as cursor:
             cursor.execute("insert into course_element values(:course_id, :elem_id, :elem_hours)",

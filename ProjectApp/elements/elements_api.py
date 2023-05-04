@@ -47,8 +47,7 @@ def element(element_id):
         if json_element:
             try:
                 element = Element.from_json(json_element)
-                element_in_db = get_db().get_element(int(element_id))
-                if element == element_in_db:
+                if element.element_id != None:
                     get_db().update_element(element)
                     resp = make_response({}, 204)
                     return resp

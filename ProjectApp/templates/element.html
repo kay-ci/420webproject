@@ -20,5 +20,7 @@
             {{form.element_criteria.label}} {{form.element_criteria()}}
             <input class="submit" type="submit"/>
         </form>
+        <a href="{{url_for('element.delete_element', element_id = element.element_id)}}">Delete</a>
     </section>
+    
 {% endblock %}

@@ -375,6 +375,13 @@ class Database:
             for row in result:
                 element = Element(int(row[0]), int(row[1]), row[2], row[3], row[4])
             return element
+    def get_element_id(self):
+        element_id = None
+        with self.__get_cursor() as cursor:
+            result = cursor.execute("select count (element_id) from elements")
+            for row in result:
+                element_id = row[0]
+        return int(element_id)
         
     def add_element(self, element):
         if not isinstance(element, Element):
@@ -407,7 +414,8 @@ class Database:
             cursor.execute("delete from elements where element_id = :id", id = element_id)
             results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
             for row in results:
-                self.update_element(row[0], row[1]-1, row[2], row[3])
+                updated_element = Element(row[0], row[1]-1, row[2], row[3], row[4])
+                self.update_element(updated_element)
     def get_terms(self):
         output = []
         with self.__connection.cursor() as cursor:

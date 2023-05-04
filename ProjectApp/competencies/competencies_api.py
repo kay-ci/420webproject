@@ -23,7 +23,7 @@ def competencies_api():
                 #aren't we supposed to return url key
                 order = 0
                 for element in competency_json["elements"]:
-                    order+=1
+                    order+=14
                     element = Element(None, order, element['element'], element['element_criteria'], competency.id)
     elif request.method == 'GET':
         if request.args:

@@ -13,6 +13,8 @@ def competencies_api():
     page_num = 1
     if request.method == 'POST':
         competency_json = request.json
+        if not isinstance(competency_json, dict):
+            raise TypeError("expecting a dict/json")
         if competency_json:
             competency = Competency.from_json(competency_json)
             get_db().add_competency(competency)#what if competency id already used?

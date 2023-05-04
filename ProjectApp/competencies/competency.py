@@ -28,7 +28,7 @@ class Competency:
     def from_json(json_dict):#throws Exception if json doesn't have expected keys
         if not isinstance(json_dict, dict):
             raise TypeError("expecting a dict argument")
-        return Competency(json_dict['id'], json_dict['competency'], json_dict['competency_achievement'], json_dict['competency_type'], )
+        return Competency(json_dict['id'], json_dict['competency'], json_dict['competency_achievement'], json_dict['competency_type'])
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectField, IntegerField

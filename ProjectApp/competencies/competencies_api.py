@@ -43,6 +43,6 @@ def competency_api(competency_id):
 def competency_elements_api():
     pass
 
-@bp.route('/competency_id/<id:element_id>', methods=["GET", "PUT", "DELETE"])
+@bp.route('/competency_id/<int:element_id>', methods=["GET", "PUT", "DELETE"])
 def competency_element_api():
     pass

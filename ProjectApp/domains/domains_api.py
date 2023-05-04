@@ -13,11 +13,11 @@ def domains_api():
     elif request.method == 'GET':
         if request.args:
             domain_id = request.args.get("domain_id")
-            domains = get_db().get_domains()
+            domains = get_db().get_domains_api()
             domain = [domain for domain in domains if domain.id == domain_id]
             return jsonify(domain[0].__dict__)
-    domains = get_db().get_domains()
-    json = [domain.__dict__ for domains in domains]
+    domains = get_db().get_domains_api()
+    json = [domain.__dict__ for domain in domains]
     return jsonify(json)
 
     

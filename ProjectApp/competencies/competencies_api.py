@@ -6,6 +6,7 @@
 from flask import Blueprint, jsonify, request, make_response
 from ..dbmanager import get_db
 from .competency import Competency
+from ..elements.element import Element
 bp = Blueprint('competencies_api', __name__, url_prefix='/api/competencies/')
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -16,9 +17,14 @@ def competencies_api():
         if not isinstance(competency_json, dict):
             raise TypeError("expecting a dict/json")
         if competency_json:
-            competency = Competency.from_json(competency_json)
-            get_db().add_competency(competency)#what if competency id already used?
-            #aren't we supposed to return url key
+            if competency_json["elements"]:
+                competency = Competency.from_json(competency_json)
+                get_db().add_competency(competency)#what if competency id already used?
+                #aren't we supposed to return url key
+                order = 0
+                for element in competency_json["elements"]:
+                    order+=1
+                    element = Element(None, order, element['element'], element['element_criteria'], competency.id)
     elif request.method == 'GET':
         if request.args:
             page = request.args.get("page")
@@ -41,6 +47,13 @@ def competency_api(competency_id):
             response = make_response({"id":404, "description":str(e)}, 404)
             return response
         
+    if request.method == "PUT":
+        new_competency = request.json
+        if not isinstance(new_competency, dict):
+            raise ValueError("excpecting a dict/json")
+        if
+        get_db().add_competency(Competency())
+        get_db().add_element(Element(None, ))
 @bp.route('/<competency_id>/', methods=["GET","POST"])
 def competency_elements_api():
     pass

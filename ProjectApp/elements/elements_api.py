@@ -16,6 +16,7 @@ def post_elements():
                 resp = make_response({}, 201)
                 element_id = get_db().get_element_id()
                 resp.headers["Location"] = url_for("element-api.element", element_id = element_id)
+                return resp
             except Exception as e:
                 flash("could not add element")
                 abort(409)
@@ -50,12 +51,14 @@ def element(element_id):
                 if element == element_in_db:
                     get_db().update_element(element)
                     resp = make_response({}, 204)
+                    return resp
                 else: 
                     get_db().add_element(element)
                     #making response
                     resp = make_response({}, 201)
                     element_id = get_db().get_element_id()
                     resp.headers["Location"] = url_for("element-api.element", element_id = element_id)
+                    return resp
             except Exception as e:
                 flash("could not add element")
                 abort(409)
@@ -64,7 +67,6 @@ def element(element_id):
     elif request.method == "GET":    
         try:
             element = get_db().get_element(int(element_id))
-            resp = make_response({}, 200)
             return element.to_json()
         except:
             flash("Invalid ID, make sure url is correct")

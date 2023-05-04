@@ -20,3 +20,10 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         
         resp = client.post("/api/elements", json = post)
         self.assertEqual(resp.status_code, 201)
+    
+    def test_get_element(self, client):
+        resp = client.get('/api/elements/1')
+        self.assertEqual(resp.status_code, 200)
+        element = resp.json
+        self.assertIsNotNone(element)
+        self.assertEqual(element["element"], "Analyze the problem.")

@@ -32,6 +32,11 @@
                                     <button type="submit">Edit</button>
                                 </form>
                                 {% endif %}
+                                {% if current_user.member_type == 'super_admin' %}
+                                    <form method="GET" class="options_admin" action="{{url_for('users.promote_super_user', email=user.email)}}">
+                                        <button type="submit">To super</button>
+                                    </form>
+                                {% endif %}
                             {% endif %}
                             </div>
                         </li>

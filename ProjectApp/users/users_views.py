@@ -47,6 +47,17 @@ def demote_user(email):
         userChosen = None
     return render_template('admin_dash.html', users=users)
 
+@bp.route('/promote-to-super/<string:email>/')
+def promote_super_user(email):
+    try:
+        userChosen = get_db().get_user(email)
+        get_db().promote_super_user(userChosen)
+        users = get_db().get_users()
+    except Exception as e:
+        userChosen = None
+    return render_template('admin_dash.html', users=users)
+
+
 @bp.route('/remove/<string:email>/')
 def delete_user(email):
     try:

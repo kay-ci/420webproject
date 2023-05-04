@@ -104,9 +104,9 @@ class Database:
     def get_domain(self, domain_id):
         domain = None
         with self.__connection.cursor() as cursor:
-            results = cursor.execute('select domain, domain_description from domains where domain_id=:id', id=domain_id)
+            results = cursor.execute('select domain_id, domain, domain_description from domains where domain_id=:id', id=domain_id)
             for row in results:
-                domain = Domain(domain_id,row[0],row[1])
+                domain = Domain(row[0],row[1],row[2])
         return domain
             
     def add_domain(self, domain):
@@ -131,10 +131,10 @@ class Database:
         prev_page = None
         next_page = None
         offset = (page_num -1)*page_size
-        with self.__conn.cursor() as cursor:
+        with self.__connection.cursor() as cursor:
             result = cursor.execute('select domain_id, domain, domain_description from domains order by domain_id offset :offset rows fetch next :page_size rows only', offset=offset, page_size=page_size)
             for row in result:
-                domain = Domain(row[0], row[1], row[2].read(), row[3], row[4])
+                domain = Domain(row[0],row[1], row[2])
                 domains.append(domain)
         if page_num > 1:
             prev_page = page_num -1
@@ -145,7 +145,7 @@ class Database:
     
     def update_domain(self, domain):
         if not isinstance(domain, Domain):
-            raise TypeError("expecting an arugment of type Domain")
+            raise TypeError("expecting an argument of type Domain")
         if self.get_domain(domain.domain_id) == None:
             raise ValueError("can't find domain with this id")
         with self.__get_cursor() as cursor:
@@ -218,6 +218,12 @@ class Database:
         with self.__get_cursor() as cursor:
             cursor.execute("update USERS set member_type = :new_member_type where email=:email",
                            new_member_type = 'member',
+                           email = user.email)
+    
+    def promote_super_user(self, user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
+                           new_member_type = 'super_admin',
                            email = user.email)
 
     def block_user(self,user):

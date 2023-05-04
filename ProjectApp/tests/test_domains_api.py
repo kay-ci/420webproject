@@ -11,7 +11,7 @@ class TestAPI(flask_unittest.ClientTestCase):
         self.assertIsNotNone(json['next_page'])
         self.assertIsNone(json['prev_page'])
 
-    def test_send_post(self, client):
+    def test_send_post(self,client):
         resp = client.get('/api/domains/')
         self.assertEqual(resp.status_code, 200)
         domains = resp.json

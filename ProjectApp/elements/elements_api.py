@@ -44,10 +44,10 @@ def post_elements():
         flash("could not fetch elements")
         abort(404)
         
-@bp.route("/update-element", methods = ["PUT"])
+@bp.route("/update-element/", methods = ["PUT"])
 def update_element():
     pass
 
-@bp.route("/delete-element", methods = ["DELETE"])
+@bp.route("/delete-element/", methods = ["DELETE"])
 def delete_element():
     pass

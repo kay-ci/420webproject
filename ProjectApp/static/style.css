@@ -227,6 +227,7 @@ legend {
     height: 9%;
     border: solid white thin;
     padding: 3px;
+    border-radius: 15px;
 }
 #field_users {
    width: 35%;
@@ -243,7 +244,7 @@ legend {
     margin: 0;
 }
 #user_desc {
-    text-align: right;
+    text-align:center;
 }
 #title_edit {
     text-align: center;

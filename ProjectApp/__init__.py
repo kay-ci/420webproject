@@ -24,6 +24,8 @@ def create_app(test_config=None):
 
     from .competencies.competency_views import bp as competency_bp
     app.register_blueprint(competency_bp)
+    from .competencies.competencies_api import bp as competencies_api_bp
+    app.register_blueprint(competencies_api_bp)
     
     from .courses.course_views import bp as course_bp
     app.register_blueprint(course_bp)
@@ -54,7 +56,7 @@ def create_app(test_config=None):
         return render_template('404.html'), 404
     
     login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'auth.logout'
     login_manager.init_app(app)
 
     @login_manager.user_loader

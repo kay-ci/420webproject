@@ -44,7 +44,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         
         resp = client.put("/api/elements/2", json = element)
         
-        self.assertEqual(resp.status_code, 204)
+        self.assertEqual(resp.status_code, 200)
         self.assertEqual(element["element_id"], 2)
         self.assertEqual(element["element_criteria"],"Best New Criteria!")
         
@@ -60,5 +60,12 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         
         self.assertEqual(resp.status_code, 201)
         
+    def test_delete_element(self, client):
+        resp = client.get("/api/elements/4")
+        self.assertEqual(resp.status_code, 200)
+        element = resp.json
+        self.assertIsNotNone(element)
         
-    
+        resp = client.delete("/api/element/4")
+            
+        self.assertEqual(resp.status_code, 204) 

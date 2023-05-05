@@ -37,6 +37,9 @@ def create_app(test_config=None):
     from .terms.term_views import bp as term_bp
     app.register_blueprint(term_bp)
     
+    from .terms.terms_api import bp as api_term_bp
+    app.register_blueprint(api_term_bp)
+    
     from .auth_views import bp as auth_bp
     app.register_blueprint(auth_bp)
 

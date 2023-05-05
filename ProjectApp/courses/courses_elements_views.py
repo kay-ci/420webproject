@@ -1,10 +1,12 @@
 from flask import Blueprint, abort, render_template, redirect, url_for, flash, request
 from .courses_element import CourseElement, CourseElementForm
 from ..dbmanager import get_db
+from flask_login import login_required
 
 bp = Blueprint("courses_elements", __name__, url_prefix="/courses-elements")
 
 @bp.route("/delete/<course_id>/<element_id>", methods=["GET"])
+@login_required
 def delete_course_element(course_id, element_id):
     element_id = int(element_id)
     if get_db().get_course_element(course_id, element_id) == None:
@@ -40,13 +42,3 @@ def list_courses_elements(page=1, page_size=10):
     if page < 1 or page_size < 1:
         abort(404)
     return render_template("courses_elements.html", courses_elements = get_db().get_courses_elements(page_size, page), form = form, course_ids= get_db().get_elements_course_ids_with_hours(page_size, page), page = page, page_size = page_size)
-    
-#display all elements for a given course
-@bp.route("course/<element_id>/")
-def get_course_element_id(element_id):
-    pass
-    
-#display a course for a given element_id
-@bp.route("elements/<course_id>/")
-def get_course_course_id(course_id):
-    pass

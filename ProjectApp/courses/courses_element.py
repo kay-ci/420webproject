@@ -6,9 +6,13 @@ class CourseElement:
             raise Exception ("Element id is not an int")
         if not isinstance(hours, float):
             raise Exception ("hours is not int or float")
+        from ..dbmanager import get_db
         self.course_id = course_id
         self.element_id = element_id
+        self.course = get_db().get_course(course_id)
+        self.element = get_db().get_element(element_id)
         self.hours = hours
+        self.calculated_total_hours = get_db().calculate_course_hours(course_id)
 
     def __repr__(self):
         return f'CourseElement({self.course_id}, {self.element_id}, {self.hours})'

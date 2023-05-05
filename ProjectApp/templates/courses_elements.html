@@ -9,8 +9,11 @@ Courses Elements
 {% block contentnotlogedin %}
     <section id = "courses_element_block">
         <a href="{{url_for('courses_elements.list_courses_elements', page=1, page_size=999)}}">Load All</a> - 
-        {% if page > 1 %}
+        {% if page > 1%}
             <a href="{{url_for('courses_elements.list_courses_elements', page = page-1)}}">Previous Page</a> -
+        {% endif %}
+        {% if page_size == 999 %}
+            <a href="{{url_for('courses_elements.list_courses_elements', page = 1)}}">Previous Page</a> -
         {% endif %}
         <a href="{{url_for('courses_elements.list_courses_elements', page = page+1)}}">Next Page</a>
         <h1>Course Elements</h1>
@@ -18,13 +21,9 @@ Courses Elements
             {% for course_id in course_ids%}
                 <li><a href="{{url_for('courses.find_course', the_id = course_id)}}">{{course_id}} </a>
                     <ul>
-                        {%for courses_element in courses_elements%}
-                            {% if courses_element.course_id == course_id%}
-                                {%for element in elements%}
-                                    {% if courses_element.element_id == element.element_id%}
-                                        <li><a href="{{url_for('element.show_element', element_id = courses_element.element_id)}}">&#40;Id:{{element.element_id}}&#41; {{element.element.element}}</a> <a href="{{url_for('competency.show_competency', id = element.competency_id)}}">&#40;Id:{{element.competency_id}}&#41;</a> {{courses_element.hours}} hours</li>
-                                    {% endif%}
-                                {% endfor %}
+                        {%for element in courses_elements%}
+                            {% if element.course_id == course_id%}
+                                <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">&#40;Id:{{element.element_id}}&#41; {{element.element.element}}</a> <a href="{{url_for('competency.show_competency', id = element.element.competency_id)}}">&#40;{{element.element.competency_id}}&#41;</a> {{element.hours}} hours</li>
                             {% endif%}
                         {% endfor %}
                     </ul>
@@ -45,3 +44,4 @@ Courses Elements
         </form>
     </section>
 {% endblock content %}
+

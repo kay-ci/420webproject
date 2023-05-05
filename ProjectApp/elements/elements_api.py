@@ -65,7 +65,8 @@ def element(element_id):
         try:
             element = get_db().get_element(int(element_id))
             if element == None:
-                abort(404)
+                resp = make_response({}, 404)
+                return resp
             else:
                 get_db().delete_element(int(element_id))
                 resp = make_response({}, 204)

@@ -135,7 +135,7 @@ class Database:
 
     def get_domain_id(self):
         with self.__get_cursor() as cursor:
-            result = cursor.execute("select count (domain_id) from domains")
+            result = cursor.execute("select max (domain_id) from domains")
             for row in result:
                 element_id = row[0]
         return int(element_id)
@@ -451,7 +451,7 @@ class Database:
             return element
     def get_element_id(self):
         with self.__get_cursor() as cursor:
-            result = cursor.execute("select count (element_id) from elements")
+            result = cursor.execute("select max (element_id) from elements")
             for row in result:
                 element_id = row[0]
         return int(element_id)
@@ -530,7 +530,7 @@ class Database:
     
     def get_term_id(self):
         with self.__get_cursor() as cursor:
-            result = cursor.execute("select count (term_id) from terms")
+            result = cursor.execute("select max (term_id) from terms")
             for row in result:
                 element_id = row[0]
         return int(element_id)

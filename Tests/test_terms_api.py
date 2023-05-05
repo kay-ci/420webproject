@@ -14,7 +14,7 @@ class TestAPITerms(flask_unittest.ClientTestCase):
         self.assertIsNotNone(json["next_page"])
         self.assertIsNone(json["previous_page"])
         
-    def test_post_term(self, client):
+    def test_post_and_delete_term(self, client):
         resp = client.get('/api/terms')
         self.assertEqual(resp.status_code, 200) 
         terms = resp.json
@@ -23,8 +23,11 @@ class TestAPITerms(flask_unittest.ClientTestCase):
         term["name"] = "test"
         
         resp = client.post("/api/terms", json = term)
-        
         self.assertEqual(resp.status_code, 201)
+        #testing delete
+        id = get_db().get_domain_id()
+        resp = client.delete(f"/api/terms/{str(id)}")
+        self.assertEqual(resp.status_code, 204)
     
     def test_get_term(self, client):
         resp = client.get('/api/terms/3')
@@ -59,13 +62,4 @@ class TestAPITerms(flask_unittest.ClientTestCase):
         resp = client.put("/api/terms/3", json = term)
         
         self.assertEqual(resp.status_code, 201)
-        
-    def test_delete_term(self, client):
-        resp = client.get("/api/terms/5")
-        self.assertEqual(resp.status_code, 200)
-        term = resp.json
-        self.assertIsNotNone(term)
-        
-        resp = client.delete("/api/terms/5")
-            
-        self.assertEqual(resp.status_code, 204) 
+    

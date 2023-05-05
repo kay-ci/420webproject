@@ -1,4 +1,5 @@
 import flask_unittest
+from ProjectApp.dbmanager import get_db
 from ProjectApp import create_app
 
 class TestAPIDomains(flask_unittest.ClientTestCase):
@@ -13,7 +14,7 @@ class TestAPIDomains(flask_unittest.ClientTestCase):
         self.assertIsNotNone(json["next_page"])
         self.assertIsNone(json["previous_page"])
         
-    def test_post_domain(self, client):
+    def test_post_and_delete_domain(self, client):
         resp = client.get('/api/domains')
         self.assertEqual(resp.status_code, 200) 
         domains = resp.json
@@ -23,8 +24,11 @@ class TestAPIDomains(flask_unittest.ClientTestCase):
         domain["domain_description"] = "This is a test domain for the api unit test, this is fun!"
         
         resp = client.post("/api/domains", json = domain)
-        
         self.assertEqual(resp.status_code, 201)
+        #testing delete
+        id = get_db().get_domain_id()
+        resp = client.delete(f"/api/domains/{str(id)}")
+        self.assertEqual(resp.status_code, 204) 
     
     def test_get_domain(self, client):
         resp = client.get('/api/domains/1')
@@ -62,13 +66,3 @@ class TestAPIDomains(flask_unittest.ClientTestCase):
         resp = client.put("/api/domains/3", json = domain)
         
         self.assertEqual(resp.status_code, 201)
-        
-    def test_delete_domain(self, client):
-        resp = client.get("/api/domains/4")
-        self.assertEqual(resp.status_code, 200)
-        domain = resp.json
-        self.assertIsNotNone(domain)
-        
-        resp = client.delete("/api/domains/4")
-            
-        self.assertEqual(resp.status_code, 204) 

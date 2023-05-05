@@ -14,7 +14,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         self.assertIsNotNone(json["next_page"])
         self.assertIsNone(json["previous_page"])
         
-    def test_post_element(self, client):
+    def test_post_and_delete_element(self, client):
         resp = client.get('/api/elements')
         self.assertEqual(resp.status_code, 200) 
         elements = resp.json
@@ -23,9 +23,12 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         element["element"] = "Testing API Post"
         element["element_order"] = get_db().get_next_competency_element_order(element["competency_id"])
         
-        resp = client.post("/api/elements", json = element)
-        
+        resp = client.post("/api/elements", json = element)     
         self.assertEqual(resp.status_code, 201)
+        #testing delete
+        id = get_db().get_element_id()
+        resp = client.delete(f"/api/elements/{id}")
+        self.assertEqual(resp.status_code, 204)
     
     def test_get_element(self, client):
         resp = client.get('/api/elements/1')
@@ -64,12 +67,3 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         
         self.assertEqual(resp.status_code, 201)
         
-    def test_delete_element(self, client): #have to reset db for this to work
-        resp = client.get("/api/elements/24")
-        self.assertEqual(resp.status_code, 200)
-        element = resp.json
-        self.assertIsNotNone(element)
-        
-        resp = client.delete("/api/elements/4")
-            
-        self.assertEqual(resp.status_code, 204) 

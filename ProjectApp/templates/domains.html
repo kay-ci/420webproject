@@ -1,0 +1,19 @@
+{%extends 'base.html' %}
+    {% block title %}Domains{% endblock %}
+{% block contentnotlogedin%}
+        <h1>Domains</h1>
+        <ul>
+            {% for domain in domains %}
+              <li> <a href ="{{url_for('domains.show_domain', id = domain.domain_id)}}">{{ domain.domain_id }}: {{domain.domain}}</a></li><br>
+            {% endfor %}
+        </ul>
+{%endblock%}
+{%block content%}
+<h1>Add Domain</h1>
+        <form method = "post">
+          {{form.csrf_token}}
+          {{form.domain.label}} {{form.domain()}}
+          {{form.domain_description.label}} {{form.domain_description()}}
+          <input class="submit" type="submit"/>
+        </form>
+{% endblock %}

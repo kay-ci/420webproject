@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            404
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    </head>
+    <body id="body404">
+        <section id="flash_messages">
+            {% for message in get_flashed_messages() %}
+                {{message}} 
+            {% endfor %}
+        </section>
+        <h1 id="alert404">404!</h1>
+        <p id="txt404">Page not Found!</p>
+    </body>
+</html>

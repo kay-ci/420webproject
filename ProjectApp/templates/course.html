@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{%block title%}
+Course Information
+{%endblock%}
+
+{% block header %}
+Courses Information
+{% endblock %}
+
+{% block contentnotlogedin %}
+<h1>Course</h1>
+<ul class="info_course">
+    <li><b>Course ID:</b> {{ course.course_id }}</li>
+    <li><b>Course Title:</b> {{ course.course_title }}</li>
+    <li><b>Thoery Hours:</b> {{ course.theory_hours }}</li>
+    <li><b>Lab Hours:</b> {{ course.lab_hours }}</li>
+    <li><b>Work Hours:</b> {{ course.work_hours }}</li>
+    <li><b>Description:</b> {{ course.description }}</li>
+    <li><b>Term:</b> {{ term }}</li>
+    <li><b>Domain:</b> {{ domain }}</li>
+</ul>
+
+<h2>Competencies:</h2>
+<ul>
+    {% for competency in competencies %}
+    <li>
+        <a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a>
+        <ul>
+            {% for element in elements %}
+                {%if element.competency_id == competency.id%}
+                <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element.element}}</a> </li>
+                {%endif%}
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+
+{%endblock%}
+
+{%block content%}
+<h1>Update Course</h1>
+<form method="post">
+    {{ form.csrf_token }}
+    {{ form.course_title.label }} {{ form.course_title() }}
+    {{ form.theory_hours.label }} {{ form.theory_hours() }}
+    {{ form.lab_hours.label }} {{ form.lab_hours() }}
+    {{ form.work_hours.label }} {{ form.work_hours() }}
+    {{ form.description.label }} {{ form.description() }}
+    {{ form.domain_id.label }} {{ form.domain_id() }}
+    {{ form.term_id.label }} {{ form.term_id() }}
+    <input class="submit" type="submit"/>
+</form>
+
+<a class="delete_button" href="{{url_for('courses.delete_from_courses', id = course.course_id)}}">Delete</a>
+{% endblock %}

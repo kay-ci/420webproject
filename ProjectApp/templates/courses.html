@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{%block title%}
+Courses List
+{%endblock%}
+
+{% block header %}
+Courses List
+{% endblock %}
+
+{% block contentnotlogedin%}
+    <h1>Courses</h1>
+    <ul>
+        {% for course in courses%}
+            <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}: {{ course.course_title }}</a></li>
+        {% endfor%}
+    </ul>
+{%endblock%}
+{%block content%}
+    <h1>Add Course</h1>
+    <form method="post" id="course_form">
+        {{ form.csrf_token }}
+        {{ form.course_id.label }} {{ form.course_id() }}
+        {{ form.course_title.label }} {{ form.course_title() }}
+        {{ form.theory_hours.label }} {{ form.theory_hours() }}
+        {{ form.lab_hours.label }} {{ form.lab_hours() }}
+        {{ form.work_hours.label }} {{ form.work_hours() }}
+        {{ form.description.label }} {{ form.description() }}
+        {{ form.domain_id.label }} {{ form.domain_id() }}
+        {{ form.term_id.label }} {{ form.term_id() }}
+        <input class="submit" type="submit"/>
+    </form>
+{% endblock%}

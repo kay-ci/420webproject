@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}Terms{% endblock %}
+
+{% block contentnotlogedin %}
+    <h1>Terms</h1>
+    <ul>
+        {% for term in terms %}
+        <li><a href="{{url_for('term.show_term', id = term.id)}}">{{term.name}} {{term.id}} </a></li>
+        {% endfor %}
+    </ul>
+{%endblock%}
+{%block content%}
+    <section>
+        <p><a href="{{url_for('term.add_term')}}">Add a Term</a></p>
+    </section>
+{% endblock %}

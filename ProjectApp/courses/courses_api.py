@@ -67,7 +67,7 @@ def update_course():
                 flash("course does not exist")
                 abort(409)
     try:            
-        courses = get_db().get_courses()
+        courses, prev_page, next_page = get_db().get_courses()
         json_courses = [course.to_json() for course in courses]
         return jsonify(json_courses)
     except:

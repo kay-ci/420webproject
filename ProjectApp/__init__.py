@@ -24,6 +24,7 @@ def create_app(test_config=None):
 
     from .competencies.competency_views import bp as competency_bp
     app.register_blueprint(competency_bp)
+    
     from .competencies.competencies_api import bp as competencies_api_bp
     app.register_blueprint(competencies_api_bp)
     

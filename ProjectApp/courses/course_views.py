@@ -11,13 +11,15 @@ def list_courses():
     try:
         if request.method == 'POST' and form.validate_on_submit():
             course = Course(form.course_id.data, form.course_title.data, float(form.theory_hours.data), float(form.work_hours.data), float(form.lab_hours.data), form.description.data, int(form.domain_id.data), int(form.term_id.data))
-            result_course = [name for name in get_db().get_courses() if name.course_id == course.course_id]
+            courses, prev_page, next_page = get_db().get_courses()
+            result_course = [name for name in courses if name.course_id == course.course_id]
             if len(result_course) == 0:
                 get_db().add_course(course)
             else:
                 flash('Course already exists')
         elif request.method == 'GET':
-            return render_template('courses.html', form = form, courses = get_db().get_courses())
+            courses, prev_page, next_page = get_db().get_courses()
+            return render_template('courses.html', form = form, courses = courses)
         return redirect(url_for('courses.list_courses'))
     except Exception as e:
         return render_template('404.html')
@@ -34,7 +36,8 @@ def find_course(the_id):
         form = CourseFormPartial()
         if request.method == 'POST' and form.validate_on_submit():
             new_course = Course(course.course_id, form.course_title.data, float(form.theory_hours.data), float(form.work_hours.data), float(form.lab_hours.data), form.description.data, int(form.domain_id.data), int(form.term_id.data))
-            old_course = [name for name in get_db().get_courses() if name.course_id == new_course.course_id]
+            courses, prev_page, next_page = get_db().get_courses()
+            old_course = [name for name in courses if name.course_id == new_course.course_id]
             if len(old_course) == 1:
                 get_db().update_course(new_course)
                 return redirect(url_for('courses.find_course', the_id = new_course.course_id))

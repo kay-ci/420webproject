@@ -12,8 +12,17 @@ def list_courses_elements():
         try:
             get_db().add_courses_element(new_course_element)
         except ValueError as e:
-            flash(str(e))
-    return render_template("courses_elements.html", courses_elements = get_db().get_elements_and_course_ids_as_tuples(), form = form, courses = get_db().get_courses_with_sum_hours_from_elements())
+            flash(e)
+            
+    page = 1
+    page_size = 999# defaults to loading all entries
+    try:
+        page = int(request.args["page"])
+        page_size = int(request.args["page_size"])
+    except Exception:
+        page = 1
+        page_size = 999# defaults to loading all entries
+    return render_template("courses_elements.html", courses_elements = get_db().get_courses_elements(page_size, page), form = form, course_ids = get_db().get_elements_course_ids(page_size, page), page = page, page_size = page_size)
     
 #display all elements for a given course
 @bp.route("course/<element_id>/")

@@ -33,3 +33,6 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         resp = client.post("/api/courses/addcourse", json = course)
         
         self.assertEqual(resp.status_code, 201)
+        
+        #feature/display-course-element
+

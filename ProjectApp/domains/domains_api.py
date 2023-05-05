@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from ProjectApp.dbmanager import get_db
+from ..dbmanager import get_db
 from .domain import Domain
 bp = Blueprint('domains_api', __name__, url_prefix='/api/domains/')
 

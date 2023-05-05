@@ -9,8 +9,11 @@ Courses Elements
 {% block contentnotlogedin %}
     <section id = "courses_element_block">
         <a href="{{url_for('courses_elements.list_courses_elements', page=1, page_size=999)}}">Load All</a> - 
-        {% if page > 1 or page_size == 999%}
+        {% if page > 1%}
             <a href="{{url_for('courses_elements.list_courses_elements', page = page-1)}}">Previous Page</a> -
+        {% endif %}
+        {% if page_size == 999 %}
+            <a href="{{url_for('courses_elements.list_courses_elements', page = 1)}}">Previous Page</a> -
         {% endif %}
         <a href="{{url_for('courses_elements.list_courses_elements', page = page+1)}}">Next Page</a>
         <h1>Course Elements</h1>

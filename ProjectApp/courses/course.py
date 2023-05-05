@@ -47,23 +47,23 @@ class Course:
     
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length
     
 class CourseForm(FlaskForm):
-    course_id = StringField('course_id', validators=[DataRequired()])
-    course_title = StringField('course_title', validators=[DataRequired()])
+    course_id = StringField('course_id', validators=[DataRequired(), Length(min = 10, max = 10)])
+    course_title = StringField('course_title', validators=[DataRequired(), Length(min = 0, max = 50)])
     theory_hours = IntegerField('theory_hours', validators=[DataRequired()])
     lab_hours = IntegerField('lab_hours', validators=[DataRequired()])
     work_hours = IntegerField('work_hours', validators=[DataRequired()])
-    description = StringField('description', validators=[DataRequired()])
+    description = StringField('description', validators=[DataRequired(), Length(min = 0, max = 1000)])
     domain_id = IntegerField('domain_id', validators=[DataRequired()])
     term_id = IntegerField('term_id', validators=[DataRequired()])
     
 class CourseFormPartial(FlaskForm):
-    course_title = StringField('course_title', validators=[DataRequired()])
-    theory_hours = IntegerField('theory_hours', validators=[DataRequired()])
+    course_title = StringField('course_title', validators=[DataRequired(), Length(min = 10, max = 10)])
+    theory_hours = IntegerField('theory_hours', validators=[DataRequired(), Length(min = 0, max = 50)])
     lab_hours = IntegerField('lab_hours', validators=[DataRequired()])
     work_hours = IntegerField('work_hours', validators=[DataRequired()])
-    description = StringField('description', validators=[DataRequired()])
+    description = StringField('description', validators=[DataRequired(), Length(min = 0, max = 1000)])
     domain_id = IntegerField('domain_id', validators=[DataRequired()])
     term_id = IntegerField('term_id', validators=[DataRequired()])

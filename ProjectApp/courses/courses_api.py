@@ -1,41 +1,59 @@
-from flask import Blueprint, flash, jsonify, render_template, request, abort
+from flask import Blueprint, flash, jsonify, render_template, request, abort, make_response, url_for
 from .course import Course
 from ..dbmanager import get_db
-bp = Blueprint('courses_api', __name__, url_prefix='/api/courses/')
+bp = Blueprint('courses_api', __name__, url_prefix="/api/courses")
 
-@bp.route("/", methods = ["GET"])
+@bp.route("/show", methods = ["GET"])
 def get_courses():
-    courses = get_db().get_courses()
-    if request.args:
-        id = request.args.get("id")
-        course = get_db().get_course(str(id))
-        if course:
-            return course.to_json(), 200
-        else:
-            flash('Could not Find Course in Database')
-            abort(404)
+    page_num = 1
+    if request.method == "GET":
+        if request.args:
+            id = request.args.get("id")
+            course = get_db().get_course(str(id))
+            if course:
+                return course.to_json(), 200
+            else:
+                flash("course was not found")
+                abort(404)
+    try:            
+        courses, prev_page, next_page = get_db().get_courses(page_num = page_num, page_size = 10)            
+        json_courses = {
+            "previous_page" : prev_page,
+            "next_page": next_page,
+            "results" : [course.to_json() for course in courses]}
+        return jsonify(json_courses)
+    except Exception as e:
+        flash("could not fetch courses")
+        abort(404)
 
-    courses_json = [course.to_json() for course in courses]
-    return courses_json, 200
-
-        
-@bp.route("/add-course/", methods = ["GET","POST"])
+@bp.route("/addcourse", methods = ["GET","POST"])
 def add_course():
     if request.method == 'POST':
         result = request.json
         if result:
-            course = Course.from_json(result)
             try:
+                course = Course.from_json(result)
                 get_db().add_course(course)
+                resp = make_response({}, 201)
+                return resp
             except Exception as e:
                 flash("could not add Course")
                 abort(409)
-    try:            
-        courses = get_db().get_courses()
-        json_courses = [course.to_json() for course in courses]
-        return jsonify(json_courses)
-    except:
-        flash("Could not fetch Courses")
+    elif request.method == "GET":
+        try:            
+            courses, prev_page, next_page = get_db().get_courses(page_num = 1, page_size = 10)            
+            json_courses = {
+                "previous_page" : prev_page,
+                "next_page": next_page,
+                "results" : [course.to_json() for course in courses]}
+            return jsonify(json_courses)
+        except Exception as e:
+            flash("Could not fetch Courses" + str(e))
+            abort(404)
+        
+    
+
+
 
 @bp.route("/update-course", methods = ["GET","PUT"])
 def update_course():

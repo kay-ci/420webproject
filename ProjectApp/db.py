@@ -55,15 +55,24 @@ class Database:
         return oracledb.connect(user=os.environ['DBUSER'], password=os.environ['DBPWD'],
                                              host="198.168.52.211", port=1521, service_name="pdbora19c.dawsoncollege.qc.ca")
         
-    def get_courses(self):
+    def get_courses(self, page_num=1, page_size=50):
+        courses = []
+        prev_page = None
+        next_page = None
+        offset = (page_num - 1) * page_size
         with self.__connection.cursor() as cursor:
-            cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses")
+            cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses offset :offset rows fetch next :page_size rows only",
+                            offset = offset,
+                            page_size = page_size)
             results = cursor.fetchall()
-            courses = []
             for row in results:
                 course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
                 courses.append(course)
-            return courses
+        if page_num > 1:
+            prev_page = page_num - 1
+        if len(courses) > 0 and (len(courses) >= page_size):
+            next_page = page_num + 1
+        return courses, prev_page, next_page
         
     def get_course(self, id):
         course = None

@@ -56,8 +56,8 @@ class CourseForm(FlaskForm):
     lab_hours = IntegerField('lab_hours', validators=[DataRequired(), NumberRange(min = 0)])
     work_hours = IntegerField('work_hours', validators=[DataRequired(), NumberRange(min = 0)])
     description = StringField('description', validators=[DataRequired(), Length(min = 0, max = 1000)])
-    domain_id = SelectField('domain_id', choices = [], validators=[DataRequired(), NumberRange(min = 0)])
-    term_id = SelectField('term_id', choices = [], validators=[DataRequired(), NumberRange(min = 0)])
+    domain_id = StringField('domain_id', validators=[DataRequired(), NumberRange(min = 0)])
+    term_id = StringField('term_id', validators=[DataRequired(), NumberRange(min = 0)])
     
 class CourseFormPartial(FlaskForm):
     course_title = StringField('course_title', validators=[DataRequired(), Length(min = 0, max = 50)])

@@ -25,13 +25,13 @@ class User(UserMixin):
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import EmailField, PasswordField, StringField, BooleanField
-from wtforms.validators import DataRequired,EqualTo, Regexp
+from wtforms.validators import DataRequired,EqualTo, Regexp, Length
 
 class SignupForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     confirm  = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
-    name = StringField("Name", validators=[DataRequired(), Regexp("^[A-Za-z]+$", message="Name must contain only letters")])
+    name = StringField("Name", validators=[DataRequired(), Regexp("[A-Za-z]", message="Name must contain only letters"), Length(min=1)])
     avatar = FileField("Choose your own avatar!")
 
 class LoginForm(FlaskForm):

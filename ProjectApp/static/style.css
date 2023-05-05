@@ -226,9 +226,13 @@ legend {
 .flash {
     margin: 10px;
 }
-
+.my_forms{
+    text-align: center;
+    margin-top: 10px;
+}
 #out_sent {
     margin: 10px;
+    text-align: center;
 }
 
 #nav_bar {

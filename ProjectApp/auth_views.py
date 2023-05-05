@@ -37,7 +37,7 @@ def signup():
 #@login_required
 def logout():
     logout_user()
-    return redirect(url_for("auth.signup"))
+    return redirect(url_for("home.login_index"))
 
 @bp.route('/avatar/<email>/avatar.png')
 def get_avatar(email):

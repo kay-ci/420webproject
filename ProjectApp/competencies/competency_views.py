@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
-
-from ..courses.courses_element import CourseElement
+from flask_login import login_required
 from .competency import Competency, CompetencyForm, CompleteCompetencyForm
 from ..elements.element import ElementForm, Element
 from ..dbmanager import get_db
@@ -11,12 +10,13 @@ bp = Blueprint("competency", __name__, url_prefix="/competencies")
 def show_competencies():
     try:
         competencies = get_db().get_competencies()
+        return render_template("competencies.html", competencies = competencies[0])
     except:
         flash("Could not load competencies")
         abort(404)
-    return render_template("competencies.html", competencies = competencies)
 
 @bp.route("/add/", methods = ["GET", "POST"])#login required
+@login_required
 def add_competency():
     form = CompleteCompetencyForm()
     if request.method == "POST" and form.validate_on_submit():

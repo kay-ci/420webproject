@@ -26,8 +26,7 @@ class TestAPIDomains(flask_unittest.ClientTestCase):
         resp = client.post("/api/domains", json = domain)
         self.assertEqual(resp.status_code, 201)
         #testing delete
-        id = get_db().get_domain_id()
-        resp = client.delete(f"/api/domains/{str(id)}")
+        resp = client.delete(f"/api/domains/{get_db().get_domain_id()}")
         self.assertEqual(resp.status_code, 204) 
     
     def test_get_domain(self, client):

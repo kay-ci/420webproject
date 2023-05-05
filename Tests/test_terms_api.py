@@ -25,8 +25,7 @@ class TestAPITerms(flask_unittest.ClientTestCase):
         resp = client.post("/api/terms", json = term)
         self.assertEqual(resp.status_code, 201)
         #testing delete
-        id = get_db().get_domain_id()
-        resp = client.delete(f"/api/terms/{str(id)}")
+        resp = client.delete(f"/api/terms/{get_db().get_domain_id()}")
         self.assertEqual(resp.status_code, 204)
     
     def test_get_term(self, client):

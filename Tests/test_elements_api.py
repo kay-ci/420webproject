@@ -26,8 +26,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         resp = client.post("/api/elements", json = element)     
         self.assertEqual(resp.status_code, 201)
         #testing delete
-        id = get_db().get_element_id()
-        resp = client.delete(f"/api/elements/{id}")
+        resp = client.delete(f"/api/elements/{get_db().get_element_id()}")
         self.assertEqual(resp.status_code, 204)
     
     def test_get_element(self, client):

@@ -7,7 +7,7 @@ import os
 from .elements.element import Element
 from .courses.course import Course
 from .terms.term import Term
-from .courses.courses_element import CourseElement
+from .courses.courses_element import CourseElement, CourseElementForm
 
 class Database:
     def __init__(self, autocommit=True):
@@ -415,13 +415,25 @@ class Database:
             raise TypeError("expecting an argument of type int whose value is above 0")
         if not (isinstance(page, int) and page > 0):
             raise TypeError("expecting an argument of type int whose value is above 0")
-        from .courses.courses_element import CourseElement
+        from .courses.courses_element import CourseElement, CourseElementForm
         courses_elements = []
         with self.__get_cursor() as cursor:
             results = cursor.execute(f"select course_id, element_id, element_hours from courses_elements order by course_id offset {page_size * (page-1)} rows fetch next {page_size} rows only")
             for row in results:
                 courses_elements.append(CourseElement(row[0], row[1], float(row[2])))
         return courses_elements
+    
+    def get_course_element(self, course_id, element_id):
+        course_element = None
+        if not isinstance(course_id, str):
+            raise TypeError("expecting a string argument at 2nd position")
+        if not isinstance(element_id, id):
+            raise TypeError("expecting an int argument at 3rd position")   
+        with self.__get_cursor() as cursor:
+            results = cursor.execute(f"select course_id, element_id, hours from courses_elements where course_id = :course_id and element_id = :element_id", course_id = course_id, element_id = element_id) 
+            for row in results:
+                course_element = CourseElement(row[0], row[1], row[3])
+        return course_element
     
     def get_elements_course_ids(self, page_size, page):
         if not (isinstance(page_size, int) and page_size > 0):
@@ -499,6 +511,10 @@ class Database:
     def add_element(self, element):
         if not isinstance(element, Element):
             raise TypeError("Expected Type Element")
+        elements = self.get_competency_elements(element.competency_id)
+        for elementInComp in elements:
+            if elementInComp.element == element.element:
+                raise ValueError("this element name is already part of the associated competency")
         with self.__get_cursor() as cursor:
             cursor.execute("insert into elements(element_order, element, element_criteria, competency_id) values(:element_order, :element, :element_criteria, :competency_id)",
                            element_order = element.element_order,

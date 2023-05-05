@@ -7,12 +7,19 @@ bp = Blueprint("courses_elements", __name__, url_prefix="/courses-elements")
 @bp.route("/", methods = ["GET", "POST"])
 def list_courses_elements(page=1, page_size=10):
     form = CourseElementForm()
+    elements = get_db().get_elements()[0]
+    for element in elements:
+        form.element.choices.append((element.element_id, f"{element.element} ({element.competency_id})"))
     if request.method == "POST" and form.validate_on_submit():
-        new_course_element = CourseElement(form.course_id.data, int(form.element_id.data), float(form.hours.data))
-        try:
+        if get_db().get_course(form.course_id.data) == None:
+            raise ValueError("couldn't find course with that course id")
+        new_course_element = CourseElement(form.course_id.data, form.element.data, float(form.hours.data))
+        if get_db().get_course_element(form.course_id.data, form.element.data) == None:
             get_db().add_courses_element(new_course_element)
-        except ValueError as e:
-            flash(e)
+            flash("successfully added new course element connection")
+        else:
+            get_db().update_courses_element()
+            flash("successfully updated the hours of that course element connection")
     try:
         page = int(request.args["page"])
     except Exception:

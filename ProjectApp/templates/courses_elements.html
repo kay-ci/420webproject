@@ -38,7 +38,7 @@ Courses Elements
         <form method = "post">
             {{form.csrf_token}}
             {{form.course_id.label}}{{form.course_id()}}
-            {{form.element_id.label}}{{form.element_id()}}
+            {{form.element.label}}{{form.element()}}
             {{form.hours.label}}{{form.hours()}}
             <input class="submit" type = "submit"/>
         </form>

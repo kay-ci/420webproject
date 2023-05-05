@@ -38,6 +38,12 @@ def show_search():
                     flash('No matches found.')
                     return render_template('search.html', form=form)
                 return render_template('search.html',form=form,competencies=competencies)
+            elif category == 'elements':
+                elements = get_db().search_elements(match)
+                if len(elements) == 0:
+                    flash('No matches found.')
+                    return render_template('search.html', form=form)
+                return render_template('search.html',form=form,elements=elements)
             else:
                 flash('Category not found.')
     return render_template('search.html', form=form)

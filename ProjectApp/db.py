@@ -331,6 +331,14 @@ class Database:
                 competencies.append(Competency(row[0], row[1], row[2], row[3]))
         return competencies
     
+    def search_elements(self, word):
+        elements = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where contains(element, :word, 1) > 0", word=word)
+            for row in results:
+                elements.append(Element(row[0], row[1], row[2], row[3], row[4]))
+        return elements
+    
     def search_courses(self, word):
         courses = []
         with self.__connection.cursor() as cursor:

@@ -3,7 +3,7 @@
 {% block content%}
         <div>
             <h1>Search</h1>
-            <p id='cat_categories'>Categories: domains,terms,courses and competencies.</p>
+            <p id='cat_categories'>Categories: domains, elements, terms, courses and competencies.</p>
             <form method="POST" action="{{ url_for('search.show_search') }}">
                 {{ form.csrf_token }}
                 {{ form.word.label }} {{ form.word() }}
@@ -38,6 +38,13 @@
                 {% for course in courses%}
                     <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}: {{ course.course_title }}</a></li>
                 {% endfor%}
+            </ul>
+        {% elif elements %}
+            <h2>Elements found:</h2>
+            <ul>
+                {% for element in elements %}
+                    <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element.element_id}}: {{element.element}} {{element.competency_id}}</a></li>
+                {% endfor %}
             </ul>
         {% endif %}
 {% endblock %}

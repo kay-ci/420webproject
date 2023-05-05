@@ -62,7 +62,6 @@ li {
 h1, h2 {
     text-align: left;
     font-family: "Lucida Console";
-    padding: 10px;
     font-family: 'DM Serif Text', serif;
 }
 
@@ -71,6 +70,7 @@ h1 {
 }
 
 h2 {
+    padding: 10px;
     font-size: 1em;
 }
 

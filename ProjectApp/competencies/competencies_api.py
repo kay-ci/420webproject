@@ -7,7 +7,7 @@ from flask import Blueprint, jsonify, request, make_response, url_for
 from ..dbmanager import get_db
 from .competency import Competency
 from ..elements.element import Element
-bp = Blueprint('competencies_api', __name__, url_prefix='/api/competencies/')
+bp = Blueprint('competencies_api', __name__, url_prefix='/api/competencies')
 
 @bp.route('/', methods=['GET', 'POST'])
 def competencies_api():
@@ -101,11 +101,3 @@ def competency_api(competency_id):
             return make_response({"description":"could not find competency for this id"}, 404)
         json = get_db().get_competency(competency_id).__dict__
         return make_response(json, 200)
-     
-@bp.route('/<competency_id>/', methods=["GET","POST"])
-def competency_elements_api():
-    pass
-
-@bp.route('/competency_id/<int:element_id>', methods=["GET", "PUT", "DELETE"])
-def competency_element_api():
-    pass

@@ -1,5 +1,5 @@
 #420WebProject
-    https://gitlab.com/server-side-programming/420webproject.git
+https://gitlab.com/server-side-programming/420webproject.git
 ##Group Members List
 1. Simona Georgiana Dragomir
 2. Jimmy Xu, 2138599

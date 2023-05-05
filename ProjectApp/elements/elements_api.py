@@ -71,7 +71,7 @@ def element(element_id):
                 resp = make_response({}, 204)
                 return resp
         except:
-            abort(404)
+            abort(403)
             
     elif request.method == "GET":    
         try:

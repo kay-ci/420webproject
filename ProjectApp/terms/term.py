@@ -15,7 +15,7 @@ class Term:
     def from_json(term_str):
         if not isinstance (term_str, dict):
             raise Exception ("Expected type dict")
-        return Term(None, term_str['name'])
+        return Term(term_str['id'], term_str['name'])
     
 from flask_wtf import FlaskForm 
 from wtforms import StringField, IntegerField

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block contentnotlogedin %}
     <h1>Domain</h1>
     <ul>
         <li>Id: {{domain.domain_id}}</li>
@@ -14,7 +14,8 @@
             <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
         {% endfor %}
     </ul>
-
+{%endblock%}
+{%block content%}
     <h1>Modify Domain</h1>
     <form method="post">
         {{form.csrf_token}}

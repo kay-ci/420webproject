@@ -2,7 +2,7 @@
 
 {% block header %}{{competency.competency}}{% endblock %}
 
-{% block content %}
+{% block contentnotlogedin %}
     <h1>Competency</h1>
     <ul>
         <li><b>Id:</b> {{competency.id}}</li>
@@ -22,6 +22,9 @@
         <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element.element_order}} {{element.element}}</a> </li>
         {% endfor %}
     </ul>
+{%endblock%}
+
+{%block content%}
     <h1>Update Competency</h1>
     <form method="post">
         {{competency_form.csrf_token}}
@@ -30,6 +33,7 @@
         {{competency_form.competency_type.label}} {{competency_form.competency_type()}}
         <input class="submit" type="submit"/>
     </form>
+
     <h1>Add Element</h1>
     <form method="post">
         {{element_form.csrf_token}}

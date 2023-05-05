@@ -8,7 +8,7 @@ Course Information
 Courses Information
 {% endblock %}
 
-{% block content %}
+{% block contentnotlogedin %}
 <h1>Course</h1>
 <ul class="info_course">
     <li><b>Course ID:</b> {{ course.course_id }}</li>
@@ -36,6 +36,10 @@ Courses Information
     </li>
     {% endfor %}
 </ul>
+
+{%endblock%}
+
+{%block content%}
 <h1>Update Course</h1>
 <form method="post">
     {{ form.csrf_token }}

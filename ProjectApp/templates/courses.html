@@ -8,13 +8,15 @@ Courses List
 Courses List
 {% endblock %}
 
-{% block content%}
+{% block contentnotlogedin%}
     <h1>Courses</h1>
     <ul>
         {% for course in courses%}
             <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}: {{ course.course_title }}</a></li>
         {% endfor%}
     </ul>
+{%endblock%}
+{%block content%}
     <h1>Add Course</h1>
     <form method="post" id="course_form">
         {{ form.csrf_token }}

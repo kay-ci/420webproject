@@ -29,12 +29,18 @@
         <h2 id="user_name">Connected: {{current_user.name}}</h2>
         </div>
         {% endif %}
+        
+        {% block contentnotlogedin%}
+        {% endblock%}
+
+        {% if current_user.is_authenticated %}
+            {% block content%}
+            {% endblock%}
+        {% endif %}
         <section id="flash_messages">
             {% for message in get_flashed_messages() %}
                 <div class="flash"> {{message}} </div>
             {% endfor %}
         </section>
-        {% block content%}
-        {% endblock%}
     </body>
 </html>

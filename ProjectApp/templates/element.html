@@ -2,7 +2,7 @@
 
 {% block header %}Element Information{% endblock %}
 
-{% block content %}
+{% block contentnotlogedin %}
     <section id= "element_info">
         <h1>Element</h1>
         <ul>
@@ -12,6 +12,8 @@
             <li><a href="{{url_for('competency.show_competency', id = element.competency_id)}}"><b>Competency ID:</b> {{element.competency_id}}</a></li>
         </ul>
     </section>
+{%endblock%}
+{%block content%}
     <h1>Edit Element</h1>
     <section clas = "element_form">
         <form method="post">

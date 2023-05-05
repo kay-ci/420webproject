@@ -2,14 +2,14 @@
 
 {% block header %}Competencies{% endblock %}
 
-{% block content %}
+{% block contentnotlogedin %}
     <h1>Competencies</h1>
     <ul>
         {% for competency in competencies %}
         <li><a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
         {% endfor %}
     </ul>
-
+{% endblock%}
+{%block content%}
     <p><a href="{{url_for('competency.add_competency')}}">Add a Competency</a></p>
-
 {% endblock %}

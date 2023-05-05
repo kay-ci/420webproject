@@ -2,7 +2,7 @@
 
 {% block header %}{{term.id}}{% endblock %}
 
-{% block content %}
+{% block contentnotlogedin %}
     <h1>Term {{term.id}}</h1>
     <ul>
         <li><b>Semester:</b> {{term.name}}</li>
@@ -14,6 +14,8 @@
             </ul>
         </li>
     <ul>
+{%endblock%}
+{%block content%}
     <h2>Edit Term</h2>
     <form method="post">
         {{form.csrf_token}}

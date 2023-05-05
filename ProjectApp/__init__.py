@@ -36,6 +36,9 @@ def create_app(test_config=None):
     
     from .courses.courses_elements_views import bp as courses_elements_bp
     app.register_blueprint(courses_elements_bp)
+    
+    from .courses.courses_elements_api import bp as courses_elements_api_bp
+    app.register_blueprint(courses_elements_api_bp)
  
     from .domains.domain_views import bp as domain_bp
     app.register_blueprint(domain_bp)

@@ -18,8 +18,17 @@ class CourseElement:
         return f'CourseElement({self.course_id}, {self.element_id}, {self.hours})'
     def __str__(self):
         return f'{self.course_id} {self.element_id} {self.hours}'
-    def to_json():
-        pass
+    def to_json(self):
+        course_json = self.course.__dict__
+        element_json = self.element.__dict__
+        json = {"course_id": self.course_id,
+                "element_id":self.element_id,
+                "course":course_json,
+                "element":element_json,
+                "hours":self.hours,
+                "calculated_total_hours":self.calculated_total_hours
+                }
+        return json
     def from_json(course_element_str):
         if not isinstance (course_element_str, dict):
             raise Exception ("Expected type dict")

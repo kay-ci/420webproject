@@ -417,11 +417,37 @@ class Database:
             raise TypeError("expecting an argument of type int whose value is above 0")
         from .courses.courses_element import CourseElement
         courses_elements = []
+        prev_page = None
+        next_page = None
+        offset = (page -1)*page_size
         with self.__get_cursor() as cursor:
             results = cursor.execute(f"select course_id, element_id, element_hours from courses_elements order by course_id offset {page_size * (page-1)} rows fetch next {page_size} rows only")
             for row in results:
                 courses_elements.append(CourseElement(row[0], row[1], float(row[2])))
-        return courses_elements
+        if page > 1:
+            prev_page = page - 1
+        if len(courses_elements) > 0 and (len(courses_elements) >= page_size):
+            next_page = page + 1
+        return courses_elements, prev_page, next_page
+    
+    def get_courses_element(self, course_id, element_id):
+        if not isinstance(course_id, str):
+            raise TypeError("expecting a string id")
+        courses_element = None
+        with self.__get_cursor() as cursor:
+            results = cursor.execute(f"select course_id, element_id, element_hours from courses_elements where course_id = :course_id and element_id = :element_id", course_id = course_id, element_id = element_id)
+            for row in results:
+                courses_element = CourseElement(row[0], row[1], float(row[2]))
+        return courses_element
+    
+    def delete_courses_element(self, course_id, element_id):
+        if not isinstance(course_id, str):
+            raise TypeError("expecting a string id")
+        isit = self.get_courses_element(course_id, element_id)
+        if isit == None:
+            raise TypeError("should already exist")
+        with self.__get_cursor() as cursor:
+            results = cursor.execute(f"delete from courses_elements where course_id = :course_id and element_id = :element_id", course_id = course_id, element_id = element_id)
     
     def get_elements_course_ids(self, page_size, page):
         if not (isinstance(page_size, int) and page_size > 0):
@@ -446,6 +472,7 @@ class Database:
             for row in results:
                 output += row[2]
         return output
+    
     def add_courses_element(self, course_element):
         if not isinstance(course_element, CourseElement):
             raise TypeError("id must be a CourseElement")

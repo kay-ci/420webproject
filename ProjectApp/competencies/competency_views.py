@@ -24,10 +24,14 @@ def add_competency():
         if get_db().get_competency(form.competency_id.data) != None:
             flash("this competency id is already being used")
             return render_template("add_competency.html", form = form)
-        get_db().add_competency(competency)
-        element = Element(None, get_db().get_next_competency_element_order(form.competency_id.data), form.element.data, form.element_criteria.data, form.competency_id.data)
-        get_db().add_element(element)
-        return redirect(url_for('competency.show_competency', id = competency.id))
+        try:
+            get_db().add_competency(competency)
+            element = Element(None, get_db().get_next_competency_element_order(form.competency_id.data), form.element.data, form.element_criteria.data, form.competency_id.data)
+            get_db().add_element(element)
+            return redirect(url_for('competency.show_competency', id = competency.id))
+        except Exception as e:
+            flash(str(e))
+            return redirect(url_for('competency.show_competencies'))
     return render_template("add_competency.html", form = form)
         
             

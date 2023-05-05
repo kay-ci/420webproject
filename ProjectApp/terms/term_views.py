@@ -8,7 +8,8 @@ bp = Blueprint("term", __name__, url_prefix="/terms")
 @bp.route("/")
 def show_terms():
     try:
-        terms = get_db().get_terms()
+        page_num = 1
+        terms, prev_page, next_page = get_db().get_terms(page_num = page_num, page_size = 50)
     except:
         flash("Could not load terms")
         abort(404)

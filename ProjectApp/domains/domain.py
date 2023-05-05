@@ -19,6 +19,13 @@ class Domain:
         value = f'{self.domain_id}: {self.domain}, {self.domain_description}'
         return value
     
+    def to_json(self):
+        return self.__dict__
+    
+    def from_json(domain_str):
+        if not isinstance (domain_str, dict):
+            raise Exception ("Expected type dict")
+        return Domain(domain_str['domain_id'], domain_str['domain'], domain_str['domain_description'])
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
 from wtforms.validators import DataRequired

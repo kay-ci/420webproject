@@ -8,7 +8,7 @@ bp = Blueprint("courses_elements", __name__, url_prefix="/courses-elements")
 def list_courses_elements(page=1, page_size=10):
     form = CourseElementForm()
     if request.method == "POST" and form.validate_on_submit():
-        new_course_element = CourseElement(form.course_id, form.element_id, form.hours)
+        new_course_element = CourseElement(form.course_id.data, int(form.element_id.data), float(form.hours.data))
         try:
             get_db().add_courses_element(new_course_element)
         except ValueError as e:

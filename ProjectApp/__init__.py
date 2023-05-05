@@ -24,11 +24,15 @@ def create_app(test_config=None):
 
     from .competencies.competency_views import bp as competency_bp
     app.register_blueprint(competency_bp)
+    
     from .competencies.competencies_api import bp as competencies_api_bp
     app.register_blueprint(competencies_api_bp)
     
     from .courses.course_views import bp as course_bp
     app.register_blueprint(course_bp)
+    
+    from .courses.courses_api import bp as courses_api
+    app.register_blueprint(courses_api)
     
     from .courses.courses_elements_views import bp as courses_elements_bp
     app.register_blueprint(courses_elements_bp)
@@ -42,6 +46,9 @@ def create_app(test_config=None):
     from .terms.term_views import bp as term_bp
     app.register_blueprint(term_bp)
     
+    from .terms.terms_api import bp as api_term_bp
+    app.register_blueprint(api_term_bp)
+    
     from .auth_views import bp as auth_bp
     app.register_blueprint(auth_bp)
 
@@ -51,8 +58,8 @@ def create_app(test_config=None):
     from .elements.elements_api import bp as elements_api_bp
     app.register_blueprint(elements_api_bp)
     
-    from .elements.element_views import bp as elem_bp1
-    app.register_blueprint(elem_bp1)
+    from .elements.element_views import bp as elem_bp
+    app.register_blueprint(elem_bp)
     
     @app.errorhandler(404)
     def page_not_found(error):

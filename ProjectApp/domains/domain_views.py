@@ -10,7 +10,7 @@ bp = Blueprint('domains', __name__, url_prefix='/domains/')
 @bp.route('/', methods=['GET', 'POST']) 
 def show_domains():
     try:
-        domains = get_db().get_domains()
+        domains, prev_page, next_page = get_db().get_domains(page_num=1, page_size=999)
     except Exception as e:
         domains = None
         flash("Could not load domains")

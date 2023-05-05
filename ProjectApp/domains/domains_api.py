@@ -30,7 +30,7 @@ def post_domains():
                 flash("domain with that id not found")
                 abort(404)
     try:            
-        domains, prev_page, next_page = get_db().get_domains(page_num = page_num, page_size = 10)            
+        domains, prev_page, next_page = get_db().get_domains(page_num = page_num, page_size = 2)            
         json_domains = {
             "previous_page" : prev_page,
             "next_page": next_page,

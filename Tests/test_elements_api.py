@@ -64,7 +64,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         
         self.assertEqual(resp.status_code, 201)
         
-    def test_delete_element(self, client):
+    def test_delete_element(self, client): #have to reset db for this to work
         resp = client.get("/api/elements/24")
         self.assertEqual(resp.status_code, 200)
         element = resp.json

@@ -18,9 +18,13 @@ Courses Elements
             {% for course_id in course_ids%}
                 <li><a href="{{url_for('courses.find_course', the_id = course_id)}}">{{course_id}} </a>
                     <ul>
-                        {%for element in elements%}
-                            {% if element.course_id == course_id%}
-                                <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">&#40;Id:{{element.element_id}}&#41; {{element.element.element}}</a> <a href="{{url_for('competency.show_competency', id = element.element.competency_id)}}">&#40;{{element.element.competency_id}}&#41;</a> {{element.hours}} hours</li>
+                        {%for courses_element in courses_elements%}
+                            {% if courses_element.course_id == course_id%}
+                                {%for element in elements%}
+                                    {% if courses_element.element_id == element.element_id%}
+                                        <li><a href="{{url_for('element.show_element', element_id = courses_element.element_id)}}">&#40;Id:{{element.element_id}}&#41; {{element.element.element}}</a> <a href="{{url_for('competency.show_competency', id = element.competency_id)}}">&#40;Id:{{element.competency_id}}&#41;</a> {{courses_element.hours}} hours</li>
+                                    {% endif%}
+                                {% endfor %}
                             {% endif%}
                         {% endfor %}
                     </ul>

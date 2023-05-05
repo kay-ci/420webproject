@@ -5,6 +5,7 @@ import requests
 
 class TestAPIElements(flask_unittest.ClientTestCase):
     app = create_app()
+    #tests run in alphabetical order
     def testA_get_elements(self, client):
         resp = client.get("/api/courses/")
         self.assertEqual(resp.status_code, 200)

@@ -4,9 +4,9 @@ class Domain:
         if not(domain_id == None or isinstance(domain_id, int)):
             raise Exception("domain id must be a number")
         if not isinstance(domain, str):
-            raise Exception("course title must be a string")
+            raise Exception("domain must be a string")
         if not isinstance(domain_description, str):
-            raise Exception("theory hours must be a string")
+            raise Exception("domain description must be a string")
 
         self.domain_id = domain_id
         self.domain = domain

@@ -4,14 +4,16 @@
         <section id="edit_section">
             <h1 id='title_edit'>User Editing</h1>
             <fieldset id='field_users'>
-                <form  method="POST" id="edit_form">
+                <form  method="POST" id="edit_form" enctype="multipart/form-data">
                     {{ form.csrf_token }}
-                    {{ form.email.label }} {{ form.email }}
                     {{ form.name.label }} {{ form.name }}
                     {{ form.avatar_path.label }} {{ form.avatar_path() }}
-                    {{ form.password.label }} {{ form.password }}
                     <input class="submit" type="submit" />
                 </form>
             </fieldset>
+            <div id='pwd_container'>
+                <p id='member_p'>To change the member's password</p>
+                <a href="{{ url_for('users.edit_user_password', email=userChosen.email) }}">Click Here</a> 
+            </div>
         </section>    
 {% endblock %}

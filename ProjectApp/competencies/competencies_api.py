@@ -7,7 +7,7 @@ from flask import Blueprint, jsonify, request, make_response, url_for
 from ..dbmanager import get_db
 from .competency import Competency
 from ..elements.element import Element
-bp = Blueprint('competencies_api', __name__, url_prefix='/api/competencies/')
+bp = Blueprint('competencies_api', __name__, url_prefix='/api/competencies')
 
 @bp.route('/', methods=['GET', 'POST'])
 def competencies_api():
@@ -46,6 +46,8 @@ def competencies_api():
 
 @bp.route('/<competency_id>', methods = ["GET", "PUT", "DELETE"])
 def competency_api(competency_id):
+    if len(competency_id) > 4:
+        return make_response({"description":"competency id has a max length of 4 characters"}, 404)
     if request.method == "DELETE":
         try:
             get_db().delete_competency(competency_id)
@@ -87,19 +89,15 @@ def competency_api(competency_id):
                     if competency_json["competency_type"] != "Mandatory" and competency_json["competency_type"] != "Optional":
                         return make_response({"description":"competency_type has to be 'Mandatory' or 'Optional'"}, 400)
                     competency.competency_type = competency_json["competency_type"]
-                get_db().update_competency(competency)#if id already used, will return 400 with str(e)
+                competency = Competency.from_json_without_id(competency_json, competency_id)
+                get_db().update_competency(competency.id, competency.competency, competency.competency_achievement, competency.competency_type)#if id already used, will return 400 with str(e)
                 resp = make_response({}, 201)
                 resp.headers["Location"] = url_for("competencies_api.competency_api", competency_id = competency_id)
                 return resp
             except ValueError as e:
                 return make_response({"description":str(e)}, 400)
     elif request.method == "GET":
-        pass
-     
-@bp.route('/<competency_id>/', methods=["GET","POST"])
-def competency_elements_api():
-    pass
-
-@bp.route('/competency_id/<int:element_id>', methods=["GET", "PUT", "DELETE"])
-def competency_element_api():
-    pass
+        if get_db().get_competency(competency_id) == None:
+            return make_response({"description":"could not find competency for this id"}, 404)
+        json = get_db().get_competency(competency_id).__dict__
+        return make_response(json, 200)

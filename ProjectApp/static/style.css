@@ -20,10 +20,9 @@ form {
 }
 .options_admin {
     display: inline-block;
-    margin-left: 3%;
-    width: 10%;
+    margin-left: 1%;
+    width: 17%;
     height: 5.5%;
-    padding: 3px;
 }
 #user_buttons {
     text-align: right;
@@ -132,7 +131,9 @@ a:active.delete_button {
     text-align:center;
     font-family: 'Lucida Sans';
 }
-
+#pwd_container {
+    text-align: center;
+}
 #txt404 {
     font-size:30px;
     text-align:center;
@@ -232,11 +233,15 @@ legend {
     height: 9%;
     border: solid white thin;
     padding: 3px;
+    border-radius: 15px;
 }
 #field_users {
    width: 35%;
    margin: auto;
    border-radius: 3%;
+}
+#field_users_p {
+    margin-left: 10px;
 }
 .users_listed {
     list-style: none;
@@ -244,12 +249,28 @@ legend {
 .users_listed li {
     margin: 0;
 }
-#flash_messages{
-    color: red;
+#user_desc {
+    text-align:center;
 }
 #title_edit {
     text-align: center;
 }
 #edit_form {
     width: 80%;
+}
+#member_p {
+    display: inline;
+}
+#field_pwd {
+    margin: auto;
+    text-align: center;
+    width: 30%;
+    border-radius: 10px;
+}
+#field_pwd input {
+    margin-left: 0;
+    width: 320%;
+}
+#flash_messages{
+    color: red;
 }

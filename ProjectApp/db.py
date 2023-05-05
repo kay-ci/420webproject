@@ -142,9 +142,9 @@ class Database:
     def get_domain(self, domain_id):
         domain = None
         with self.__connection.cursor() as cursor:
-            results = cursor.execute('select domain, domain_description from domains where domain_id=:id', id=domain_id)
+            results = cursor.execute('select domain_id, domain, domain_description from domains where domain_id=:id', id=domain_id)
             for row in results:
-                domain = Domain(domain_id,row[0],row[1])
+                domain = Domain(row[0],row[1],row[2])
         return domain
             
     def add_domain(self, domain):
@@ -164,9 +164,26 @@ class Database:
                 domains.append(domain)
         return domains
     
+    def get_domains_api(self, page_num=1, page_size=50):
+        domains = []
+        prev_page = None
+        next_page = None
+        offset = (page_num -1)*page_size
+        with self.__connection.cursor() as cursor:
+            result = cursor.execute('select domain_id, domain, domain_description from domains order by domain_id offset :offset rows fetch next :page_size rows only', offset=offset, page_size=page_size)
+            for row in result:
+                domain = Domain(row[0],row[1], row[2])
+                domains.append(domain)
+        if page_num > 1:
+            prev_page = page_num -1
+        if len(domains) > 0 and (len(domains) >= page_size):
+            next_page = page_num+1
+        return domains, prev_page, next_page
+
+    
     def update_domain(self, domain):
         if not isinstance(domain, Domain):
-            raise TypeError("expecting an arugment of type Domain")
+            raise TypeError("expecting an argument of type Domain")
         if self.get_domain(domain.domain_id) == None:
             raise ValueError("can't find domain with this id")
         with self.__get_cursor() as cursor:
@@ -240,6 +257,18 @@ class Database:
             cursor.execute("update USERS set member_type = :new_member_type where email=:email",
                            new_member_type = 'member',
                            email = user.email)
+    
+    def promote_super_user(self, user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
+                           new_member_type = 'super_admin',
+                           email = user.email)
+
+    def block_user(self,user):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set member_type = :new_member_type where email=:email",
+                           new_member_type = 'blocked',
+                           email = user.email)
 
     def delete_user(self, user):
         with self.__get_cursor() as cursor:
@@ -261,7 +290,28 @@ class Database:
         if len(posts) > 0 and (len(posts) >= page_size):
             next_page = page_num+1
         return posts, prev_page, next_page
-
+    
+    def update_user_name(self,user,name):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set name = :name where email=:email",
+                           name = name,
+                           email = user.email)
+            
+    def update_user_email(self,user,email):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set email =: email where id=:id",
+                           email = email,
+                           id = user.id)
+            
+    def update_user_avatar():
+        pass
+    
+    def update_user_password(self,user,password):
+        with self.__get_cursor() as cursor:
+            cursor.execute("update USERS set password = :password where id=:id",
+                           password = password,
+                           id = user.id)
+            
     def get_competencies(self, page_num=1, page_size=999):
         output = []
         prev_page = None

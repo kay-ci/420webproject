@@ -387,4 +387,3 @@ CREATE OR REPLACE PACKAGE BODY courses_package IS
 END courses_package;
 /
 
-COMMIT;

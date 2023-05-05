@@ -1,6 +1,9 @@
 --calling table drops
 @remove.sql
 
+--removing indexes
+@remove_indexes.sql
+
 --adding objects
 @project_type.sql
 
@@ -42,6 +45,7 @@ create table courses_elements (course_id REFERENCES courses(course_id) ON DELETE
                                 element_id REFERENCES elements(element_id) ON DELETE CASCADE, 
                                 element_hours number NOT NULL);
 
+--calling creation of the users table with instructor user.
 @users.sql
 
 --calling creation of sample data
@@ -55,3 +59,8 @@ create table courses_elements (course_id REFERENCES courses(course_id) ON DELETE
 
 --adding package
 @courses_package.sql
+
+--adding indexes
+@indexes.sql
+
+

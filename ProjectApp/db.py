@@ -299,15 +299,55 @@ class Database:
             cursor.execute("update USERS set email =: email where id=:id",
                            email = email,
                            id = user.id)
-            
-    def update_user_avatar():
-        pass
     
     def update_user_password(self,user,password):
         with self.__get_cursor() as cursor:
             cursor.execute("update USERS set password = :password where id=:id",
                            password = password,
                            id = user.id)
+    
+    def search_domains(self, word):
+        domains = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute('select domain_id, domain, domain_description from domains where contains(domain_description, :word, 1) > 0', word=word)
+            for row in results:
+                domain = Domain(row[0],row[1],row[2])
+                domains.append(domain)
+        return domains
+    
+    def search_terms(self, word):
+        terms = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select term_id, term_name from terms where contains(term_name, :word, 1) > 0", word=word)
+            for row in results:
+                terms.append(Term(row[0], row[1]))
+        return terms
+    
+    def search_competencies(self, word):
+        competencies = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies where contains(competency, :word, 1) > 0", word=word)
+            for row in results:
+                competencies.append(Competency(row[0], row[1], row[2], row[3]))
+        return competencies
+    
+    def search_elements(self, word):
+        elements = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where contains(element, :word, 1) > 0", word=word)
+            for row in results:
+                elements.append(Element(row[0], row[1], row[2], row[3], row[4]))
+        return elements
+    
+    def search_courses(self, word):
+        courses = []
+        with self.__connection.cursor() as cursor:
+            cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses where contains(description, :word, 1) > 0", word=word)
+            results = cursor.fetchall()
+            for row in results:
+                course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
+                courses.append(course)
+            return courses
             
     def get_competencies(self, page_num=1, page_size=999):
         output = []
@@ -545,8 +585,10 @@ class Database:
             cursor.execute("delete from elements where element_id = :id", id = element_id)
             results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
             for row in results:
+                self.update_element(row[0], row[1]-1, row[2], row[3])
                 updated_element = Element(row[0], row[1]-1, row[2], row[3], row[4])
                 self.update_element(updated_element)
+                
     def get_terms(self, page_num=1, page_size=50):
         terms = []
         prev_page = None

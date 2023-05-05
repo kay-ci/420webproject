@@ -13,6 +13,8 @@
                     {{ form.avatar.label }} {{ form.avatar() }}
                     <input class="submit" type="submit" />
                 </form>
+                <p>Already have an account?</p>
+                <a href={{url_for('home.login_index')}}>Log In</a>
             </fieldset>
         </section>    
 {% endblock %}

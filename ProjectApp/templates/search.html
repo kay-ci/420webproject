@@ -1,0 +1,50 @@
+{%extends 'base.html' %}
+    {% block title %}Search{% endblock %}
+{% block content%}
+        <div>
+            <h1>Search</h1>
+            <p id='cat_categories'>Categories: domains, elements, terms, courses and competencies.</p>
+            <form method="POST" action="{{ url_for('search.show_search') }}">
+                {{ form.csrf_token }}
+                {{ form.word.label }} {{ form.word() }}
+                {{ form.category.label }} {{ form.category() }}
+                <input class="submit" type="submit" />
+            </form>                      
+        </div>
+        {% if domains %}
+            <h2>Domains found:</h2>
+            <ul>
+                {% for domain in domains %}
+                    <li><a href ="{{url_for('domains.show_domain', id = domain.domain_id)}}">{{domain.domain}}</a></li>
+                {% endfor %}
+            </ul>
+        {% elif terms %}
+            <h2>Terms found:</h2>
+            <ul>
+                {% for term in terms %}
+                    <li><a href="{{url_for('term.show_term', id = term.id)}}">{{term}}</a></li>
+                {% endfor %}
+            </ul>
+        {% elif competencies %}
+            <h2>Competencies found:</h2>
+            <ul>
+                {% for competency in competencies %}
+                    <li><a href="{{url_for('competency.show_competency', id = competency.id)}}">{{competency.id}}: {{competency.competency}}</a></li>
+                {% endfor %}
+            </ul>
+        {% elif courses %}
+            <h2>Courses found:</h2>
+            <ul>
+                {% for course in courses%}
+                    <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}: {{ course.course_title }}</a></li>
+                {% endfor%}
+            </ul>
+        {% elif elements %}
+            <h2>Elements found:</h2>
+            <ul>
+                {% for element in elements %}
+                    <li><a href="{{url_for('element.show_element', element_id = element.element_id)}}">{{element.element_id}}: {{element.element}} {{element.competency_id}}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+{% endblock %}

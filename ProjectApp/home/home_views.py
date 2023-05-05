@@ -17,11 +17,12 @@ def login_index():
             user = get_db().get_user(email)
             if user:
                 if user.member_type == 'blocked':
-                    return render_template('userBlocked.html',form=form)
+                    return render_template('userBlocked.html', form=form)
                 # Check password
                 pwd = form.password.data
                 if check_password_hash(user.password, pwd):
-                    login_user(user, remember=form.remember_me.data)
+                    remember_me = form.remember_me.data
+                    login_user(user, remember=remember_me)
                     return redirect(url_for('courses.list_courses'))
                 else:
                     flash("Invalid information")

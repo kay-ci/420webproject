@@ -1,4 +1,5 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, url_for
+import oracledb
 from ProjectApp.dbmanager import get_db
 from .course import Course, CourseForm, CourseFormPartial
 
@@ -21,7 +22,7 @@ def list_courses():
             courses, prev_page, next_page = get_db().get_courses()
             return render_template('courses.html', form = form, courses = courses)
         return redirect(url_for('courses.list_courses'))
-    except Exception as e:
+    except oracledb.Exception as e:
         return render_template('404.html')
 
 @bp.route("/<the_id>/", methods=['GET', 'POST'])

@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, request, jsonify, flash, make_response, url_for
+from flask import Blueprint, request, jsonify, flash, make_response, url_for
 from .element import Element
 from ..dbmanager import get_db
 bp = Blueprint("element-api", __name__, url_prefix="/api/elements")
@@ -18,8 +18,7 @@ def post_elements():
                 resp.headers["Location"] = url_for("element-api.element", element_id = element_id)
                 return resp
             except Exception as e:
-                flash("could not add element")
-                abort(409)
+                return make_response({"description":"could not add element"}, 409)
     elif request.method == "GET":
         if request.args:
             page = request.args.get("page")
@@ -27,8 +26,7 @@ def post_elements():
                 if page:
                     page_num = int(page)
             except:
-                flash("element with that id not found")
-                abort(404)
+                return make_response({"description":"element with that id not found"}, 404)
     try:            
         elements, prev_page, next_page = get_db().get_elements(page_num = page_num, page_size = 10)            
         json_elements = {
@@ -37,8 +35,7 @@ def post_elements():
             "results" : [element.to_json() for element in elements]}
         return jsonify(json_elements)
     except:
-        flash("could not fetch elements")
-        abort(404)
+        return make_response({"description":"could not fetch elements"}, 404)
         
 @bp.route("/<int:element_id>", methods = [ "DELETE", "PUT", "GET"])
 def element(element_id):
@@ -49,7 +46,7 @@ def element(element_id):
                 element = Element.from_json(json_element)
                 if element.element_id != None:
                     get_db().update_element(element)
-                    resp = make_response({}, 200)
+                    resp = make_response({}, 201)
                     return resp
                 else: 
                     get_db().add_element(element)
@@ -59,8 +56,7 @@ def element(element_id):
                     resp.headers["Location"] = url_for("element-api.element", element_id = element_id)
                     return resp
             except Exception as e:
-                flash("could not add element")
-                abort(409)
+                return make_response({"description":"could not add element"}, 409)
     elif request.method == "DELETE":
         try:
             element = get_db().get_element(int(element_id))
@@ -72,13 +68,13 @@ def element(element_id):
                 resp = make_response({}, 204)
                 return resp
         except:
-            abort(403)
+            return make_response({"description":"Could not delete element"}, 403)
+            
             
     elif request.method == "GET":    
         try:
             element = get_db().get_element(int(element_id))
             return element.to_json()
         except:
-            flash("Invalid ID, make sure url is correct")
-            abort(404)
+            return make_response({"description":"Invalid ID, make sure url is correct"}, 404)
    

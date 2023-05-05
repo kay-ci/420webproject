@@ -14,6 +14,11 @@
             {% if not current_user.is_authenticated %}
             <a class="active" href={{url_for('home.login_index')}}>Log In</a>
             {% endif %}
+            {% if current_user.is_authenticated %}
+            <div id="out_link">
+                <a href={{url_for('auth.logout')}}>Log out:</a> <p id="user_name">   {{current_user.name}}</p>
+            </div>
+            {% endif %}
             <a href={{url_for('competency.show_competencies')}}>Competencies</a>
             <a href={{url_for('domains.show_domains')}}>Domains</a>
             <a href={{url_for('courses_elements.list_courses_elements')}}>Course Elements</a>
@@ -25,23 +30,21 @@
             {% endif %}
             <p id="web_name">Dawson College Database Manager</p>
         </div> 
-        {% if current_user.is_authenticated %}
-        <div id="out_link"><a href={{url_for('auth.logout')}}>Log out</a>
-        <h2 id="user_name">Connected: {{current_user.name}}</h2>
-        </div>
-        {% endif %}
-        
-        {% block contentnotlogedin%}
-        {% endblock%}
-
-        {% if current_user.is_authenticated %}
-            {% block content%}
-            {% endblock%}
-        {% endif %}
         <section id="flash_messages">
             {% for message in get_flashed_messages() %}
                 <div class="flash"> {{message}} </div>
             {% endfor %}
         </section>
+        
+        {% block contentnotlogedin%}
+        {% endblock%}
+
+        {% if current_user.is_authenticated %}
+            <section class = "modify_content">
+                {% block content%}
+                {% endblock%}
+            </section>
+        {% endif %}
+        
     </body>
 </html>

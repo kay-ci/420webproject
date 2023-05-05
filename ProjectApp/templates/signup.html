@@ -2,14 +2,17 @@
     {% block title %}Sign Up{% endblock %}
 {% block contentnotlogedin%}
         <section id="signup_section">
-            <h1>Sign up</h1>
+            <h1 class="my_forms">Sign up</h1>
             <fieldset>
                 <legend>Insert your information</legend>
                 <form method="post" enctype="multipart/form-data">
                     {{ form.csrf_token }}
                     {{ form.email.label }} {{ form.email() }}
                     {{ form.password.label }} {{ form.password() }}
+                    {% for error in form.password.errors %} {{ error }} {% endfor%}
+                    {{ form.confirm.label }} {{ form.confirm() }}
                     {{ form.name.label }} {{ form.name() }}
+                    {% for error in form.name.errors %} {{ error }} {% endfor%}
                     {{ form.avatar.label }} {{ form.avatar() }}
                     <input class="submit" type="submit" />
                 </form>

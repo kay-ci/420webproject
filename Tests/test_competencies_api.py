@@ -4,7 +4,7 @@ from ProjectApp import create_app
 class TestCompetencyAPI(flask_unittest.ClientTestCase):
     app = create_app()
     def test_competencies(self, client):
-        resp = client.get('/api/competencies/')
+        resp = client.get('/api/competencies')
         self.assertEqual(resp.status_code, 200)
         json = resp.json
         self.assertIsNotNone(json)
@@ -18,7 +18,7 @@ class TestCompetencyAPI(flask_unittest.ClientTestCase):
         elements.append({"element":"test-name", "element_criteria":"test criteria"})
         elements.append({"element":"test-name2", "element_criteria":"test criteria2"})
         competency_with_elements["elements"] = elements
-        resp = client.post('/api/competencies/', json=competency_with_elements)
+        resp = client.post('/api/competencies', json=competency_with_elements)
         self.assertEqual(resp.status_code, 201)
 
         resp = client.delete('api/competencies/test')
@@ -31,7 +31,7 @@ class TestCompetencyAPI(flask_unittest.ClientTestCase):
         elements.append({"element":"test-name", "element_criteria":"test criteria"})
         elements.append({"element":"test-name2", "element_criteria":"test criteria2"})
         competency_with_elements["elements"] = elements
-        resp = client.post('/api/competencies/', json=competency_with_elements)
+        resp = client.post('/api/competencies', json=competency_with_elements)
         self.assertEqual(resp.status_code, 201)
 
         competency_with_elements["competency"] = "updated name"
@@ -62,7 +62,7 @@ class TestCompetencyAPI(flask_unittest.ClientTestCase):
         elements.append({"element":"test-name", "element_criteria":"test criteria"})
         elements.append({"element":"test-name2", "element_criteria":"test criteria2"})
         competency_with_elements["elements"] = elements
-        resp = client.post('/api/competencies/', json=competency_with_elements)
+        resp = client.post('/api/competencies', json=competency_with_elements)
         self.assertEqual(resp.status_code, 201)
 
         resp = client.get('api/competencies/test')

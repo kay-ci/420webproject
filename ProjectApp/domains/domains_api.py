@@ -18,8 +18,7 @@ def post_domains():
                 resp.headers["Location"] = url_for("domain-api.domain", domain_id = domain_id)
                 return resp
             except Exception as e:
-                flash("could not add domain")
-                abort(409)
+                return make_response({"description":"could not add domain"}, 409)
     elif request.method == "GET":
         if request.args:
             page = request.args.get("page")
@@ -27,8 +26,7 @@ def post_domains():
                 if page:
                     page_num = int(page)
             except:
-                flash("domain with that id not found")
-                abort(404)
+                return make_response({"description":"domain with that id not found"}, 404)
     try:            
         domains, prev_page, next_page = get_db().get_domains(page_num = page_num, page_size = 2)            
         json_domains = {
@@ -37,8 +35,7 @@ def post_domains():
             "results" : [domain.to_json() for domain in domains]}
         return jsonify(json_domains)
     except:
-        flash("could not fetch domains")
-        abort(404)
+        return make_response({"description":"could not fetch domains"}, 409)
         
 @bp.route("/<int:domain_id>", methods = [ "DELETE", "PUT", "GET"])
 def domain(domain_id):
@@ -59,27 +56,25 @@ def domain(domain_id):
                     resp.headers["Location"] = url_for("domain-api.domain", domain_id = domain_id)
                     return resp
             except Exception as e:
-                flash("could not add domain")
-                abort(409)
+                return make_response({"description":{str(e)}}, 409)
     elif request.method == "DELETE":
         try:
             domain = get_db().get_domain(int(domain_id))
             if domain == None:
-                abort(404)
+                return make_response({"description":"domain not found"}, 404)
             else:
                 get_db().delete_domain(int(domain_id))
                 resp = make_response({}, 204)
                 return resp
         except:
-            abort(403)
+            return make_response({"description":"could not delete"}, 403)
             
     elif request.method == "GET":    
         try:
             domain = get_db().get_domain(int(domain_id))
             return domain.to_json()
         except:
-            flash("Invalid ID, make sure url is correct")
-            abort(404)
+            return make_response({"description":"Invalid ID, make sure url is correct"}, 404)
    
     
     

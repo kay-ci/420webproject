@@ -19,6 +19,7 @@
             <a href={{url_for('courses_elements.list_courses_elements')}}>Course Elements</a>
             <a href={{url_for('term.show_terms')}}>Terms</a>
             <a href={{url_for('courses.list_courses')}}>Courses</a>
+            <a href={{url_for('search.show_search')}}>Search</a>
             {% if current_user.is_authenticated %}
                 <a href={{url_for('users.get_users')}}>Dashboard</a>
             {% endif %}

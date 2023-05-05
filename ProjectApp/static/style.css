@@ -109,6 +109,10 @@ a:active {
     color: aliceblue;
 }
 
+#cat_categories {
+    margin: 10px;
+}
+
 a:link.delete_button, a:visited.delete_button, a:hover.delete_button {
     color: aliceblue;
     font-size: 10px;
@@ -268,3 +272,4 @@ legend {
 #flash_messages{
     color: red;
 }
+

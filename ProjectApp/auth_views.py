@@ -3,7 +3,7 @@ from flask import Blueprint, current_app, flash, redirect, render_template, requ
 from werkzeug.security import generate_password_hash
 from .dbmanager import get_db
 from .users.user import SignupForm, User
-from flask_login import logout_user
+from flask_login import logout_user, login_user, login_required
 
 bp = Blueprint("auth", __name__, url_prefix='/auth/')
 
@@ -22,9 +22,13 @@ def signup():
                 file.save(avatar_path)
                 #what should we do if user doesn't give a file for avatar
             hash = generate_password_hash(form.password.data)
+            if get_db().get_user(form.email.data) != None:
+                flash("this email is already being used")
+                return render_template("signup.html", form = form)
             user = User(form.email.data, hash, form.name.data)
             get_db().insert_user(user)
-            flash("User added")
+            userInserted = get_db().get_user(form.email.data)
+            login_user(userInserted)
             return redirect(url_for('courses.list_courses'))
     return render_template('signup.html', form=form)
 

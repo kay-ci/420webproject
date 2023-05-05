@@ -70,6 +70,6 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         element = resp.json
         self.assertIsNotNone(element)
         
-        resp = client.delete("/api/element/4")
+        resp = client.delete("/api/elements/4")
             
         self.assertEqual(resp.status_code, 204) 

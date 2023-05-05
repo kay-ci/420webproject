@@ -59,3 +59,13 @@ class TestAPITerms(flask_unittest.ClientTestCase):
         resp = client.put("/api/terms/3", json = term)
         
         self.assertEqual(resp.status_code, 201)
+        
+    def test_delete_term(self, client):
+        resp = client.get("/api/terms/5")
+        self.assertEqual(resp.status_code, 200)
+        term = resp.json
+        self.assertIsNotNone(term)
+        
+        resp = client.delete("/api/terms/5")
+            
+        self.assertEqual(resp.status_code, 204) 

@@ -12,7 +12,14 @@ class TestCompetencyAPI(flask_unittest.ClientTestCase):
         self.assertIsNone(json['prev_page'])
 
     def test_post_and_delete_competency(self, client):
-        
+        competency_with_elements = {"id":"test", "competency":"test-name", "competency_achievement":"test-achievement", "competency_type":"Mandatory"}
+        elements = []
+        elements.append({"element":"test-name", "element_criteria":"test criteria"})
+        elements.append({"element":"test-name2", "element_criteria":"test criteria2"})
+        competency_with_elements["elements"] = elements
+        resp = client.post('/api/competencies/', json=competency_with_elements)
+        self.assertEqual(resp.status_code, 201)
+
         resp = client.delete('api/competencies/test')
         self.assertEqual(resp.status_code, 204)
     

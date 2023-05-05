@@ -61,7 +61,21 @@ def competency_api(competency_id):
         if not competency_json:
             return make_response({"description":"expecting a not empty json"}, 400)
         if get_db().get_competency(competency_id) == None:#then we add
-            return make_response({"description":str(e)}, 400)
+            if not competency_json["elements"]:#empty list will match this condition too
+                return make_response({"description":"competencies must be created with elements, expecting elements key for a list of element object with 'element' and 'element_criteria' keys"}, 400)
+            try:
+                competency = Competency.from_json_without_id(competency_json, competency_id)
+                get_db().add_competency(competency)
+                order = 0
+                for element in competency_json["elements"]:
+                    order+=1
+                    element = Element(None, order, element['element'], element['element_criteria'], competency_id)
+                    get_db().add_element(element)
+                resp = make_response({}, 201)
+                resp.headers["Location"] = url_for("competencies_api.competency_api", competency_id = competency_id)
+                return resp
+            except ValueError as e:
+                return make_response({"description":str(e)}, 400)
         else:#if given id corresponds to a competency
             try:
                 competency = get_db().get_competency(competency_id)

@@ -5,7 +5,7 @@ import requests
 
 class TestAPIElements(flask_unittest.ClientTestCase):
     app = create_app()
-    def test_get_elements(self, client):
+    def testA_get_elements(self, client):
         resp = client.get("/api/courses/")
         self.assertEqual(resp.status_code, 200)
         json = resp.json
@@ -13,15 +13,15 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         self.assertIsNone(json["next_page"])
         self.assertIsNone(json["previous_page"])
 
-    def test_get_course(self, client):
+    def testB_get_course(self, client):
         resp = client.get("/api/courses/?id=420-210-DW")
         self.assertEqual(resp.status_code, 200)
     
-    def test_dont_get_course(self, client):
+    def testC_dont_get_course(self, client):
         resp = client.get("/api/courses/show?id=test")
         self.assertEqual(resp.status_code, 404)  
         
-    def test_post_course(self, client):
+    def testD_post_course(self, client):
         resp = client.get('/api/courses/add')
         self.assertEqual(resp.status_code, 200) 
         course1 = Course("1111111111", "any", 3.0, 3.0, 3.0, "any", 1, 1).to_json()
@@ -31,7 +31,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         resp = client.post("/api/courses/add", json = course2)
         self.assertEqual(resp.status_code, 201)
         
-    def test_post_bad_course(self, client):
+    def testE_post_bad_course(self, client):
         resp = client.get('/api/courses/add')
         self.assertEqual(resp.status_code, 200) 
         courses = resp.json
@@ -40,7 +40,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         resp = client.post("/api/courses/add", json = course)
         self.assertEqual(resp.status_code, 409)
         
-    def test_update_course(self, client):
+    def testF_update_course(self, client):
         resp = client.get('/api/courses/update')
         self.assertEqual(resp.status_code, 200) 
         courses = resp.json
@@ -52,7 +52,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         resp = client.put("/api/courses/update", json = course)
         self.assertEqual(resp.status_code, 204)
     
-    def test_delete_course(self, client):
+    def testG_delete_course(self, client):
         resp = client.get('/api/courses/420-110-DW')
         self.assertEqual(resp.status_code, 200)
 
@@ -65,7 +65,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         
         #python -m unittest
 
-    def test_dont_delete_course(self, client):
+    def testH_dont_delete_course(self, client):
         resp = client.get('/api/courses/3333333333')
         self.assertEqual(resp.status_code, 404)
         resp = client.delete("/api/courses/3333333333")

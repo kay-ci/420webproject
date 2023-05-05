@@ -21,16 +21,25 @@ def list_courses_elements(page=1, page_size=10):
     elements = get_db().get_elements()[0]
     for element in elements:
         form.element.choices.append((element.element_id, f"{element.element} ({element.competency_id})"))
-    if request.method == "POST" and form.validate_on_submit():
-        if get_db().get_course(form.course_id.data) == None:
-            raise ValueError("couldn't find course with that course id")
-        new_course_element = CourseElement(form.course_id.data, int(form.element.data), float(form.hours.data))
-        if get_db().get_course_element(form.course_id.data, int(form.element.data)) == None:
-            get_db().add_courses_element(new_course_element)
-            flash("successfully added new course element connection")
+    if request.method == "POST":
+        if form.validate_on_submit():
+            if get_db().get_course(form.course_id.data) == None:
+                raise ValueError("couldn't find course with that course id")
+            try:
+                new_course_element = CourseElement(form.course_id.data, int(form.element.data), float(form.hours.data))
+                if(float(form.hours.data) < 0):
+                    raise Exception()
+            except Exception:
+                flash("your hours is of wrong format")
+                return redirect(url_for('courses_elements.list_courses_elements'))
+            if get_db().get_course_element(form.course_id.data, int(form.element.data)) == None:
+                get_db().add_courses_element(new_course_element)
+                flash("successfully added new course element connection")
+            else:
+                get_db().update_courses_element(new_course_element)
+                flash("successfully updated the hours of that course element connection")
         else:
-            get_db().update_courses_element(new_course_element)
-            flash("successfully updated the hours of that course element connection")
+            flash("something's wrong with the form")
     try:
         page = int(request.args["page"])
     except Exception:

@@ -13,7 +13,6 @@ def get_courses():
             if course:
                 return course.to_json(), 200
             else:
-                flash("course was not found")
                 abort(404)
     try:            
         courses, prev_page, next_page = get_db().get_courses(page_num = page_num, page_size = 10)            
@@ -23,7 +22,6 @@ def get_courses():
             "results" : [course.to_json() for course in courses]}
         return jsonify(json_courses)
     except Exception as e:
-        flash("could not fetch courses")
         abort(404)
 
 @bp.route("/addcourse", methods = ["GET","POST"])
@@ -37,7 +35,6 @@ def add_course():
                 resp = make_response({}, 201)
                 return resp
             except Exception as e:
-                flash("could not add Course")
                 abort(409)
     elif request.method == "GET":
         try:            
@@ -48,7 +45,6 @@ def add_course():
                 "results" : [course.to_json() for course in courses]}
             return jsonify(json_courses)
         except Exception as e:
-            flash("Could not fetch Courses" + str(e))
             abort(404)
         
     

@@ -1,3 +1,4 @@
+from ProjectApp.courses.course import Course
 import flask_unittest
 from ProjectApp import create_app
 import requests
@@ -26,13 +27,14 @@ class TestAPIElements(flask_unittest.ClientTestCase):
     def test_post_course(self, client):
         resp = client.get('/api/courses/addcourse')
         self.assertEqual(resp.status_code, 200) 
-        courses = resp.json
-        course = courses["results"][0]
-        course["course_id"] = "None"
+        # courses = resp.json
+        # course = courses["results"][0]
+        # course["course_id"] = "None"
+        course = Course("1111111111", "any", float(3), float(3), float(3), "any", int(1), int(1)).to_json()
         
         resp = client.post("/api/courses/addcourse", json = course)
         
         self.assertEqual(resp.status_code, 201)
         
-        #feature/display-course-element
+        #python -m unittest
 

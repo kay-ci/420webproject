@@ -36,9 +36,9 @@ class CourseElement:
     
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, DecimalField, SelectField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms.validators import DataRequired, NumberRange, Regexp
 
 class CourseElementForm(FlaskForm):
-    course_id = StringField('Course ID', [DataRequired()])
+    course_id = StringField('Course ID', validators=[DataRequired()])
     element = SelectField('Element', choices = [], validators= [DataRequired()])
-    hours = FloatField('Hours', [DataRequired()])
+    hours = StringField('Hours', validators=[DataRequired()])

@@ -39,7 +39,7 @@ def list_courses_elements(page=1, page_size=10):
         page_size = 10
     if page < 1 or page_size < 1:
         abort(404)
-    return render_template("courses_elements.html", courses_elements = get_db().get_courses_elements(page_size, page), form = form, course_ids = get_db().get_elements_course_ids(page_size, page), page = page, page_size = page_size)
+    return render_template("courses_elements.html", courses_elements = get_db().get_courses_elements(page_size, page), form = form, course_ids= get_db().get_elements_course_ids_with_hours(page_size, page), page = page, page_size = page_size)
     
 #display all elements for a given course
 @bp.route("course/<element_id>/")

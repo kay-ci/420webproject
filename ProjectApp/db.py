@@ -479,7 +479,7 @@ class Database:
         with self.__get_cursor() as cursor:
             cursor.execute("delete from courses_elements where course_id = :course_id AND element_id = :element_id", course_id = course_id, element_id = element_id)
     
-    def get_elements_course_ids(self, page_size, page):
+    def get_elements_course_ids_with_hours(self, page_size, page): 
         if not (isinstance(page_size, int) and page_size > 0):
             raise TypeError("expecting an argument of type int whose value is above 0")
         if not (isinstance(page, int) and page > 0):
@@ -488,7 +488,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute(f"select course_id from (select course_id from courses_elements order by course_id offset {page_size * (page-1)} rows fetch next {page_size} rows only) group by course_id")
             for row in results:
-                courses.append(row[0])
+                courses.append( (row[0], self.calculate_course_hours_from_CLH(row[0]),self.calculate_course_hours(row[0])) )
         return courses
     
     def calculate_course_hours(self, course_id):
@@ -502,6 +502,13 @@ class Database:
             for row in results:
                 output += row[2]
         return output
+    
+    def calculate_course_hours_from_CLH(self, course_id):
+        course = self.get_course(course_id)
+        if course == None:
+            raise ValueError("could not find a course with this id")
+        return 15*(course.theory_hours + course.lab_hours)
+    
     def add_courses_element(self, course_element):
         if not isinstance(course_element, CourseElement):
             raise TypeError("id must be a CourseElement")

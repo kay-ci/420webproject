@@ -5,6 +5,7 @@ drop table competencies cascade constraints;
 drop table courses cascade constraints;
 drop table terms cascade constraints;
 drop table domains cascade constraints;
+drop table users cascade constraints;
 --Logging
 drop table audit_logs cascade constraints;
 

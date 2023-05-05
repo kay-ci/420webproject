@@ -235,6 +235,23 @@ class Database:
     def delete_user(self, user):
         with self.__get_cursor() as cursor:
             cursor.execute("delete from USERS where email=:email", email=user.email)
+
+    def get_posts(self, page_num=1, page_size=50):
+        posts = []
+        prev_page = None
+        next_page = None
+        offset = (page_num -1)*page_size
+        with self.__conn.cursor() as cursor:
+            result = cursor.execute('select title, author, text, tag_line, post_date, id from posts order by post_date offset :offset rows fetch next :page_size rows only', offset=offset, page_size=page_size)
+            for row in result:
+                post = Post(row[0], row[1], row[2].read(), row[3], row[4])
+                post.id = row[5]
+                posts.append(post)
+        if page_num > 1:
+            prev_page = page_num -1
+        if len(posts) > 0 and (len(posts) >= page_size):
+            next_page = page_num+1
+        return posts, prev_page, next_page
     
     def update_user_name(self,user,name):
         with self.__get_cursor() as cursor:
@@ -257,13 +274,20 @@ class Database:
                            password = password,
                            id = user.id)
             
-    def get_competencies(self):
+    def get_competencies(self, page_num=1, page_size=999):
         output = []
+        prev_page = None
+        next_page = None
+        offset = (page_num -1) * page_size
         with self.__connection.cursor() as cursor:
-            results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies")
+            results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies order by competency_id offset :offset rows fetch next :page_size rows only", offset = offset, page_size = page_size)
             for row in results:
                 output.append(Competency(row[0], row[1], row[2], row[3]))
-        return output
+        if page_num > 1:
+            prev_page = page_num - 1
+        if len(output) > 0 and (len(output) >= page_size):
+            next_page = page_num + 1
+        return output, prev_page, next_page
     
     def get_competency(self, id):#might return None
         output = None
@@ -428,6 +452,13 @@ class Database:
             for row in result:
                 element = Element(int(row[0]), int(row[1]), row[2], row[3], row[4])
             return element
+    def get_element_id(self):
+        element_id = None
+        with self.__get_cursor() as cursor:
+            result = cursor.execute("select count (element_id) from elements")
+            for row in result:
+                element_id = row[0]
+        return int(element_id)
         
     def add_element(self, element):
         if not isinstance(element, Element):
@@ -460,7 +491,8 @@ class Database:
             cursor.execute("delete from elements where element_id = :id", id = element_id)
             results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
             for row in results:
-                self.update_element(row[0], row[1]-1, row[2], row[3])
+                updated_element = Element(row[0], row[1]-1, row[2], row[3], row[4])
+                self.update_element(updated_element)
     def get_terms(self):
         output = []
         with self.__connection.cursor() as cursor:

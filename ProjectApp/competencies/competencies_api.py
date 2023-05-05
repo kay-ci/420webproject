@@ -9,7 +9,7 @@ from .competency import Competency
 from ..elements.element import Element
 bp = Blueprint('competencies_api', __name__, url_prefix='/api/competencies')
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('', methods=['GET', 'POST'])
 def competencies_api():
     page_num = 1
     if request.method == 'POST':

@@ -46,6 +46,9 @@ def create_app(test_config=None):
     from .terms.term_views import bp as term_bp
     app.register_blueprint(term_bp)
     
+    from .terms.terms_api import bp as api_term_bp
+    app.register_blueprint(api_term_bp)
+    
     from .auth_views import bp as auth_bp
     app.register_blueprint(auth_bp)
 
@@ -55,8 +58,8 @@ def create_app(test_config=None):
     from .elements.elements_api import bp as elements_api_bp
     app.register_blueprint(elements_api_bp)
     
-    from .elements.element_views import bp as elem_bp1
-    app.register_blueprint(elem_bp1)
+    from .elements.element_views import bp as elem_bp
+    app.register_blueprint(elem_bp)
     
     @app.errorhandler(404)
     def page_not_found(error):

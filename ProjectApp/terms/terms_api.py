@@ -26,7 +26,7 @@ def post_terms():
             if page:
                 page_num = int(page)     
     try:            
-        terms, prev_page, next_page = get_db().get_terms(page_num = page_num, page_size = 10)            
+        terms, prev_page, next_page = get_db().get_terms(page_num = page_num, page_size = 5)            
         json_terms = {
             "previous_page" : prev_page,
             "next_page": next_page,

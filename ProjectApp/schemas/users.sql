@@ -6,4 +6,8 @@ create table users (
     member_type VARCHAR2(30) DEFAULT 'member'
 ); 
 
-INSERT INTO users (email,password,name,member_type) VALUES ('instructor@dawsoncollege.qc.ca','dawson1234', 'Dirk', 'super_admin')
+UPDATE users
+SET MEMBER_TYPE = 'super_admin'
+WHERE email = 'instructor@dawsoncollege.qc.ca';
+
+commit;

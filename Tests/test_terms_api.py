@@ -27,7 +27,7 @@ class TestAPITerms(flask_unittest.ClientTestCase):
         self.assertEqual(resp.status_code, 201)
     
     def test_get_term(self, client):
-        resp = client.get('/api/terms/2')
+        resp = client.get('/api/terms/3')
         self.assertEqual(resp.status_code, 200)
         
         term = resp.json

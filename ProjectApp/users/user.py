@@ -12,7 +12,7 @@ class User(UserMixin):
         self.name= name
         self.password = password
         self.id = None
-        self.member_type = 'member'
+        self.member_type = None
         
     def __repr__(self):
         return f'User({self.name}, {self.email})'
@@ -37,3 +37,10 @@ class LoginForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     remember_me = BooleanField("Remember me")
+    
+class ProfileEdit(FlaskForm):
+    name = StringField("Name:", validators=[DataRequired()])
+    avatar_path = FileField("Select avatar")
+
+class ChangePassword(FlaskForm):
+    password = PasswordField("Password", validators=[DataRequired()])

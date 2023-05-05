@@ -3,6 +3,7 @@
 {% block header %}Add a Competency{% endblock %}
 
 {% block content %}
+    <h1>Add Competency</h1>
     <form method="post">
         {{form.csrf_token}}
         {{form.competency_id.label}} {{form.competency_id()}}
@@ -12,8 +13,7 @@
         <p>A competency must at least have one element, you can add more later (after initial creation of this competency)</p>
         {{form.element.label}} {{form.element()}}
         {{form.element_criteria.label}} {{form.element_criteria()}}
-        {{form.course_number.label}} <a href="{{url_for('courses.list_courses')}}">browse</a>{{form.course_number()}}
         <br/>
-        <input type="submit"/>
+        <input class="submit" type="submit"/>
     </form>
 {% endblock %}

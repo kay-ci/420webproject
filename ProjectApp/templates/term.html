@@ -2,23 +2,26 @@
 
 {% block header %}{{term.id}}{% endblock %}
 
-{% block content %}
+{% block contentnotlogedin %}
     <h1>Term {{term.id}}</h1>
     <ul>
         <li><b>Semester:</b> {{term.name}}</li>
-        <li><b>Courses:</b></li>
-        <ul>
-            {% for course in courses %}
-                <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
-            {% endfor %}
-        </ul>
+        <li><b>Courses:</b>
+            <ul>
+                {% for course in courses %}
+                    <li><a href="{{url_for('courses.find_course', the_id = course.course_id)}}">{{course.course_id}}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
     <ul>
+{%endblock%}
+{%block content%}
     <h2>Edit Term</h2>
     <form method="post">
         {{form.csrf_token}}
         {{form.name.label}} {{form.name()}}
-        <input type="submit"/>
+        <input class="submit"type="submit"/>
     </form>
-    <a href="{{url_for('term.delete_term', id = term.id)}}">Delete Term</a>
+    <a class="delete_button" href="{{url_for('term.delete_term', id = term.id)}}">Delete</a>
 
 {% endblock %}

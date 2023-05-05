@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
+from flask_login import login_required
 from .competency import Competency, CompetencyForm, CompleteCompetencyForm
 from ..elements.element import ElementForm, Element
 from ..dbmanager import get_db
@@ -9,12 +10,13 @@ bp = Blueprint("competency", __name__, url_prefix="/competencies")
 def show_competencies():
     try:
         competencies = get_db().get_competencies()
+        return render_template("competencies.html", competencies = competencies[0])
     except:
         flash("Could not load competencies")
         abort(404)
-    return render_template("competencies.html", competencies = competencies)
 
 @bp.route("/add/", methods = ["GET", "POST"])#login required
+@login_required
 def add_competency():
     form = CompleteCompetencyForm()
     if request.method == "POST" and form.validate_on_submit():
@@ -22,10 +24,14 @@ def add_competency():
         if get_db().get_competency(form.competency_id.data) != None:
             flash("this competency id is already being used")
             return render_template("add_competency.html", form = form)
-        get_db().add_competency(competency)
-        element = Element(None, get_db().get_next_competency_element_order(form.competency_id.data), form.element.data, form.element_criteria.data, form.competency_id.data)
-        get_db().add_element(element)
-        return redirect(url_for('competency.show_competency', id = competency.id))
+        try:
+            get_db().add_competency(competency)
+            element = Element(None, get_db().get_next_competency_element_order(form.competency_id.data), form.element.data, form.element_criteria.data, form.competency_id.data)
+            get_db().add_element(element)
+            return redirect(url_for('competency.show_competency', id = competency.id))
+        except Exception as e:
+            flash(str(e))
+            return redirect(url_for('competency.show_competencies'))
     return render_template("add_competency.html", form = form)
         
             

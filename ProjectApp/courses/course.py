@@ -42,7 +42,7 @@ class Course:
     def from_json(course_str):
         if not isinstance (course_str, dict):
             raise Exception ("Expected type dict")
-        return Course(None, course_str['course_id'], course_str['course_title'], course_str['theory_hours'], course_str['lab_hours'], course_str['work_hours'], course_str['description'], course_str['domain_id'], course_str['term_id'])
+        return Course(course_str['course_id'], course_str['course_title'], course_str['theory_hours'], course_str['lab_hours'], course_str['work_hours'], course_str['description'], course_str['domain_id'], course_str['term_id'])
 
     
 from flask_wtf import FlaskForm

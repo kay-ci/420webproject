@@ -9,6 +9,7 @@
         </ul>
 {%endblock%}
 {%block content%}
+<h1>Add Domain</h1>
         <form method = "post">
           {{form.csrf_token}}
           {{form.domain.label}} {{form.domain()}}

@@ -25,8 +25,9 @@
             <p id="web_name">Dawson College Database Manager</p>
         </div> 
         {% if current_user.is_authenticated %}
-        <div id="out_link"><a href={{url_for('auth.logout')}}>Log out</a><div>
+        <div id="out_link"><a href={{url_for('auth.logout')}}>Log out</a>
         <h2 id="user_name">Connected: {{current_user.name}}</h2>
+        </div>
         {% endif %}
         <section id="flash_messages">
             {% for message in get_flashed_messages() %}

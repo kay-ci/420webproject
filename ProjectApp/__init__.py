@@ -34,6 +34,8 @@ def create_app(test_config=None):
     from .domains.domain_views import bp as domain_bp
     app.register_blueprint(domain_bp)
     
+    from .domains.domains_api import bp as domain_bp_api
+    app.register_blueprint(domain_bp_api)
     
     from .terms.term_views import bp as term_bp
     app.register_blueprint(term_bp)
@@ -46,6 +48,7 @@ def create_app(test_config=None):
     
     from .elements.elements_api import bp as elements_api
     app.register_blueprint(elements_api)
+    
     from .elements.element_views import bp as elem_bp
     app.register_blueprint(elem_bp)
     

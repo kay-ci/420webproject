@@ -1,5 +1,6 @@
 from flask import (Blueprint, render_template, 
                    url_for, redirect, abort, flash, request)
+from flask_login import login_required
 from ProjectApp.dbmanager import get_db
 from ProjectApp.domains.domain import Domain, DomainForm
 from datetime import datetime
@@ -39,6 +40,7 @@ def show_domain(id):
     return render_template("domain.html", domain = domain, form = form, courses = get_db().get_domain_courses(id))
 
 @bp.route("/delete/<int:id>")
+#@login_required
 def delete_domain(id):
     if not isinstance(id, int):
         flash("could not find domain with this id")

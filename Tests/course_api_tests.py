@@ -1,7 +1,6 @@
 from ProjectApp.courses.course import Course
 import flask_unittest
 from ProjectApp import create_app
-import requests
 
 class TestAPIElements(flask_unittest.ClientTestCase):
     app = create_app()

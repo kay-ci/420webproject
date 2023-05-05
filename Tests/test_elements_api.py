@@ -49,7 +49,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         
         resp = client.put("/api/elements/2", json = element)
         
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, 201)
         self.assertEqual(element["element_id"], 2)
         self.assertEqual(element["element_criteria"],"Best New Criteria!")
         

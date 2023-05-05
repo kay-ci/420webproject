@@ -34,6 +34,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired, Length
 class ElementForm(FlaskForm):
-    element = StringField('Element', validators=[DataRequired(), Length(min=10, max=250)])
-    element_criteria = StringField('Element criteria', validators=[DataRequired(), Length(min=10, max=250)])
+    element = StringField('Element', validators=[DataRequired(), Length(min=5, max=250)])
+    element_criteria = StringField('Element criteria', validators=[DataRequired(), Length(min=5, max=250)])
         

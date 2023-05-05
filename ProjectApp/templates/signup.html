@@ -8,7 +8,6 @@
                 <form method="post" enctype="multipart/form-data">
                     {{ form.csrf_token }}
                     {{ form.email.label }} {{ form.email() }}
-                    {% for error in form.email.errors %} {{ error }} {% endfor%}
                     {{ form.password.label }} {{ form.password() }}
                     {% for error in form.password.errors %} {{ error }} {% endfor%}
                     {{ form.confirm.label }} {{ form.confirm() }}

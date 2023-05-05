@@ -41,8 +41,8 @@ from wtforms.validators import DataRequired, Length
     
 class CompetencyForm(FlaskForm):
     competency_id = StringField('competency id', validators=[DataRequired(), Length(min = 4, max = 4)])
-    competency = StringField('competency title', validators=[DataRequired(), Length(max = 250)])
-    competency_achievement = TextAreaField('competency achievement', validators=[DataRequired(), Length(max = 500)])
+    competency = StringField('competency title', validators=[DataRequired(), Length(min = 5, max = 250)])
+    competency_achievement = TextAreaField('competency achievement', validators=[DataRequired(), Length(min = 10,max = 500)])
     competency_type = SelectField('competency type', choices=[("mandatory"),("optional")], validators=[DataRequired()])
 
 class CompleteCompetencyForm(CompetencyForm):

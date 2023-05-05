@@ -27,11 +27,11 @@ class Domain:
             raise Exception ("Expected type dict")
         return Domain(domain_str['domain_id'], domain_str['domain'], domain_str['domain_description'])
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms import StringField
+from wtforms.validators import DataRequired, Length
     
 class DomainForm(FlaskForm):
-    domain = StringField('Name', validators=[DataRequired()])
-    domain_description = StringField('Description', validators=[DataRequired()])
+    domain = StringField('Name', validators=[DataRequired(), Length(min=5, max=50)])
+    domain_description = StringField('Description', validators=[DataRequired(), Length(min=10, max=500)])
 
 

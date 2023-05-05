@@ -155,16 +155,7 @@ class Database:
         with self.__connection.cursor() as cursor:
             cursor.execute('insert into domains (domain, domain_description) values (:domain, :domain_description)', domain = domain.domain, domain_description = domain.domain_description)
     
-    def get_domains(self):
-        domains = []
-        with self.__connection.cursor() as cursor:
-            result = cursor.execute('select domain_id, domain, domain_description from domains order by domain_id')
-            for row in result:
-                domain = Domain(row[0],row[1],row[2])
-                domains.append(domain)
-        return domains
-    
-    def get_domains_api(self, page_num=1, page_size=50):
+    def get_domains(self, page_num=1, page_size=50):
         domains = []
         prev_page = None
         next_page = None
@@ -180,6 +171,12 @@ class Database:
             next_page = page_num+1
         return domains, prev_page, next_page
 
+    def get_domain_id(self):
+        with self.__get_cursor() as cursor:
+            result = cursor.execute("select max (domain_id) from domains")
+            for row in result:
+                element_id = row[0]
+        return int(element_id)
     
     def update_domain(self, domain):
         if not isinstance(domain, Domain):
@@ -494,7 +491,7 @@ class Database:
             return element
     def get_element_id(self):
         with self.__get_cursor() as cursor:
-            result = cursor.execute("select count (element_id) from elements")
+            result = cursor.execute("select max (element_id) from elements")
             for row in result:
                 element_id = row[0]
         return int(element_id)
@@ -575,7 +572,7 @@ class Database:
     
     def get_term_id(self):
         with self.__get_cursor() as cursor:
-            result = cursor.execute("select count (term_id) from terms")
+            result = cursor.execute("select max (term_id) from terms")
             for row in result:
                 element_id = row[0]
         return int(element_id)

@@ -27,13 +27,13 @@ class TestAPITerms(flask_unittest.ClientTestCase):
         self.assertEqual(resp.status_code, 201)
     
     def test_get_term(self, client):
-        resp = client.get('/api/terms/1')
+        resp = client.get('/api/terms/2')
         self.assertEqual(resp.status_code, 200)
         
         term = resp.json
         
         self.assertIsNotNone(term)
-        self.assertEqual(term["name"], "Fall")
+        self.assertEqual(term["name"], "Winter")
     
     def test_update_term(self, client):
         resp = client.get('/api/terms/2')
@@ -48,15 +48,14 @@ class TestAPITerms(flask_unittest.ClientTestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(term["id"], 2)
         
-    def test_post_put_element(self, client):
-        resp = client.get('/api/elements/3')
+    def test_post_put_term(self, client):
+        resp = client.get('/api/terms/3')
         self.assertEqual(resp.status_code, 200)
-        element = resp.json
-        self.assertIsNotNone(element)
-        element["element_id"] = None #setting new id so its like a newly created element
-        element["element"] = "New API PUT element POST"
-        element["element_order"] = get_db().get_next_competency_element_order(element["competency_id"])
-        
-        resp = client.put("/api/elements/3", json = element)
+        term = resp.json
+        self.assertIsNotNone(term)
+        term["id"] = None #setting new id so its like a newly created term
+        term["name"] = "Post"
+       
+        resp = client.put("/api/terms/3", json = term)
         
         self.assertEqual(resp.status_code, 201)

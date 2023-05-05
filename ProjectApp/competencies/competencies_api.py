@@ -3,7 +3,7 @@
 #returning a collection should include: count of all entries, url to previous page, url to next page, and results
 #GET POST for collections, GET PUT DELETE for document
 
-from flask import Blueprint, jsonify, request, make_response
+from flask import Blueprint, jsonify, request, make_response, url_for
 from ..dbmanager import get_db
 from .competency import Competency
 from ..elements.element import Element
@@ -15,16 +15,24 @@ def competencies_api():
     if request.method == 'POST':
         competency_json = request.json
         if not isinstance(competency_json, dict):
-            raise TypeError("expecting a dict/json")
-        if competency_json:
-            if competency_json["elements"]:
-                competency = Competency.from_json(competency_json)
-                get_db().add_competency(competency)#what if competency id already used?
-                #aren't we supposed to return url key
-                order = 0
-                for element in competency_json["elements"]:
-                    order+=14
-                    element = Element(None, order, element['element'], element['element_criteria'], competency.id)
+            return make_response({"description":"expecting json format"}, 400)
+        if not competency_json:
+            return make_response({"description":"expecting a not empty json"}, 400)
+        if not competency_json["elements"]:#empty list will match this condition too
+            return make_response({"description":"competencies must be created with elements, expecting elements key for a list of element object with 'element' and 'element_criteria' keys"}, 400)
+        try:
+            competency = Competency.from_json(competency_json)
+            get_db().add_competency(competency)#if id already used, will return 400 with str(e)
+            order = 0
+            for element in competency_json["elements"]:
+                order+=1
+                element = Element(None, order, element['element'], element['element_criteria'], competency.id)
+                get_db().add_element(element)
+            resp = make_response({}, 201)
+            resp.headers["Location"] = url_for("competencies_api.competency_api", competency_id = competency.id)
+            return resp
+        except ValueError as e:
+            return make_response({"description":str(e)}, 400)    
     elif request.method == 'GET':
         if request.args:
             page = request.args.get("page")
@@ -34,7 +42,7 @@ def competencies_api():
     json = {'prev_page': prev_page, 
             'next_page': next_page, 
             'results':[competency.__dict__ for competency in competencies]}
-    return jsonify(json)
+    return make_response(json, 200)
 
 @bp.route('/<competency_id>', methods = ["GET", "PUT", "DELETE"])
 def competency_api(competency_id):
@@ -43,17 +51,37 @@ def competency_api(competency_id):
             get_db().delete_competency(competency_id)
             response = make_response({}, 204)
             return response
-        except ValueError() as e:
-            response = make_response({"id":404, "description":str(e)}, 404)
+        except ValueError as e:
+            response = make_response({ "description":str(e)}, 404)
             return response
-        
     if request.method == "PUT":
-        new_competency = request.json
-        if not isinstance(new_competency, dict):
-            raise ValueError("excpecting a dict/json")
-        if
-        get_db().add_competency(Competency())
-        get_db().add_element(Element(None, ))
+        competency_json = request.json
+        if not isinstance(competency_json, dict):
+            return make_response({"description":"expecting json format"}, 400)
+        if not competency_json:
+            return make_response({"description":"expecting a not empty json"}, 400)
+        if get_db().get_competency(competency_id) == None:#then we add
+            return make_response({"description":str(e)}, 400)
+        else:#if given id corresponds to a competency
+            try:
+                competency = get_db().get_competency(competency_id)
+                if competency_json["competency"]:
+                    competency.competency = competency_json["competency"]
+                if competency_json["competency_achievement"]:
+                    competency.competency_achievement = competency_json["competency_achievement"]
+                if competency_json["competency_type"]:
+                    if competency_json["competency_type"] != "Mandatory" and competency_json["competency_type"] != "Optional":
+                        return make_response({"description":"competency_type has to be 'Mandatory' or 'Optional'"}, 400)
+                    competency.competency_type = competency_json["competency_type"]
+                get_db().update_competency(competency)#if id already used, will return 400 with str(e)
+                resp = make_response({}, 201)
+                resp.headers["Location"] = url_for("competencies_api.competency_api", competency_id = competency_id)
+                return resp
+            except ValueError as e:
+                return make_response({"description":str(e)}, 400)
+    elif request.method == "GET":
+        pass
+     
 @bp.route('/<competency_id>/', methods=["GET","POST"])
 def competency_elements_api():
     pass

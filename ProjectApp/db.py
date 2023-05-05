@@ -467,13 +467,17 @@ class Database:
         course_element = None
         if not isinstance(course_id, str):
             raise TypeError("expecting a string argument at 2nd position")
-        if not isinstance(element_id, id):
+        if not isinstance(element_id, int):
             raise TypeError("expecting an int argument at 3rd position")   
         with self.__get_cursor() as cursor:
-            results = cursor.execute(f"select course_id, element_id, hours from courses_elements where course_id = :course_id and element_id = :element_id", course_id = course_id, element_id = element_id) 
+            results = cursor.execute(f"select course_id, element_id, element_hours from courses_elements where course_id = :course_id and element_id = :element_id", course_id = course_id, element_id = element_id) 
             for row in results:
-                course_element = CourseElement(row[0], row[1], row[3])
+                course_element = CourseElement(row[0], row[1], float(row[2]))
         return course_element
+    
+    def delete_course_element(self, course_id, element_id):
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from courses_elements where course_id = :course_id AND element_id = :element_id", course_id = course_id, element_id = element_id)
     
     def get_elements_course_ids(self, page_size, page):
         if not (isinstance(page_size, int) and page_size > 0):
@@ -510,7 +514,7 @@ class Database:
     #only update hours
     def update_courses_element(self, course_element):
         with self.__get_cursor() as cursor:
-            cursor.execute("update course_element set elem_hours = :new_hour where course_id=:id and elem_id = :elem_id",
+            cursor.execute("update courses_elements set element_hours = :new_hour where course_id=:id and element_id = :elem_id",
                            new_hour = course_element.hours,
                            id = course_element.course_id,
                            elem_id = course_element.element_id)

@@ -5,7 +5,7 @@ class CourseElement:
         if not isinstance (element_id, int):
             raise Exception ("Element id is not an int")
         if not isinstance(hours, float):
-            raise Exception ("hours is not int or float")
+            raise Exception ("hours is not float")
         from ..dbmanager import get_db
         self.course_id = course_id
         self.element_id = element_id

@@ -4,6 +4,15 @@ from ..dbmanager import get_db
 
 bp = Blueprint("courses_elements", __name__, url_prefix="/courses-elements")
 
+@bp.route("/delete/<course_id>/<element_id>", methods=["GET"])
+def delete_course_element(course_id, element_id):
+    element_id = int(element_id)
+    if get_db().get_course_element(course_id, element_id) == None:
+        flash("course element connection not found")
+        abort(404)
+    get_db().delete_course_element(course_id, element_id)
+    return redirect(url_for('courses_elements.list_courses_elements'))
+
 @bp.route("/", methods = ["GET", "POST"])
 def list_courses_elements(page=1, page_size=10):
     form = CourseElementForm()
@@ -13,12 +22,12 @@ def list_courses_elements(page=1, page_size=10):
     if request.method == "POST" and form.validate_on_submit():
         if get_db().get_course(form.course_id.data) == None:
             raise ValueError("couldn't find course with that course id")
-        new_course_element = CourseElement(form.course_id.data, form.element.data, float(form.hours.data))
-        if get_db().get_course_element(form.course_id.data, form.element.data) == None:
+        new_course_element = CourseElement(form.course_id.data, int(form.element.data), float(form.hours.data))
+        if get_db().get_course_element(form.course_id.data, int(form.element.data)) == None:
             get_db().add_courses_element(new_course_element)
             flash("successfully added new course element connection")
         else:
-            get_db().update_courses_element()
+            get_db().update_courses_element(new_course_element)
             flash("successfully updated the hours of that course element connection")
     try:
         page = int(request.args["page"])

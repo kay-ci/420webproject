@@ -1,4 +1,5 @@
 import flask_unittest
+from ProjectApp.dbmanager import get_db
 from ProjectApp import create_app
 
 class TestAPIElements(flask_unittest.ClientTestCase):
@@ -19,6 +20,8 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         elements = resp.json
         element = elements["results"][0]
         element["element_id"] = None
+        element["element"] = "Testing API Post"
+        element["element_order"] = get_db().get_next_competency_element_order(element["competency_id"])
         
         resp = client.post("/api/elements", json = element)
         
@@ -44,7 +47,7 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         
         resp = client.put("/api/elements/2", json = element)
         
-        self.assertEqual(resp.status_code, 204)
+        self.assertEqual(resp.status_code, 200)
         self.assertEqual(element["element_id"], 2)
         self.assertEqual(element["element_criteria"],"Best New Criteria!")
         
@@ -54,11 +57,19 @@ class TestAPIElements(flask_unittest.ClientTestCase):
         element = resp.json
         self.assertIsNotNone(element)
         element["element_id"] = None #setting new id so its like a newly created element
-        element["element"] = "New element Name for the element 70"
+        element["element"] = "New API PUT element POST"
+        element["element_order"] = get_db().get_next_competency_element_order(element["competency_id"])
         
         resp = client.put("/api/elements/3", json = element)
         
         self.assertEqual(resp.status_code, 201)
         
+    def test_delete_element(self, client):
+        resp = client.get("/api/elements/24")
+        self.assertEqual(resp.status_code, 200)
+        element = resp.json
+        self.assertIsNotNone(element)
         
-    
+        resp = client.delete("/api/element/4")
+            
+        self.assertEqual(resp.status_code, 204) 

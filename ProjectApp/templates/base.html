@@ -28,12 +28,12 @@
         <div id="out_link"><a href={{url_for('auth.logout')}}>Log out</a><div>
         <h2 id="user_name">Connected: {{current_user.name}}</h2>
         {% endif %}
-        {% block content%}
-        {% endblock%}
         <section id="flash_messages">
             {% for message in get_flashed_messages() %}
                 <div class="flash"> {{message}} </div>
             {% endfor %}
         </section>
+        {% block content%}
+        {% endblock%}
     </body>
 </html>

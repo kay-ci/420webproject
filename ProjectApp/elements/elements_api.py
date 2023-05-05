@@ -49,7 +49,7 @@ def element(element_id):
                 element = Element.from_json(json_element)
                 if element.element_id != None:
                     get_db().update_element(element)
-                    resp = make_response({}, 204)
+                    resp = make_response({}, 200)
                     return resp
                 else: 
                     get_db().add_element(element)
@@ -62,7 +62,17 @@ def element(element_id):
                 flash("could not add element")
                 abort(409)
     elif request.method == "DELETE":
-        pass
+        try:
+            element = get_db().get_element(int(element_id))
+            if element == None:
+                abort(404)
+            else:
+                get_db().delete_element(int(element_id))
+                resp = make_response({}, 204)
+                return resp
+        except:
+            abort(403)
+            
     elif request.method == "GET":    
         try:
             element = get_db().get_element(int(element_id))

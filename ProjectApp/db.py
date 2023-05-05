@@ -97,14 +97,6 @@ class Database:
             for row in results:
                 output.append(Element(int(row[0]), int(row[1]), row[2], row[3], row[4]))
             return output
-    
-    def get_count_element_id(self):
-        with self.__connection.cursor() as cursor:
-            output = 0
-            results = cursor.execute("select count(*) from elements")
-            for row in results:
-                output = row[0]
-            return int(output)
 
     def add_course(self, course):
         if not isinstance(course, Course):
@@ -448,7 +440,6 @@ class Database:
                 element = Element(int(row[0]), int(row[1]), row[2], row[3], row[4])
             return element
     def get_element_id(self):
-        element_id = None
         with self.__get_cursor() as cursor:
             result = cursor.execute("select count (element_id) from elements")
             for row in result:
@@ -488,15 +479,24 @@ class Database:
             cursor.execute("delete from elements where element_id = :id", id = element_id)
             results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
             for row in results:
-                self.update_element(row[0], row[1]-1, row[2], row[3])
-    
-    def get_terms(self):
-        output = []
+                updated_element = Element(row[0], row[1]-1, row[2], row[3], row[4])
+                self.update_element(updated_element)
+    def get_terms(self, page_num=1, page_size=50):
+        terms = []
+        prev_page = None
+        next_page = None
+        offset = (page_num - 1) * page_size
         with self.__connection.cursor() as cursor:
-            results = cursor.execute("select term_id, term_name from terms order by terms.term_id")
+            results = cursor.execute("select term_id, term_name from terms order by terms.term_id offset :offset rows fetch next :page_size rows only",
+                                     offset = offset,
+                                     page_size = page_size)
             for row in results:
-                output.append(Term(row[0], row[1]))
-        return output
+                terms.append(Term(row[0], row[1]))
+        if page_num > 1:
+            prev_page = page_num - 1
+        if len(terms) > 0 and (len(terms) >= page_size):
+            next_page = page_num + 1        
+        return terms, prev_page, next_page
     
     def get_term(self, id):#might return None
         output = None
@@ -520,6 +520,12 @@ class Database:
                 output.append(Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], row[6], id))
         return output
     
+    def get_term_id(self):
+        with self.__get_cursor() as cursor:
+            result = cursor.execute("select count (term_id) from terms")
+            for row in result:
+                element_id = row[0]
+        return int(element_id)
     def add_term(self, term):
         if not isinstance(term, Term):
             raise TypeError("expected type Term")

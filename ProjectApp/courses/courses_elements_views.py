@@ -21,8 +21,11 @@ def list_courses_elements(page=1, page_size=10):
         page_size = int(request.args["page_size"])
     except Exception:
         page_size = 10
-    return render_template("courses_elements.html", courses_elements = get_db().get_courses_elements(page_size, page), form = form, course_ids = get_db().get_elements_course_ids(page_size, page), page = page, page_size = page_size)
-    
+    try:
+        return render_template("courses_elements.html", courses_elements = get_db().get_courses_elements(page_size, page), form = form, course_ids = get_db().get_elements_course_ids(page_size, page), page = page, page_size = page_size, element = get_db().get_elements(page, page_size))
+    except Exception as e:
+        flash(str(e))
+        abort(404)
 #display all elements for a given course
 @bp.route("course/<element_id>/")
 def get_course_element_id(element_id):

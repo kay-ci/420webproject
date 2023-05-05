@@ -1,9 +1,9 @@
 from flask import Blueprint, flash, jsonify, render_template, request, abort, make_response, url_for
 from .course import Course
 from ..dbmanager import get_db
-bp = Blueprint('courses_api', __name__, url_prefix="/api/courses")
+bp = Blueprint('courses_api', __name__, url_prefix="/api/courses/")
 
-@bp.route("/show", methods = ["GET"])
+@bp.route("/", methods = ["GET"])
 def get_courses():
     page_num = 1
     if request.method == "GET":
@@ -50,15 +50,19 @@ def add_course():
         except Exception as e:
             abort(404)
 
-
-@bp.route("/update-course", methods = ["GET","PUT"])
+@bp.route("/update", methods = ["GET","PUT"])
 def update_course():
     if request.method == 'PUT':
         result = request.json
         if result:
-            course = Course.from_json(result)
+            if not isinstance(result, dict):
+                return make_response({"description":"expecting json format"}, 400)
             try:
+                course = Course.from_json(result)
                 get_db().update_course(course)
+                resp = make_response({}, 204)
+                resp.headers["Location"] = url_for("courses_api.course_api", course_id = course.course_id)
+                return resp
             except Exception as e:
                 abort(409)
     elif request.method == "GET":
@@ -72,7 +76,7 @@ def update_course():
         except Exception as e:
             abort(404)
         
-@bp.route("/delete/<course_id>", methods = ["GET","DELETE"])
+@bp.route("/<course_id>", methods = ["GET","DELETE"])
 def course_api(course_id):
     if request.method == 'DELETE':
         try:

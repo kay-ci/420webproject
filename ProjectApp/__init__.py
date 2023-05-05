@@ -64,6 +64,9 @@ def create_app(test_config=None):
     from .elements.element_views import bp as elem_bp
     app.register_blueprint(elem_bp)
     
+    from .search_views import bp as search_bp
+    app.register_blueprint(search_bp)
+    
     @app.errorhandler(404)
     def page_not_found(error):
         return render_template('404.html'), 404

@@ -7,7 +7,7 @@ import os
 from .elements.element import Element
 from .courses.course import Course
 from .terms.term import Term
-from .courses.courses_element import CourseElement
+from .courses.courses_element import CourseElement, CourseElementForm
 
 class Database:
     def __init__(self, autocommit=True):
@@ -299,15 +299,55 @@ class Database:
             cursor.execute("update USERS set email =: email where id=:id",
                            email = email,
                            id = user.id)
-            
-    def update_user_avatar():
-        pass
     
     def update_user_password(self,user,password):
         with self.__get_cursor() as cursor:
             cursor.execute("update USERS set password = :password where id=:id",
                            password = password,
                            id = user.id)
+    
+    def search_domains(self, word):
+        domains = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute('select domain_id, domain, domain_description from domains where contains(domain_description, :word, 1) > 0', word=word)
+            for row in results:
+                domain = Domain(row[0],row[1],row[2])
+                domains.append(domain)
+        return domains
+    
+    def search_terms(self, word):
+        terms = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select term_id, term_name from terms where contains(term_name, :word, 1) > 0", word=word)
+            for row in results:
+                terms.append(Term(row[0], row[1]))
+        return terms
+    
+    def search_competencies(self, word):
+        competencies = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select competency_id, competency, competency_achievement, competency_type from competencies where contains(competency, :word, 1) > 0", word=word)
+            for row in results:
+                competencies.append(Competency(row[0], row[1], row[2], row[3]))
+        return competencies
+    
+    def search_elements(self, word):
+        elements = []
+        with self.__connection.cursor() as cursor:
+            results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where contains(element, :word, 1) > 0", word=word)
+            for row in results:
+                elements.append(Element(row[0], row[1], row[2], row[3], row[4]))
+        return elements
+    
+    def search_courses(self, word):
+        courses = []
+        with self.__connection.cursor() as cursor:
+            cursor.execute("select course_id, course_title, theory_hours, lab_hours, work_hours, description, domain_id, term_id from courses where contains(description, :word, 1) > 0", word=word)
+            results = cursor.fetchall()
+            for row in results:
+                course = Course(row[0], row[1], float(row[2]), float(row[3]), float(row[4]), row[5], int(row[6]), int(row[7]))
+                courses.append(course)
+            return courses
             
     def get_competencies(self, page_num=1, page_size=999):
         output = []
@@ -415,7 +455,7 @@ class Database:
             raise TypeError("expecting an argument of type int whose value is above 0")
         if not (isinstance(page, int) and page > 0):
             raise TypeError("expecting an argument of type int whose value is above 0")
-        from .courses.courses_element import CourseElement
+        from .courses.courses_element import CourseElement, CourseElementForm
         courses_elements = []
         prev_page = None
         next_page = None
@@ -449,7 +489,23 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute(f"delete from courses_elements where course_id = :course_id and element_id = :element_id", course_id = course_id, element_id = element_id)
     
-    def get_elements_course_ids(self, page_size, page):
+    def get_course_element(self, course_id, element_id):
+        course_element = None
+        if not isinstance(course_id, str):
+            raise TypeError("expecting a string argument at 2nd position")
+        if not isinstance(element_id, int):
+            raise TypeError("expecting an int argument at 3rd position")   
+        with self.__get_cursor() as cursor:
+            results = cursor.execute(f"select course_id, element_id, element_hours from courses_elements where course_id = :course_id and element_id = :element_id", course_id = course_id, element_id = element_id) 
+            for row in results:
+                course_element = CourseElement(row[0], row[1], float(row[2]))
+        return course_element
+    
+    def delete_course_element(self, course_id, element_id):
+        with self.__get_cursor() as cursor:
+            cursor.execute("delete from courses_elements where course_id = :course_id AND element_id = :element_id", course_id = course_id, element_id = element_id)
+    
+    def get_elements_course_ids_with_hours(self, page_size, page): 
         if not (isinstance(page_size, int) and page_size > 0):
             raise TypeError("expecting an argument of type int whose value is above 0")
         if not (isinstance(page, int) and page > 0):
@@ -458,7 +514,7 @@ class Database:
         with self.__get_cursor() as cursor:
             results = cursor.execute(f"select course_id from (select course_id from courses_elements order by course_id offset {page_size * (page-1)} rows fetch next {page_size} rows only) group by course_id")
             for row in results:
-                courses.append(row[0])
+                courses.append( (row[0], self.calculate_course_hours_from_CLH(row[0]),self.calculate_course_hours(row[0])) )
         return courses
     
     def calculate_course_hours(self, course_id):
@@ -473,6 +529,12 @@ class Database:
                 output += row[2]
         return output
     
+    def calculate_course_hours_from_CLH(self, course_id):
+        course = self.get_course(course_id)
+        if course == None:
+            raise ValueError("could not find a course with this id")
+        return 15*(course.theory_hours + course.lab_hours)
+    
     def add_courses_element(self, course_element):
         if not isinstance(course_element, CourseElement):
             raise TypeError("id must be a CourseElement")
@@ -485,7 +547,7 @@ class Database:
     #only update hours
     def update_courses_element(self, course_element):
         with self.__get_cursor() as cursor:
-            cursor.execute("update course_element set elem_hours = :new_hour where course_id=:id and elem_id = :elem_id",
+            cursor.execute("update courses_elements set element_hours = :new_hour where course_id=:id and element_id = :elem_id",
                            new_hour = course_element.hours,
                            id = course_element.course_id,
                            elem_id = course_element.element_id)
@@ -526,6 +588,10 @@ class Database:
     def add_element(self, element):
         if not isinstance(element, Element):
             raise TypeError("Expected Type Element")
+        elements = self.get_competency_elements(element.competency_id)
+        for elementInComp in elements:
+            if elementInComp.element == element.element:
+                raise ValueError("this element name is already part of the associated competency")
         with self.__get_cursor() as cursor:
             cursor.execute("insert into elements(element_order, element, element_criteria, competency_id) values(:element_order, :element, :element_criteria, :competency_id)",
                            element_order = element.element_order,
@@ -556,8 +622,10 @@ class Database:
             cursor.execute("delete from elements where element_id = :id", id = element_id)
             results = cursor.execute("select element_id, element_order, element, element_criteria, competency_id from elements where competency_id = :competency_id AND element_order > :deleted_order", competency_id = element.competency_id, deleted_order = element.element_order)
             for row in results:
+                self.update_element(row[0], row[1]-1, row[2], row[3])
                 updated_element = Element(row[0], row[1]-1, row[2], row[3], row[4])
                 self.update_element(updated_element)
+                
     def get_terms(self, page_num=1, page_size=50):
         terms = []
         prev_page = None

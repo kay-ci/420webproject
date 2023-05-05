@@ -24,6 +24,8 @@ def create_app(test_config=None):
 
     from .competencies.competency_views import bp as competency_bp
     app.register_blueprint(competency_bp)
+    from .competencies.competencies_api import bp as competencies_api_bp
+    app.register_blueprint(competencies_api_bp)
     
     from .courses.course_views import bp as course_bp
     app.register_blueprint(course_bp)
@@ -49,8 +51,8 @@ def create_app(test_config=None):
     from .users.users_views import bp as users_bp
     app.register_blueprint(users_bp)
     
-    from .elements.elements_api import bp as elements_api
-    app.register_blueprint(elements_api)
+    from .elements.elements_api import bp as elements_api_bp
+    app.register_blueprint(elements_api_bp)
     
     from .elements.element_views import bp as elem_bp
     app.register_blueprint(elem_bp)
@@ -60,7 +62,7 @@ def create_app(test_config=None):
         return render_template('404.html'), 404
     
     login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'auth.logout'
     login_manager.init_app(app)
 
     @login_manager.user_loader

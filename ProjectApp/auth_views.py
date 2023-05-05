@@ -13,30 +13,31 @@ def signup():
     if request.method == 'POST':
         if form.validate_on_submit():
             file = form.avatar.data
-            avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], 
-                                       form.email.data)
+            avatar_dir = os.path.join(current_app.config['IMAGE_PATH'], form.email.data)
             if not os.path.exists(avatar_dir):
                 os.makedirs(avatar_dir)
             avatar_path = os.path.join(avatar_dir, 'avatar.png')
             if file != None:
-                file.save(avatar_path)
-                #what should we do if user doesn't give a file for avatar
+                file.save(avatar_path) #if user doesn't give a file for avatar
             hash = generate_password_hash(form.password.data)
             if get_db().get_user(form.email.data) != None:
                 flash("this email is already being used")
                 return render_template("signup.html", form = form)
-            user = User(form.email.data, hash, form.name.data)
-            get_db().insert_user(user)
+            try:
+                user = User(form.email.data, hash, form.name.data)
+                get_db().insert_user(user)
+            except:
+                flash("sign up failed")
             userInserted = get_db().get_user(form.email.data)
             login_user(userInserted)
-            return redirect(url_for('courses.list_courses'))
+            return redirect(url_for('courses.list_courses'))   
     return render_template('signup.html', form=form)
 
 @bp.route('/logout/')
 #@login_required
 def logout():
     logout_user()
-    return render_template('logout.html')
+    return redirect(url_for("auth.signup"))
 
 @bp.route('/avatar/<email>/avatar.png')
 def get_avatar(email):

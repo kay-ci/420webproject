@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
+from flask_login import login_required
 from .term import Term, TermForm
 from ..dbmanager import get_db
 
@@ -41,7 +42,8 @@ def show_term(id):
     
             
 
-@bp.route("/add/", methods = ["GET", "POST"]) 
+@bp.route("/add/", methods = ["GET", "POST"])
+@login_required 
 def add_term():
     form = TermForm()
     if request.method == "POST" and form.validate_on_submit():
@@ -61,6 +63,7 @@ def add_term():
     return render_template("add_term.html", form = form) 
 
 @bp.route("/delete/<id>/")
+@login_required
 def delete_term(id):
     try:
         get_db().delete_term(int(id))

@@ -19,6 +19,6 @@ class Term:
     
 from flask_wtf import FlaskForm 
 from wtforms import StringField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length
 class TermForm(FlaskForm):
-    name = StringField('Term Title', validators=[DataRequired()])
+    name = StringField('Term Title', validators=[DataRequired(), Length(min = 4, max = 6)])

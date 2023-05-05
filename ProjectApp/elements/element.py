@@ -31,9 +31,9 @@ class Element:
         return Element(element_str['element_id'], element_str['element_order'], element_str['element'], element_str['element_criteria'], element_str['competency_id'])
         
 from flask_wtf import FlaskForm 
-from wtforms import StringField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms import StringField
+from wtforms.validators import DataRequired, Length
 class ElementForm(FlaskForm):
-    element = StringField('Element', validators=[DataRequired()])
-    element_criteria = StringField('Element criteria', validators=[DataRequired()])
+    element = StringField('Element', validators=[DataRequired(), Length(min=10, max=250)])
+    element_criteria = StringField('Element criteria', validators=[DataRequired(), Length(min=10, max=250)])
         

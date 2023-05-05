@@ -100,4 +100,9 @@ def competency_api(competency_id):
         if get_db().get_competency(competency_id) == None:
             return make_response({"description":"could not find competency for this id"}, 404)
         json = get_db().get_competency(competency_id).__dict__
+        elements = get_db().get_competency_elements(competency_id)
+        elements_url = []
+        for element in elements:
+            elements_url.append(url_for('element.show_element', element_id = element.element_id))
+        json["elements"] = elements_url
         return make_response(json, 200)
